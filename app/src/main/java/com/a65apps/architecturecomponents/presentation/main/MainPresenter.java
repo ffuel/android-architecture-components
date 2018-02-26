@@ -23,10 +23,8 @@ public class MainPresenter extends BasePresenter<MainState, MainView, MainIntera
     }
 
     void updateScreen(@NonNull Screen screen) {
-        switch (screen) {
-            case SAMPLE:
-                getRouter().newRootScreenIfNotExists(Screens.SAMPLE_SCREEN);
-                break;
+        if (screen.equals(Screen.SAMPLE)) {
+            getRouter().newRootScreenIfNotExists(Screens.SAMPLE_SCREEN);
         }
     }
 }

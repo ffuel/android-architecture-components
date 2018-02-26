@@ -68,7 +68,8 @@ public abstract class BaseFragment<S extends State, Parcel extends Parcelable,
     @CallSuper
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (BaseNavigator.isBackCommandActivated()) {
-            Animation a = new Animation() {};
+            Animation a = new Animation() {
+            };
             a.setDuration(0);
             return a;
         }

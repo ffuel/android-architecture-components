@@ -18,7 +18,15 @@ public abstract class BaseNavigator extends SupportAppNavigator {
     private final FragmentManager fragmentManager;
 
     public static boolean isBackCommandActivated() {
-        return backCommandActivated;
+        synchronized (BaseNavigator.class) {
+            return backCommandActivated;
+        }
+    }
+
+    private static void setBackCommandActivated(boolean value) {
+        synchronized (BaseNavigator.class) {
+            backCommandActivated = value;
+        }
     }
 
     public BaseNavigator(@NonNull FragmentActivity activity, int containerId) {
@@ -36,9 +44,9 @@ public abstract class BaseNavigator extends SupportAppNavigator {
     @Override
     public void applyCommand(@NonNull Command command) {
         if (command instanceof BackTo) {
-            backCommandActivated = true;
+            setBackCommandActivated(true);
             super.applyCommand(command);
-            backCommandActivated = false;
+            setBackCommandActivated(false);
             return;
         } else if (command instanceof NewRootScreenIfNotExistsCommand) {
             NewRootScreenIfNotExistsCommand newRootScreenIfNotExistsCommand =
@@ -46,9 +54,9 @@ public abstract class BaseNavigator extends SupportAppNavigator {
             Fragment fragment = fragmentManager
                     .findFragmentByTag(newRootScreenIfNotExistsCommand.getScreenKey());
             if (fragment == null) {
-                backCommandActivated = true;
+                setBackCommandActivated(true);
                 super.applyCommand(new BackTo(null));
-                backCommandActivated = false;
+                setBackCommandActivated(false);
                 super.applyCommand(new Replace(newRootScreenIfNotExistsCommand.getScreenKey(),
                         newRootScreenIfNotExistsCommand.getData()));
             }
