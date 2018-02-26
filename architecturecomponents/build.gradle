@@ -1,0 +1,81 @@
+apply plugin: 'com.android.library'
+
+apply from: "$project.rootDir/tools/findbugs.gradle"
+apply from: "$project.rootDir/tools/checkstyle.gradle"
+apply from: "$project.rootDir/tools/pmd.gradle"
+
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        warningsAsErrors true
+    }
+
+}
+
+dependencies {
+    def supportVersion = '27.0.2'
+    def butterKnifeVersion = '8.8.1'
+    def moxyVersion = '1.5.3'
+    def daggerVersion = '2.14.1'
+    def ciceroneVersion = '2.1.0'
+    def rxJavaVersion = '2.1.6'
+    def rxAndroidVersion = '2.0.1'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // support dependencies
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+
+    // ButterKnife dependencies
+    implementation "com.jakewharton:butterknife:$butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    // MVP dependencies
+    implementation "com.arello-mobile:moxy:$moxyVersion"
+    compileOnly "com.arello-mobile:moxy-compiler:$moxyVersion"
+    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    // Dagger dependencies
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Navigation dependencies
+    implementation "ru.terrakok.cicerone:cicerone:$ciceroneVersion"
+
+    // rxJava dependencies
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
+    // test dependencies
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
