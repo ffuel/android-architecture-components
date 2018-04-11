@@ -1,1 +1,1 @@
-include ':app', ':architecturecomponents'
+include ':app', ':architecturecomponents', ':moxyarchitecturecomponents', ':ciceronearchitecturecomponents', ':daggerarchitecturecomponents', ':moxydaggerarchitecturecomponents'

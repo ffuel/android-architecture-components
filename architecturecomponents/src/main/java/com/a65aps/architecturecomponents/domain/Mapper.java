@@ -12,7 +12,7 @@ public abstract class Mapper<From, To> {
     public abstract To map(@NonNull From from);
 
     @NonNull
-    public List<To> map(@NonNull Collection<From> from) {
+    public final List<To> map(@NonNull Collection<From> from) {
         if (from.isEmpty()) {
             return Collections.emptyList();
         }

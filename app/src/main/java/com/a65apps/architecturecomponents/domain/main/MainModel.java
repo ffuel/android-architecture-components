@@ -1,13 +1,18 @@
 package com.a65apps.architecturecomponents.domain.main;
 
+import android.support.annotation.NonNull;
+
 import com.a65aps.architecturecomponents.domain.model.BaseModel;
+import com.a65aps.architecturecomponents.presentation.navigation.Router;
 
 import javax.inject.Inject;
 
-public final class MainModel extends BaseModel<MainState> implements MainInteractor {
+final class MainModel extends BaseModel<MainState, Router> implements MainInteractor {
 
     @Inject
-    public MainModel() {
-        setState(MainState.create(Screen.SAMPLE));
+    MainModel(@NonNull Router router) {
+        super(MainState.create(Screen.SAMPLE), router);
+
+        router.newRootScreen(getState().screen().getName());
     }
 }

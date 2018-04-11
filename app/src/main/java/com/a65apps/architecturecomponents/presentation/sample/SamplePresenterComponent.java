@@ -3,10 +3,10 @@ package com.a65apps.architecturecomponents.presentation.sample;
 import com.a65apps.architecturecomponents.domain.sample.SampleDomainModule;
 import com.a65apps.architecturecomponents.domain.sample.SampleInteractor;
 import com.a65apps.architecturecomponents.domain.sample.SampleState;
-import com.a65apps.architecturecomponents.presentation.main.MainRouter;
-import com.a65aps.architecturecomponents.presentation.presenter.PresenterComponentBuilder;
-import com.a65aps.architecturecomponents.presentation.presenter.PresenterScope;
-import com.a65aps.architecturecomponents.presentation.presenter.ProviderPresenterComponent;
+import com.a65aps.architecturecomponents.presentation.navigation.Router;
+import com.a65aps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
+import com.a65aps.daggerarchitecturecomponents.presenter.PresenterScope;
+import com.a65aps.daggerarchitecturecomponents.presenter.ProviderPresenterComponent;
 
 import dagger.Module;
 import dagger.Subcomponent;
@@ -16,7 +16,7 @@ import dagger.Subcomponent;
         SamplePresenterComponent.SamplePresenterModule.class
 })
 public interface SamplePresenterComponent extends ProviderPresenterComponent<SampleState,
-        SampleView, SampleInteractor, MainRouter, SamplePresenter> {
+        SampleView, SampleInteractor, Router, SamplePresenter> {
 
     @Subcomponent.Builder
     interface Builder extends PresenterComponentBuilder<SamplePresenterComponent> {

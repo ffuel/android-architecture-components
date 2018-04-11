@@ -4,27 +4,20 @@ import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.domain.main.MainState;
-import com.a65apps.architecturecomponents.domain.main.Screen;
-import com.a65apps.architecturecomponents.presentation.navigation.Screens;
 import com.a65aps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65aps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65aps.architecturecomponents.presentation.presenter.BasePresenter;
+import com.a65aps.architecturecomponents.presentation.navigation.Router;
+import com.a65aps.moxyarchitecturecomponents.presenter.MoxyPresenter;
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
 
 @InjectViewState
-public class MainPresenter extends BasePresenter<MainState, MainView, MainInteractor, MainRouter> {
+public class MainPresenter extends MoxyPresenter<MainState, MainView, MainInteractor, Router> {
 
     @Inject
-    public MainPresenter(@NonNull ExecutorsFactory executors, @NonNull MainRouter router,
-                         @NonNull MainInteractor interactor, @NonNull ApplicationLogger logger) {
-        super(executors, router, interactor, logger);
-    }
-
-    void updateScreen(@NonNull Screen screen) {
-        if (screen.equals(Screen.SAMPLE)) {
-            getRouter().newRootScreenIfNotExists(Screens.SAMPLE_SCREEN);
-        }
+    public MainPresenter(@NonNull ExecutorsFactory executors, @NonNull MainInteractor interactor,
+                         @NonNull ApplicationLogger logger) {
+        super(executors, interactor, logger);
     }
 }

@@ -6,8 +6,11 @@ import android.util.Log;
 import com.a65aps.architecturecomponents.BuildConfig;
 import com.a65aps.architecturecomponents.domain.log.ApplicationLogger;
 
+import net.jcip.annotations.ThreadSafe;
+
 import javax.inject.Inject;
 
+@ThreadSafe
 public final class AndroidApplicationLogger implements ApplicationLogger {
 
     private static final String TAG = AndroidApplicationLogger.class.getSimpleName();

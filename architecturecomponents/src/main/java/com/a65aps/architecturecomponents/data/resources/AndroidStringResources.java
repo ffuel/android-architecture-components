@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.a65aps.architecturecomponents.domain.resources.StringResources;
 
+import net.jcip.annotations.NotThreadSafe;
+
 import javax.inject.Inject;
 
+@NotThreadSafe
 public class AndroidStringResources implements StringResources {
 
     @NonNull

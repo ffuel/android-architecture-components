@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ArchitectureComponents</string>
     <string name="hello_text">Hello World!</string>
+    <string name="no_connection_text">Проверьте подключение к интернету</string>
 </resources>

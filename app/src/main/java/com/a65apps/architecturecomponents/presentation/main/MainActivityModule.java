@@ -4,26 +4,50 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import com.a65apps.architecturecomponents.domain.main.MainState;
-import com.a65aps.architecturecomponents.presentation.activity.ContainerIdProvider;
-import com.a65aps.architecturecomponents.presentation.component.ViewModule;
-import com.a65aps.architecturecomponents.presentation.navigation.BaseNavigator;
+import com.a65aps.architecturecomponents.di.ActivityModule;
+import com.a65aps.architecturecomponents.presentation.navigation.NavigatorDelegate;
+import com.a65aps.ciceronearchitecturecomponents.CiceroneDelegate;
+import com.a65aps.daggerarchitecturecomponents.activity.DaggerActivityModule;
 
-import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
+import ru.terrakok.cicerone.NavigatorHolder;
 
 @Module
-public interface MainActivityModule extends ViewModule<MainState, MainParcelable, MainStateMapper,
-        MainParcelMapper> {
-    @Binds
-    @NonNull
-    BaseNavigator bindNavigator(@NonNull MainNavigator navigator);
+public class MainActivityModule extends DaggerActivityModule<MainState, MainParcelable,
+        MainStateMapper, MainParcelMapper> {
 
-    @Binds
+    @Provides
     @NonNull
-    FragmentActivity bindFragmentActivity(@NonNull MainActivity activity);
+    FragmentActivity providesFragmentActivity(@NonNull MainActivity activity) {
+        return activity;
+    }
 
-    @Binds
+    @Provides
     @NonNull
-    ContainerIdProvider bindContainerId(@NonNull MainContainerIdProvider idProvider);
+    ActivityModule<MainState, MainParcelable, MainStateMapper,
+                MainParcelMapper> providesModule(@NonNull FragmentActivity activity,
+                                                 @NonNull NavigatorHolder holder) {
+        return new ActivityModule<MainState, MainParcelable, MainStateMapper,
+                MainParcelMapper>() {
 
+            @NonNull
+            @Override
+            public MainStateMapper provideStateToParcelableMapper() {
+                return new MainStateMapper();
+            }
+
+            @NonNull
+            @Override
+            public MainParcelMapper provideParcelableToStateMapper() {
+                return new MainParcelMapper();
+            }
+
+            @NonNull
+            @Override
+            public NavigatorDelegate provideNavigatorDelegate() {
+                return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider()));
+            }
+        };
+    }
 }
