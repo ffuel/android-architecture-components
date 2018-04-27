@@ -1,21 +1,13 @@
 package com.a65apps.architecturecomponents;
 
-import android.app.Application;
-import android.support.annotation.Nullable;
+import com.a65aps.daggerarchitecturecomponents.DaggerApplication;
 
-public class SampleApplication extends Application {
+import dagger.android.AndroidInjector;
 
-    @Nullable
-    private SampleApplicationDelegate delegate;
+public class SampleApplication extends DaggerApplication {
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        delegate = SampleApplicationDelegate.create(this);
-    }
-
-    @Nullable
-    public SampleApplicationDelegate getDelegate() {
-        return delegate;
+    protected AndroidInjector<? extends dagger.android.DaggerApplication> applicationInjector() {
+        return com.a65apps.architecturecomponents.DaggerSampleComponent.builder().create(this);
     }
 }

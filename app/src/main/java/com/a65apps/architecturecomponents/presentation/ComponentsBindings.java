@@ -6,8 +6,8 @@ import com.a65apps.architecturecomponents.presentation.main.MainPresenter;
 import com.a65apps.architecturecomponents.presentation.main.MainPresenterComponent;
 import com.a65apps.architecturecomponents.presentation.sample.SamplePresenter;
 import com.a65apps.architecturecomponents.presentation.sample.SamplePresenterComponent;
-import com.a65aps.architecturecomponents.presentation.presenter.PresenterComponentBuilder;
-import com.a65aps.architecturecomponents.presentation.presenter.PresenterKey;
+import com.a65aps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
+import com.a65aps.daggerarchitecturecomponents.presenter.PresenterKey;
 
 import dagger.Binds;
 import dagger.Module;

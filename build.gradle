@@ -1,13 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -19,6 +18,17 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+
+    project.ext {
+        supportVersion = '27.1.1'
+        rxJavaVersion = '2.1.12'
+        rxAndroidVersion = '2.0.2'
+        jcipVersion = '1.0'
+        injectVersion = '1'
+        moxyVersion = '1.5.3'
+        ciceroneVersion = '3.0.0'
+        daggerVersion = '2.15'
     }
 }
 

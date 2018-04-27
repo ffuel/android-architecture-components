@@ -17,6 +17,7 @@ public class SampleParcelMapper extends ParcelableToStateMapper<SampleParcelable
     @NonNull
     @Override
     public SampleState map(@NonNull SampleParcelable sampleParcelable) {
-        return SampleState.create(sampleParcelable.text());
+        return SampleState.create(sampleParcelable.state(), sampleParcelable.text(),
+                sampleParcelable.data(), sampleParcelable.error());
     }
 }

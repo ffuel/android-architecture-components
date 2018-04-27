@@ -4,20 +4,25 @@ import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.sample.SampleInteractor;
 import com.a65apps.architecturecomponents.domain.sample.SampleState;
-import com.a65apps.architecturecomponents.presentation.main.MainRouter;
 import com.a65aps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65aps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65aps.architecturecomponents.presentation.presenter.BasePresenter;
+import com.a65aps.architecturecomponents.presentation.navigation.Router;
+import com.a65aps.moxyarchitecturecomponents.presenter.MoxyPresenter;
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
 
 @InjectViewState
-public class SamplePresenter extends BasePresenter<SampleState, SampleView, SampleInteractor, MainRouter> {
+public class SamplePresenter extends MoxyPresenter<SampleState, SampleView, SampleInteractor, Router> {
 
     @Inject
-    public SamplePresenter(@NonNull ExecutorsFactory executors, @NonNull MainRouter router,
-                           @NonNull SampleInteractor interactor, @NonNull ApplicationLogger logger) {
-        super(executors, router, interactor, logger);
+    SamplePresenter(@NonNull ExecutorsFactory executors,
+                           @NonNull SampleInteractor interactor,
+                           @NonNull ApplicationLogger logger) {
+        super(executors, interactor, logger);
+    }
+
+    void refresh() {
+        getInteractor().reload();
     }
 }

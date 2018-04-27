@@ -5,19 +5,21 @@ import android.support.annotation.NonNull;
 import com.a65apps.architecturecomponents.R;
 import com.a65apps.architecturecomponents.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.domain.main.MainState;
-import com.a65aps.architecturecomponents.presentation.activity.BaseActivity;
+import com.a65apps.architecturecomponents.presentation.common.ButterActivity;
+import com.a65aps.architecturecomponents.presentation.navigation.Router;
+import com.a65aps.daggerarchitecturecomponents.presenter.PresenterInjector;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-public class MainActivity extends BaseActivity<MainState, MainParcelable, MainView, MainInteractor,
-        MainRouter, MainPresenter> implements MainView {
+public class MainActivity extends ButterActivity<MainState, MainParcelable, MainView, MainInteractor,
+        Router, MainPresenter> implements MainView {
 
     @InjectPresenter
     MainPresenter presenter;
 
     @Override
     protected void updateState(@NonNull MainParcelable state) {
-        presenter.updateScreen(state.screen());
+        // Empty body
     }
 
     @Override
@@ -34,6 +36,6 @@ public class MainActivity extends BaseActivity<MainState, MainParcelable, MainVi
     @ProvidePresenter
     @NonNull
     MainPresenter provideMainPresenter() {
-        return providePresenter(MainPresenter.class);
+        return PresenterInjector.build(MainPresenter.class, getApplication());
     }
 }

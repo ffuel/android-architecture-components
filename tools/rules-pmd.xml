@@ -23,6 +23,9 @@
         <exclude name="ConfusingTernary"/>
         <exclude name="AccessorClassGeneration"/>
         <exclude name="SingletonClassReturningNewInstance"/>
+        <exclude name="AbstractClassWithoutAnyMethod"/>
+        <exclude name="AbstractClassWithoutAbstractMethod"/>
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>
     </rule>
     <rule ref="rulesets/java/typeresolution.xml"/>
     <rule ref="rulesets/java/empty.xml/EmptyCatchBlock">

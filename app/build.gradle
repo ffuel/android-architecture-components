@@ -13,6 +13,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
     }
     buildTypes {
         release {
@@ -32,46 +38,54 @@ android {
 }
 
 dependencies {
-    def moxyVersion = '1.5.3'
-    def daggerVersion = '2.14.1'
-    def ciceroneVersion = '2.1.0'
-    def autoValueParcelVersion = '0.2.5'
-    def autoValueVersion = '0.5.0'
-    def rxJavaVersion = '2.1.6'
-    def rxAndroidVersion = '2.0.1'
+    def autoValueParcelVersion = '0.2.6'
+    def autoValueGsonVersion = '0.7.0'
     def butterKnifeVersion = '8.8.1'
-
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':architecturecomponents')
+    implementation project(':ciceronearchitecturecomponents')
+    implementation project(':moxyarchitecturecomponents')
+    implementation project(':daggerarchitecturecomponents')
+    implementation project(':moxydaggerarchitecturecomponents')
 
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    // Support
+    implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
 
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    // Dagger
+    implementation "com.google.dagger:dagger:$project.ext.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$project.ext.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$project.ext.daggerVersion"
 
-    implementation "ru.terrakok.cicerone:cicerone:$ciceroneVersion"
+    // MVP dependencies
+    implementation "com.arello-mobile:moxy:$project.ext.moxyVersion"
+    implementation "com.arello-mobile:moxy-app-compat:$project.ext.moxyVersion"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$project.ext.moxyVersion"
 
+    // AutoValue
+    implementation "com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion"
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$autoValueParcelVersion"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$autoValueVersion"
-    implementation "com.ryanharter.auto.value:auto-value-gson:$autoValueVersion"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion"
 
     // ButterKnife dependencies
     implementation "com.jakewharton:butterknife:$butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
-    // MVP dependencies
-    implementation "com.arello-mobile:moxy:$moxyVersion"
-    compileOnly "com.arello-mobile:moxy-compiler:$moxyVersion"
-    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+    // Rx
+    implementation "io.reactivex.rxjava2:rxjava:$project.ext.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$project.ext.rxAndroidVersion"
 
-    // rxJava dependencies
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    // Javax.inject annotations
+    implementation "javax.inject:javax.inject:$project.ext.injectVersion"
 
+    // Cicerone
+    implementation "ru.terrakok.cicerone:cicerone:$project.ext.ciceroneVersion"
+
+    // JCIP dependencies
+    implementation "net.jcip:jcip-annotations:$project.ext.jcipVersion"
+
+    // test dependencies
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
