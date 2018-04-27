@@ -1,0 +1,70 @@
+before_script:
+  - export ANDROID_HOME=/usr/local/share/android-sdk
+
+stages:
+  - build
+  - test
+
+buildDebug:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+    - ./gradlew checkstyle
+    - ./gradlew pmd
+    - ./gradlew findbugs
+    - ./gradlew lintDebug
+  artifacts:
+    paths:
+    - app/build/outputs/
+    expire_in: 1 week
+  only:
+    - develop
+    - /^feature.*$/
+  tags:
+    - android
+
+unitTestsDebug:
+  stage: test
+  script:
+    - ./gradlew testDebugUnitTest
+  artifacts:
+    paths:
+    - app/build/reports/tests/testDebugUnitTest/
+    expire_in: 1 week
+  only:
+    - develop
+    - /^feature.*$/
+  tags:
+    - android
+
+buildRelease:
+  stage: build
+  script:
+    - ./gradlew assembleRelease
+    - ./gradlew checkstyle
+    - ./gradlew pmd
+    - ./gradlew findbugs
+    - ./gradlew lintRelease
+  artifacts:
+    paths:
+    - app/build/outputs/
+    expire_in: 1 week
+  only:
+    - master
+    - /^v(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
+  tags:
+    - android
+
+unitTestsRelease:
+  stage: test
+  script:
+    - ./gradlew testReleaseUnitTest
+  artifacts:
+    paths:
+    - app/build/reports/tests/testReleaseUnitTest/
+    expire_in: 1 week
+  only:
+    - master
+    - /^v(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
+  tags:
+    - android
