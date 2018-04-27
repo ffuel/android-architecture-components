@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class SamplePresenter extends MoxyPresenter<SampleState, SampleView, SampleInteractor, Router> {
 
     @Inject
-    public SamplePresenter(@NonNull ExecutorsFactory executors,
+    SamplePresenter(@NonNull ExecutorsFactory executors,
                            @NonNull SampleInteractor interactor,
                            @NonNull ApplicationLogger logger) {
         super(executors, interactor, logger);

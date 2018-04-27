@@ -8,6 +8,8 @@ import io.reactivex.Observable;
 
 public interface Interactor<S extends State, R extends Router> {
 
+    void firstStart();
+
     @NonNull
     Observable<S> observeState();
 

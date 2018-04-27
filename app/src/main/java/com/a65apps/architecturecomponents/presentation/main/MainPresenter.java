@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class MainPresenter extends MoxyPresenter<MainState, MainView, MainInteractor, Router> {
 
     @Inject
-    public MainPresenter(@NonNull ExecutorsFactory executors, @NonNull MainInteractor interactor,
+    MainPresenter(@NonNull ExecutorsFactory executors, @NonNull MainInteractor interactor,
                          @NonNull ApplicationLogger logger) {
         super(executors, interactor, logger);
     }

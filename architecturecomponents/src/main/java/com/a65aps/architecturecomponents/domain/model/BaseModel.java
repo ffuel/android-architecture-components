@@ -28,6 +28,11 @@ public abstract class BaseModel<S extends State, R extends Router> implements In
         this.router = router;
     }
 
+    @Override
+    public void firstStart() {
+//      default implementation
+    }
+
     @NonNull
     @Override
     @CallSuper

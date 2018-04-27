@@ -52,6 +52,7 @@ public abstract class BasePresenter<S extends State, V extends View<S>, I extend
     @CallSuper
     @UiThread
     public void onCreate() {
+        interactor.firstStart();
         disposeOnDestroy(interactor.observeState()
                 .observeOn(uiExecutor.getScheduler())
                 .subscribe(this::onUpdateState, this::onError));
@@ -61,6 +62,7 @@ public abstract class BasePresenter<S extends State, V extends View<S>, I extend
     @UiThread
     public void onDestroy() {
         compositeDisposable.dispose();
+        interactor.dispose();
     }
 
     @Override
