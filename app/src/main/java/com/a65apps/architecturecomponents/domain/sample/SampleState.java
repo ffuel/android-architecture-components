@@ -2,11 +2,14 @@ package com.a65apps.architecturecomponents.domain.sample;
 
 import android.support.annotation.NonNull;
 
-import com.a65aps.architecturecomponents.domain.State;
+import com.a65aps.architecturecomponents.domain.model.ReloadingState;
 import com.google.auto.value.AutoValue;
 
+import net.jcip.annotations.ThreadSafe;
+
 @AutoValue
-public abstract class SampleState implements State {
+@ThreadSafe
+public abstract class SampleState implements ReloadingState {
 
     public static SampleState create(State state, String text, String data, String error) {
         return new AutoValue_SampleState(state, text, data, error);
@@ -23,6 +26,16 @@ public abstract class SampleState implements State {
 
     @NonNull
     public abstract String error();
+
+    @Override
+    public boolean hasData() {
+        return !data().isEmpty();
+    }
+
+    @Override
+    public boolean isLoading() {
+        return state() == State.LOADING;
+    }
 
     @NonNull
     public SampleState mutateLoading(@NonNull String text) {

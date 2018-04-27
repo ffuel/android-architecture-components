@@ -32,8 +32,6 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     TextView text;
     @BindView(R.id.error)
     TextView error;
-    @BindView(R.id.progress)
-    View progress;
     @BindView(R.id.data)
     TextView data;
 
@@ -53,17 +51,14 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
         data.setText(state.data());
         switch (state.state()) {
             case LOADING:
-                progress.setVisibility(View.VISIBLE);
                 data.setVisibility(View.GONE);
                 refresh.setRefreshing(true);
                 break;
             case COMPLETE:
-                progress.setVisibility(View.GONE);
                 data.setVisibility(View.VISIBLE);
                 refresh.setRefreshing(false);
                 break;
             case ERROR:
-                progress.setVisibility(View.GONE);
                 if (state.data().isEmpty()) {
                     data.setVisibility(View.GONE);
                 } else {

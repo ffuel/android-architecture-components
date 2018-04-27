@@ -54,6 +54,7 @@ public abstract class MoxyPresenter<S extends State, V extends MoxyView<S>, I ex
     @CallSuper
     @UiThread
     protected void onFirstViewAttach() {
+        interactor.firstStart();
         disposeOnDestroy(interactor.observeState()
                 .observeOn(uiExecutor.getScheduler())
                 .subscribe(this::onUpdateState, this::onError));
@@ -64,7 +65,7 @@ public abstract class MoxyPresenter<S extends State, V extends MoxyView<S>, I ex
     @UiThread
     public void onDestroy() {
         compositeDisposable.dispose();
-        getInteractor().dispose();
+        interactor.dispose();
     }
 
     @Nullable

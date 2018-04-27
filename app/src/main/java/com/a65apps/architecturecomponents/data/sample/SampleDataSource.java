@@ -18,7 +18,7 @@ public class SampleDataSource implements SampleSource {
     private static final long TIME_WAIT = 3_000L;
 
     @Inject
-    public SampleDataSource(@NonNull StringResources resources) {
+    SampleDataSource(@NonNull StringResources resources) {
         this.resources = resources;
     }
 
@@ -32,7 +32,11 @@ public class SampleDataSource implements SampleSource {
     @Override
     public Single<String> data() {
         return Single.fromCallable(() -> {
-            Thread.sleep(TIME_WAIT);
+            try {
+                Thread.sleep(TIME_WAIT);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             return resources.getString(R.string.app_name);
         });
     }
