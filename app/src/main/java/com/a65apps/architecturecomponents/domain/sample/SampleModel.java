@@ -36,6 +36,19 @@ public final class SampleModel extends ReloadingModel<SampleState, Router>
 
     @NonNull
     @Override
+    protected Single<SampleState> tryGetDataCached() {
+        return source.cachedData().map(data -> {
+            if (data.isEmpty()) {
+                SampleState state = getState();
+                return state.mutateError(state.error());
+            }
+
+            return getState().mutateData(data);
+        });
+    }
+
+    @NonNull
+    @Override
     protected SampleState getError(@NonNull SampleState lastState, @NonNull Throwable error) {
         return lastState.mutateError(error.getMessage());
     }
@@ -63,6 +76,6 @@ public final class SampleModel extends ReloadingModel<SampleState, Router>
     @NonNull
     @Override
     protected SampleState getConnectionError(@NonNull SampleState lastState) {
-        return lastState.mutateError(source.noConnectionText());
+        return lastState.mutateErrorPreserveCurrentState(source.noConnectionText());
     }
 }
