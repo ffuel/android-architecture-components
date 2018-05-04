@@ -67,6 +67,9 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
     protected abstract Single<S> getData();
 
     @NonNull
+    protected abstract Single<S> tryGetDataCached();
+
+    @NonNull
     protected abstract S getError(@NonNull S lastState, @NonNull Throwable error);
 
     @NonNull
@@ -98,6 +101,13 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
     }
 
     @NonNull
+    private Single<S> tryLoadDataCache() {
+        return tryGetDataCached()
+                .doOnSubscribe(__ -> setLoading())
+                .doOnError(this::setError);
+    }
+
+    @NonNull
     private Observable<S> reloadEvent() {
         return loadSubject
                 .flatMapSingle(__ -> connectionSource.single())
@@ -108,7 +118,8 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
                         return loadData();
                     }
 
-                    return Single.just(getConnectionError(getState()));
+                    setState(getConnectionError(getState()));
+                    return tryLoadDataCache();
                 });
     }
 

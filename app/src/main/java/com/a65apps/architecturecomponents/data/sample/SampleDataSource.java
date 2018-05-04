@@ -5,21 +5,37 @@ import android.support.annotation.NonNull;
 import com.a65apps.architecturecomponents.R;
 import com.a65apps.architecturecomponents.domain.sample.SampleSource;
 import com.a65aps.architecturecomponents.domain.resources.StringResources;
+import com.a65aps.architecturecomponents.domain.source.SinglePutSource;
+import com.a65aps.architecturecomponents.domain.source.SingleSource;
+import com.a65aps.daggerarchitecturecomponents.source.Local;
+import com.a65aps.daggerarchitecturecomponents.source.Remote;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
 
-public class SampleDataSource implements SampleSource {
+class SampleDataSource implements SampleSource {
 
     @NonNull
     private final StringResources resources;
-
-    private static final long TIME_WAIT = 3_000L;
+    @NonNull
+    private final SingleSource<String> networkSource;
+    @NonNull
+    private final SinglePutSource<String> dbSource;
 
     @Inject
-    SampleDataSource(@NonNull StringResources resources) {
+    SampleDataSource(@NonNull StringResources resources,
+                     @Remote @NonNull SingleSource<String> networkSource,
+                     @Local @NonNull SinglePutSource<String> dbSource) {
         this.resources = resources;
+        this.networkSource = networkSource;
+        this.dbSource = dbSource;
+    }
+
+    @NonNull
+    @Override
+    public Single<String> cachedData() {
+        return dbSource.data();
     }
 
     @NonNull
@@ -31,14 +47,9 @@ public class SampleDataSource implements SampleSource {
     @NonNull
     @Override
     public Single<String> data() {
-        return Single.fromCallable(() -> {
-            try {
-                Thread.sleep(TIME_WAIT);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return resources.getString(R.string.app_name);
-        });
+        return networkSource.data()
+                .flatMapCompletable(dbSource::putData)
+                .andThen(dbSource.data());
     }
 
     @NonNull

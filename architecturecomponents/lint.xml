@@ -7,6 +7,7 @@
     <issue id="GradleDependency" severity="ignore" />
     <issue id="InconsistentLayout" severity="ignore" />
     <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" />
 
     <issue id="HardcodedText" severity="error" />
     <issue id="UnusedResources" severity="error" />

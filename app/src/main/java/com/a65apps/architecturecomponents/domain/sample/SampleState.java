@@ -48,6 +48,11 @@ public abstract class SampleState implements ReloadingState {
     }
 
     @NonNull
+    public SampleState mutateErrorPreserveCurrentState(@NonNull String message) {
+        return SampleState.create(state(), text(), data(), message);
+    }
+
+    @NonNull
     public SampleState mutateData(@NonNull String data) {
         return SampleState.create(SampleState.State.COMPLETE, text(), data, error());
     }
