@@ -28,7 +28,7 @@ allprojects {
         injectVersion = '1'
         moxyVersion = '1.5.3'
         ciceroneVersion = '3.0.0'
-        daggerVersion = '2.15'
+        daggerVersion = '2.11'
     }
 }
 

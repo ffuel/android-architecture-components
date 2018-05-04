@@ -42,7 +42,9 @@ dependencies {
     implementation project(':architecturecomponents')
 
     implementation "com.google.dagger:dagger:$project.ext.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$project.ext.daggerVersion"
+    implementation ("com.google.dagger:dagger-android-support:$project.ext.daggerVersion") {
+        exclude group: "com.android.support"
+    }
     annotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$project.ext.daggerVersion"
 
