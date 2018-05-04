@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn com.google.errorprone.annotations.**
+-dontwarn java.lang.invoke.**
