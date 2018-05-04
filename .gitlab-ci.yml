@@ -43,7 +43,6 @@ buildRelease:
     - ./gradlew assembleRelease
     - ./gradlew checkstyle
     - ./gradlew pmd
-    - ./gradlew findbugs
     - ./gradlew lintRelease
   artifacts:
     paths:
