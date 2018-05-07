@@ -1,18 +1,20 @@
-package com.a65aps.architecturecomponents.presentation.presenter;
+package com.a65aps.moxyarchitecturecomponents.presenter;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
-import com.a65aps.architecturecomponents.domain.Interactor;
+import com.a65aps.architecturecomponents.domain.CompositeStateInteractor;
 import com.a65aps.architecturecomponents.domain.State;
 import com.a65aps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65aps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65aps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65aps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65aps.architecturecomponents.presentation.navigation.Router;
-import com.a65aps.architecturecomponents.presentation.view.View;
+import com.a65aps.architecturecomponents.presentation.presenter.CompositeStatePresenter;
+import com.a65aps.moxyarchitecturecomponents.view.MoxyCompositeStateView;
+import com.arellomobile.mvp.MvpPresenter;
 
 import net.jcip.annotations.NotThreadSafe;
 
@@ -21,9 +23,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 @NotThreadSafe
-public abstract class BasePresenter<S extends State, V extends View<S>, I extends Interactor<S, R>,
-        R extends Router>
-        implements Presenter<S, V, I, R> {
+public class MoxyCompositeStatePresenter<S extends State, CS extends State,
+        V extends MoxyCompositeStateView<S, CS>, I extends CompositeStateInteractor<S, CS, R>,
+        R extends Router> extends MvpPresenter<V> implements CompositeStatePresenter<S, CS, V, I, R> {
 
     @NonNull
     private final ThreadExecutor ioExecutor;
@@ -40,8 +42,8 @@ public abstract class BasePresenter<S extends State, V extends View<S>, I extend
     @Nullable
     private Object tag = null;
 
-    public BasePresenter(@NonNull ExecutorsFactory executors, @NonNull I interactor,
-                         @NonNull ApplicationLogger logger) {
+    public MoxyCompositeStatePresenter(@NonNull ExecutorsFactory executors, @NonNull I interactor,
+                                       @NonNull ApplicationLogger logger) {
         ioExecutor = executors.getExecutor(SchedulerType.IO);
         computationExecutor = executors.getExecutor(SchedulerType.COMPUTATION);
         uiExecutor = executors.getExecutor(SchedulerType.UI);
@@ -49,20 +51,31 @@ public abstract class BasePresenter<S extends State, V extends View<S>, I extend
         this.logger = logger;
     }
 
+    @Override
     @CallSuper
     @UiThread
-    public void onCreate() {
+    protected void onFirstViewAttach() {
         interactor.firstStart();
         disposeOnDestroy(interactor.observeState()
                 .observeOn(uiExecutor.getScheduler())
                 .subscribe(this::onUpdateState, this::onError));
+        disposeOnDestroy(interactor.observeDependentState()
+                .observeOn(uiExecutor.getScheduler())
+                .subscribe(this::onUpdateDependentState, this::onError));
     }
 
+    @Override
     @CallSuper
     @UiThread
     public void onDestroy() {
         compositeDisposable.dispose();
         interactor.dispose();
+    }
+
+    @Nullable
+    @Override
+    public V getView() {
+        return getViewState();
     }
 
     @Override
@@ -107,6 +120,15 @@ public abstract class BasePresenter<S extends State, V extends View<S>, I extend
         V view = getView();
         if (view != null) {
             view.updateState(state);
+        }
+    }
+
+    @CallSuper
+    @UiThread
+    protected void onUpdateDependentState(@NonNull CS state) {
+        V view = getView();
+        if (view != null) {
+            view.updateDependentState(state);
         }
     }
 
