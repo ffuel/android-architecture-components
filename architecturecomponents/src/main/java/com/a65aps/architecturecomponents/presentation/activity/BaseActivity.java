@@ -1,5 +1,6 @@
 package com.a65aps.architecturecomponents.presentation.activity;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.CallSuper;
@@ -7,12 +8,14 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.a65aps.architecturecomponents.domain.Interactor;
 import com.a65aps.architecturecomponents.domain.State;
+import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsManager;
 import com.a65aps.architecturecomponents.presentation.fragment.BaseFragment;
 import com.a65aps.architecturecomponents.presentation.mapper.ParcelableToStateMapper;
 import com.a65aps.architecturecomponents.presentation.mapper.StateToParcelableMapper;
@@ -27,7 +30,7 @@ import javax.inject.Inject;
 public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
         V extends View<S>, I extends Interactor<S, R>, R extends Router,
         P extends Presenter<S, V, I, R>> extends AppCompatActivity
-        implements View<S> {
+        implements View<S>, RequestPermissionsManager {
 
     private static final String VIEW_STATE = "view_state";
 
@@ -43,6 +46,9 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
 
     @Nullable
     private Parcel state;
+
+    @Nullable
+    private OnRequestPermissionCallback permissionsCallback;
 
     @Override
     @CallSuper
@@ -74,11 +80,7 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
 
     protected abstract void inject();
 
-    @Override
-    @CallSuper
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
+    protected final void restoreState(@NonNull Bundle savedInstanceState) {
         state = savedInstanceState.getParcelable(VIEW_STATE);
         if (state != null) {
             if (parcelMapper == null) {
@@ -133,6 +135,16 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
         updateState(this.state);
     }
 
+    @Override
+    @CallSuper
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissions.length != 0 && grantResults.length != 0 && permissionsCallback != null) {
+            permissionsCallback.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     protected abstract void updateState(@NonNull Parcel state);
 
     @LayoutRes
@@ -140,4 +152,24 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
 
     @NonNull
     protected abstract P getPresenter();
+
+    @Override
+    public final void setResultCallback(@Nullable OnRequestPermissionCallback callback) {
+        this.permissionsCallback = callback;
+    }
+
+    @Override
+    public final void requestPermission(@NonNull String[] permission, int requestCode) {
+        ActivityCompat.requestPermissions(this, permission, requestCode);
+    }
+
+    @Override
+    public final boolean showRequestPermissionRationale(@NonNull String permission) {
+        return ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+    }
+
+    @Override
+    public final boolean checkPermission(@NonNull String permission) {
+        return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+    }
 }

@@ -29,6 +29,9 @@ public abstract class MoxyActivity<S extends State, Parcel extends Parcelable,
         super.onCreate(savedInstanceState);
 
         getMvpDelegate().onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
     }
 
     @Override

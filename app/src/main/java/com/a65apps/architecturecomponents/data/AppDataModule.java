@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import com.a65apps.architecturecomponents.data.contacts.ContactsDataModel;
 import com.a65apps.architecturecomponents.data.sample.SampleDataModule;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = {
-        SampleDataModule.class
+        SampleDataModule.class,
+        ContactsDataModel.class
 })
 public class AppDataModule {
 

@@ -2,4 +2,11 @@
     <string name="app_name">ArchitectureComponents</string>
     <string name="hello_text">Hello World!</string>
     <string name="no_connection_text">Проверьте подключение к интернету</string>
+    <string name="search_hint">Поиск контакта</string>
+
+    <string name="sample_title">Главный экран</string>
+    <string name="contacts_title">Поиск контактов</string>
+    <string name="permissions_title">Необходимы разешения</string>
+
+    <string name="contacts_permissions_not_granted">Необходимо включить разрешение на чтение контактов</string>
 </resources>

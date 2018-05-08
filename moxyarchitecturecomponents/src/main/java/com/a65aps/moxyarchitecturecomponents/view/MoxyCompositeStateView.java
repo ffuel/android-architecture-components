@@ -8,5 +8,5 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MoxyCompositeStateView<T extends State, S extends State>
-        extends CompositeStateView<T, S>, MvpView {
+        extends MvpView, CompositeStateView<T, S> {
 }

@@ -4,31 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_base">
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             tools:text="Hello World!"/>
 
         <TextView
             android:id="@+id/data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/text"
+            android:layout_centerHorizontal="true"
             tools:text="Данные"/>
 
         <TextView
             android:id="@+id/error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/text"
+            android:layout_centerHorizontal="true"
             tools:text="Ошибка!"/>
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/contacts_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_hint"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
 

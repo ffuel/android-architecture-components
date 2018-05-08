@@ -2,6 +2,8 @@ package com.a65apps.architecturecomponents.presentation;
 
 import android.support.annotation.NonNull;
 
+import com.a65apps.architecturecomponents.presentation.contacts.ContactsPresenter;
+import com.a65apps.architecturecomponents.presentation.contacts.ContactsPresenterComponent;
 import com.a65apps.architecturecomponents.presentation.main.MainPresenter;
 import com.a65apps.architecturecomponents.presentation.main.MainPresenterComponent;
 import com.a65apps.architecturecomponents.presentation.sample.SamplePresenter;
@@ -15,7 +17,8 @@ import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = {
         MainPresenterComponent.class,
-        SamplePresenterComponent.class
+        SamplePresenterComponent.class,
+        ContactsPresenterComponent.class
 })
 public interface ComponentsBindings {
 
@@ -30,4 +33,10 @@ public interface ComponentsBindings {
     @PresenterKey(SamplePresenter.class)
     @NonNull
     PresenterComponentBuilder bindsSampleComponentBuilder(@NonNull SamplePresenterComponent.Builder builder);
+
+    @Binds
+    @IntoMap
+    @PresenterKey(ContactsPresenter.class)
+    @NonNull
+    PresenterComponentBuilder bindsContactsComponentBuilder(@NonNull ContactsPresenterComponent.Builder builder);
 }

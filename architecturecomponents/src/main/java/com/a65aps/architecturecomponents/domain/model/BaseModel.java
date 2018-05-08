@@ -29,7 +29,7 @@ public abstract class BaseModel<S extends State, R extends Router> implements In
     }
 
     @Override
-    public void firstStart() {
+    public void firstStart(boolean isRestoring) {
 //      default implementation
     }
 

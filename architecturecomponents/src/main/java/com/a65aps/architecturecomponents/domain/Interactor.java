@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public interface Interactor<S extends State, R extends Router> {
 
-    void firstStart();
+    void firstStart(boolean isRestoring);
 
     @NonNull
     Observable<S> observeState();

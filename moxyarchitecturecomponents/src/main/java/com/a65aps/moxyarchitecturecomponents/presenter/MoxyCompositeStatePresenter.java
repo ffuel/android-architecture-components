@@ -42,6 +42,8 @@ public class MoxyCompositeStatePresenter<S extends State, CS extends State,
     @Nullable
     private Object tag = null;
 
+    private boolean isRestoring = false;
+
     public MoxyCompositeStatePresenter(@NonNull ExecutorsFactory executors, @NonNull I interactor,
                                        @NonNull ApplicationLogger logger) {
         ioExecutor = executors.getExecutor(SchedulerType.IO);
@@ -55,7 +57,8 @@ public class MoxyCompositeStatePresenter<S extends State, CS extends State,
     @CallSuper
     @UiThread
     protected void onFirstViewAttach() {
-        interactor.firstStart();
+        interactor.firstStart(isRestoring);
+        isRestoring = false;
         disposeOnDestroy(interactor.observeState()
                 .observeOn(uiExecutor.getScheduler())
                 .subscribe(this::onUpdateState, this::onError));
@@ -82,6 +85,7 @@ public class MoxyCompositeStatePresenter<S extends State, CS extends State,
     @CallSuper
     @UiThread
     public void restoreState(@NonNull S state) {
+        isRestoring = true;
         interactor.restoreState(state);
     }
 

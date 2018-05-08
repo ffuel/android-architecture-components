@@ -75,6 +75,8 @@ dependencies {
 
     // Support
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
+    implementation "com.android.support:recyclerview-v7:$project.ext.supportVersion"
+    implementation "com.android.support:design:$project.ext.supportVersion"
 
     // Dagger
     implementation "com.google.dagger:dagger:$project.ext.daggerVersion"

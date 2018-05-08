@@ -17,8 +17,8 @@ public class SamplePresenter extends MoxyPresenter<SampleState, SampleView, Samp
 
     @Inject
     SamplePresenter(@NonNull ExecutorsFactory executors,
-                           @NonNull SampleInteractor interactor,
-                           @NonNull ApplicationLogger logger) {
+                    @NonNull SampleInteractor interactor,
+                    @NonNull ApplicationLogger logger) {
         super(executors, interactor, logger);
     }
 

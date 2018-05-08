@@ -37,7 +37,7 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
 
     @Override
     @CallSuper
-    public void firstStart() {
+    public void firstStart(boolean isRestoring) {
         addDisposable(reloadEvent()
                 .doOnNext(this::setState)
                 .doOnError(this::setError)
