@@ -5,31 +5,21 @@ import android.support.v4.app.FragmentActivity;
 
 import com.a65apps.architecturecomponents.domain.main.MainState;
 import com.a65aps.architecturecomponents.di.ActivityModule;
-import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsManager;
 import com.a65aps.architecturecomponents.presentation.navigation.NavigatorDelegate;
 import com.a65aps.ciceronearchitecturecomponents.CiceroneDelegate;
-import com.a65aps.daggerarchitecturecomponents.PermissionsModule;
 import com.a65aps.daggerarchitecturecomponents.activity.DaggerActivityModule;
 
 import dagger.Module;
 import dagger.Provides;
 import ru.terrakok.cicerone.NavigatorHolder;
 
-@Module(includes = {
-        PermissionsModule.class
-})
+@Module
 public class MainActivityModule extends DaggerActivityModule<MainState, MainParcelable,
         MainStateMapper, MainParcelMapper> {
 
     @Provides
     @NonNull
     FragmentActivity providesFragmentActivity(@NonNull MainActivity activity) {
-        return activity;
-    }
-
-    @Provides
-    @NonNull
-    RequestPermissionsManager providesPermissionsManager(@NonNull MainActivity activity) {
         return activity;
     }
 

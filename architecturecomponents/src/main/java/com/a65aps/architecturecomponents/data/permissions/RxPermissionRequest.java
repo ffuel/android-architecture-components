@@ -2,9 +2,12 @@ package com.a65aps.architecturecomponents.data.permissions;
 
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.a65aps.architecturecomponents.domain.permissions.PermissionState;
-import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsManager;
+import com.a65aps.architecturecomponents.domain.permissions.PermissionsManager;
+import com.a65aps.architecturecomponents.domain.permissions.PermissionsRequest;
+import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsWorker;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -12,42 +15,57 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposables;
 
-final class RxPermissionRequest implements SingleOnSubscribe<List<PermissionState>> {
+final class RxPermissionRequest implements PermissionsRequest {
 
     private static final int REQUEST_CODE = 100;
 
     @NonNull
-    private final WeakReference<RequestPermissionsManager> managerPointer;
-    @NonNull
     private final String[] permissions;
     private final boolean force;
+    @NonNull
+    private final PermissionsManager permissionsManager;
+
+    @Nullable
+    private SingleEmitter<List<PermissionState>> emitter;
 
     @NonNull
-    public static Single<List<PermissionState>> create(@NonNull RequestPermissionsManager manager,
+    public static Single<List<PermissionState>> create(@NonNull PermissionsManager permissionsManager,
                                                        @NonNull String[] permissions, boolean force) {
-        return Single.defer(() -> Single.create(new RxPermissionRequest(manager, permissions, force)));
+        return Single.defer(() -> Single.create(
+                new RxPermissionRequest(permissionsManager, permissions, force)));
     }
 
-    private RxPermissionRequest(@NonNull RequestPermissionsManager manager,
+    private RxPermissionRequest(@NonNull PermissionsManager permissionsManager,
                                 @NonNull String[] permissions, boolean force) {
-        this.managerPointer = new WeakReference<>(manager);
+        this.permissionsManager = permissionsManager;
         this.permissions = permissions;
         this.force = force;
     }
 
     @Override
-    public void subscribe(SingleEmitter<List<PermissionState>> emitter) {
+    public void subscribe(@NonNull SingleEmitter<List<PermissionState>> emitter) {
+        this.emitter = emitter;
+        permissionsManager.executeRequest(this);
+    }
+
+    @Override
+    public void execute(@NonNull RequestPermissionsWorker worker) {
+        if (emitter == null || emitter.isDisposed()) {
+            return;
+        }
+
+        final WeakReference<RequestPermissionsWorker> managerPointer = new WeakReference<>(worker);
+
         emitter.setDisposable(Disposables.fromRunnable(() -> {
-            RequestPermissionsManager manager = managerPointer.get();
+            RequestPermissionsWorker manager = managerPointer.get();
             if (manager != null) {
                 manager.setResultCallback(null);
             }
         }));
 
-        RequestPermissionsManager manager = managerPointer.get();
+        RequestPermissionsWorker manager = managerPointer.get();
         if (manager != null) {
             List<PermissionState> result = new ArrayList<>(permissions.length);
             for (String permission: permissions) {
@@ -62,8 +80,9 @@ final class RxPermissionRequest implements SingleOnSubscribe<List<PermissionStat
             }
 
             manager.setResultCallback((requestCode, permission, grantResult) -> {
-                RequestPermissionsManager ptr = managerPointer.get();
+                RequestPermissionsWorker ptr = managerPointer.get();
                 if (ptr == null) {
+                    emitter.onError(new IllegalStateException("RequestPermissionsManager is null"));
                     return;
                 }
 

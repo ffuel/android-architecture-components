@@ -2,6 +2,7 @@ package com.a65aps.architecturecomponents.domain.model;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 
 import com.a65aps.architecturecomponents.domain.CompositeStateInteractor;
 import com.a65aps.architecturecomponents.domain.State;
@@ -31,6 +32,7 @@ public abstract class BaseCompositeStateModel<S extends State, CS extends State,
         return Observable.defer(() -> Observable.create(dependentState));
     }
 
+    @UiThread
     @Override
     @CallSuper
     public void restoreState(@NonNull S state) {
@@ -49,5 +51,6 @@ public abstract class BaseCompositeStateModel<S extends State, CS extends State,
         this.dependentState.setState(state);
     }
 
+    @UiThread
     protected abstract void restoreDependentState(@NonNull S state);
 }

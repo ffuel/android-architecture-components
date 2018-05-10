@@ -2,6 +2,7 @@ package com.a65aps.architecturecomponents.domain.model;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 
 import com.a65aps.architecturecomponents.domain.Interactor;
 import com.a65aps.architecturecomponents.domain.State;
@@ -28,6 +29,7 @@ public abstract class BaseModel<S extends State, R extends Router> implements In
         this.router = router;
     }
 
+    @UiThread
     @Override
     public void firstStart(boolean isRestoring) {
 //      default implementation
@@ -40,6 +42,7 @@ public abstract class BaseModel<S extends State, R extends Router> implements In
         return Observable.defer(() -> Observable.create(state));
     }
 
+    @UiThread
     @Override
     @CallSuper
     public void restoreState(@NonNull S state) {

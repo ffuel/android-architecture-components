@@ -3,8 +3,8 @@ package com.a65aps.architecturecomponents.data.permissions;
 import android.support.annotation.NonNull;
 
 import com.a65aps.architecturecomponents.domain.permissions.PermissionState;
+import com.a65aps.architecturecomponents.domain.permissions.PermissionsManager;
 import com.a65aps.architecturecomponents.domain.permissions.PermissionsSource;
-import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsManager;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ import io.reactivex.Single;
 public final class AndroidPermissionsSource implements PermissionsSource {
 
     @NonNull
-    private final RequestPermissionsManager manager;
+    private final PermissionsManager permissionsManager;
 
     @Inject
-    public AndroidPermissionsSource(@NonNull RequestPermissionsManager manager) {
-        this.manager = manager;
+    public AndroidPermissionsSource(@NonNull PermissionsManager permissionsManager) {
+        this.permissionsManager = permissionsManager;
     }
 
     @NonNull
     @Override
     public Single<List<PermissionState>> requestPermissions(boolean force, @NonNull String... permission) {
-        return RxPermissionRequest.create(manager, permission, force);
+        return RxPermissionRequest.create(permissionsManager, permission, force);
     }
 
     @NonNull

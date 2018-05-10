@@ -1,6 +1,7 @@
 package com.a65aps.architecturecomponents.domain.permissions;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 
 import com.a65aps.architecturecomponents.domain.DataSource;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 
+@UiThread
 public interface PermissionsSource extends DataSource {
 
     @NonNull

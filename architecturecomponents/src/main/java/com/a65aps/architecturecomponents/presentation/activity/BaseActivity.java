@@ -15,7 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.a65aps.architecturecomponents.domain.Interactor;
 import com.a65aps.architecturecomponents.domain.State;
-import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsManager;
+import com.a65aps.architecturecomponents.domain.permissions.PermissionsManager;
+import com.a65aps.architecturecomponents.domain.permissions.RequestPermissionsWorker;
 import com.a65aps.architecturecomponents.presentation.fragment.BaseFragment;
 import com.a65aps.architecturecomponents.presentation.mapper.ParcelableToStateMapper;
 import com.a65aps.architecturecomponents.presentation.mapper.StateToParcelableMapper;
@@ -30,7 +31,7 @@ import javax.inject.Inject;
 public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
         V extends View<S>, I extends Interactor<S, R>, R extends Router,
         P extends Presenter<S, V, I, R>> extends AppCompatActivity
-        implements View<S>, RequestPermissionsManager {
+        implements View<S>, RequestPermissionsWorker {
 
     private static final String VIEW_STATE = "view_state";
 
@@ -43,6 +44,9 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
     @Inject
     @Nullable
     NavigatorDelegate navigatorDelegate;
+    @Inject
+    @Nullable
+    PermissionsManager permissionsManager;
 
     @Nullable
     private Parcel state;
@@ -56,6 +60,9 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
         inject();
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
+        if (permissionsManager != null) {
+            permissionsManager.getPermissionsRequestHolder().setWorker(this);
+        }
     }
 
     @Override
@@ -76,6 +83,15 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
         if (navigatorDelegate != null) {
             navigatorDelegate.onDetach();
         }
+    }
+
+    @Override
+    @CallSuper
+    protected void onDestroy() {
+        if (permissionsManager != null) {
+            permissionsManager.getPermissionsRequestHolder().removeWorker();
+        }
+        super.onDestroy();
     }
 
     protected abstract void inject();
