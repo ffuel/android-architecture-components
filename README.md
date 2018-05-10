@@ -12,11 +12,12 @@ ___
 - *daggerarchitecturecomponents* - модуль содержит реализацию DI на основе библиотеки Dagger 2 и предоставляет базовые Dagger модули.
 - *moxyarchitecturecomponents* - модуль содержит реализацию паттерна MVP из базового модуля на основе библиотеки Moxy.
 - *moxydaggerarchitecturecomponents* - модуль содержит реализацию паттерна MVP из базового модуля на основе модуля *moxyarchitecturecomponents* и *daggerarchitecturecomponents*, т.е. Moxy + Dagger.
+
 ___
 
 ## Работа с Android architecture components
 
-Для начала, необходимо подключить этот репозиторий к вашему проекту как git submodule [![git submodule](https://git-scm.com/images/logo@2x.png)](https://git-scm.com/book/ru/v1/%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-Git-%D0%9F%D0%BE%D0%B4%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D0%B8)
+Для начала, необходимо подключить этот репозиторий к вашему проекту как git submodule [![git submodule](https://git-scm.com/images/logo.png)](https://git-scm.com/book/ru/v1/%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-Git-%D0%9F%D0%BE%D0%B4%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D0%B8)
 и добавить необходимые gradle модули в проект. Если вы не планируете использовать Moxy, Dagger, Cicerone, то достаточно подключить только *architecturecomponents*, 
 но придется тогда написать свои реализации для MVP, DI и навигации соответственно.
 
