@@ -13,8 +13,8 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     @Override
     @CallSuper
     public void onReceive(Context context, Intent intent) {
-        inject(context, intent);
+        inject(context);
     }
 
-    protected abstract void inject(Context context, Intent intent);
+    protected abstract void inject(Context context);
 }
