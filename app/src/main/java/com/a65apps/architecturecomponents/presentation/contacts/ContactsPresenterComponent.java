@@ -5,15 +5,15 @@ import com.a65apps.architecturecomponents.domain.contacts.ContactsInteractor;
 import com.a65apps.architecturecomponents.domain.contacts.ContactsListState;
 import com.a65apps.architecturecomponents.domain.contacts.ContactsState;
 import com.a65aps.architecturecomponents.presentation.navigation.Router;
+import com.a65aps.daggerarchitecturecomponents.presenter.ChildPresenterScope;
 import com.a65aps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
-import com.a65aps.daggerarchitecturecomponents.presenter.PresenterScope;
 import com.a65aps.daggerarchitecturecomponents.presenter.ProviderPresenterComponent;
 import com.a65aps.moxyarchitecturecomponents.view.MoxyCompositeStateView;
 
 import dagger.Module;
 import dagger.Subcomponent;
 
-@PresenterScope
+@ChildPresenterScope
 @Subcomponent(modules = {
         ContactsPresenterComponent.ContactsPresenterModule.class
 })

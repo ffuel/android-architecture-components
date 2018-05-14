@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.a65apps.architecturecomponents.domain.contacts.ContactsInteractor;
 import com.a65apps.architecturecomponents.domain.contacts.ContactsListState;
 import com.a65apps.architecturecomponents.domain.contacts.ContactsState;
+import com.a65apps.architecturecomponents.domain.main.MainInteractor;
 import com.a65aps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65aps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65aps.architecturecomponents.presentation.navigation.Router;
@@ -18,10 +19,19 @@ import javax.inject.Inject;
 public class ContactsPresenter extends MoxyCompositeStatePresenter<ContactsState, ContactsListState,
         MoxyCompositeStateView<ContactsState, ContactsListState>, ContactsInteractor, Router> {
 
+    @NonNull
+    private final MainInteractor mainInteractor;
+
     @Inject
     public ContactsPresenter(@NonNull ExecutorsFactory executors, @NonNull ContactsInteractor interactor,
-                             @NonNull ApplicationLogger logger) {
+                             @NonNull ApplicationLogger logger, @NonNull MainInteractor mainInteractor) {
         super(executors, interactor, logger);
+        this.mainInteractor = mainInteractor;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mainInteractor.onBack();
     }
 
     void query(@NonNull String query) {

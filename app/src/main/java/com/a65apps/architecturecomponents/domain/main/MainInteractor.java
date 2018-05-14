@@ -12,4 +12,7 @@ public interface MainInteractor extends Interactor<MainState, Router> {
 
     @UiThread
     void forceContactsPermissions();
+
+    @UiThread
+    void onBack();
 }

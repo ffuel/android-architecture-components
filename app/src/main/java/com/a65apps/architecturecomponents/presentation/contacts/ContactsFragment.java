@@ -115,6 +115,6 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
     @ProvidePresenter
     @NonNull
     ContactsPresenter provideSamplePresenter() {
-        return PresenterInjector.build(ContactsPresenter.class, requireActivity().getApplication());
+        return PresenterInjector.build(ContactsPresenter.class, this);
     }
 }

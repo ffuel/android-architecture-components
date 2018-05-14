@@ -115,7 +115,7 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     @ProvidePresenter
     @NonNull
     SamplePresenter provideSamplePresenter() {
-        return PresenterInjector.build(SamplePresenter.class, requireActivity().getApplication());
+        return PresenterInjector.build(SamplePresenter.class, this);
     }
 
     @OnClick(R.id.contacts_btn)

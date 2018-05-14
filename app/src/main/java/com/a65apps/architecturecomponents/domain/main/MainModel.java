@@ -53,6 +53,23 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
                 .subscribe());
     }
 
+    @UiThread
+    @Override
+    public void onBack() {
+        switch (getState().screen()) {
+            case SAMPLE:
+            case CONTACTS:
+                setState(MainState.create(Screen.SAMPLE));
+                break;
+            case PERMISSION_EXPLANATION:
+                setState(MainState.create(Screen.CONTACTS));
+                break;
+            default:
+                break;
+        }
+        getRouter().exit();
+    }
+
     private void checkPermissionState(@NonNull PermissionState state) {
         switch (state) {
             case GRANTED:
