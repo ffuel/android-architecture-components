@@ -156,7 +156,7 @@ public interface ActivityBuilder {
 
 Создаем компонент для презентера главного модуля:
 ```java
-@PresenterScope
+@PresenterScope // Используем аннотацию времени жизни компонента
 @Subcomponent(modules = {
         MainPresenterComponent.MainPresenterModule.class
 })
@@ -168,10 +168,20 @@ public interface MainPresenterComponent extends ProviderPresenterComponent<MainS
     }
 
     @Module(includes = {
-            MainDomainModule.class // Модуль предоставляет зависимости для domain-слоя главного модуля приложения
+            MainDomainModule.class
+    }, subcomponents = {
+            SamplePresenterComponent.class, // Сабкомпонет фрагмента главного экрана
+            ... // Другие сабкомпоненты презентеров фрагментов
     })
     interface MainPresenterModule {
 
+        @Binds
+        @IntoMap
+        @PresenterKey(SamplePresenter.class) // Ключ презентера
+        @NonNull
+        PresenterComponentBuilder bindsSampleComponentBuilder(@NonNull SamplePresenterComponent.Builder builder); // Регистрируем PresenterComponentBuilder для презентера главного экрана
+
+        ... // Другие сабкомпоненты презентеров фрагментов
     }
 }
 ```
@@ -211,7 +221,7 @@ public interface MainDomainModule {
 MainActivity
 ```java
 public class MainActivity extends MoxyDaggerActivity<MainState, MainParcelable, MainView, MainInteractor,
-        Router, MainPresenter> implements MainView {
+        Router, MainPresenter> implements MainView, HasPresenterSubComponentBuilders {
 
     @InjectPresenter
     MainPresenter presenter;
@@ -235,7 +245,14 @@ public class MainActivity extends MoxyDaggerActivity<MainState, MainParcelable, 
     @ProvidePresenter
     @NonNull
     MainPresenter provideMainPresenter() {
-        return PresenterInjector.build(MainPresenter.class, getApplication()); // Используем PresenterInjector для предоставления MainPresenter
+        return PresenterInjector.build(MainPresenter.class, this); // Используем PresenterInjector для предоставления MainPresenter
+    }
+
+    @NonNull
+    @Override
+    public PresenterComponentBuilder getPresenterSubComponentBuilder(
+            @NonNull Class<? extends Presenter> presenterClass) {
+        return presenter.getPresenterSubComponentBuilder(presenterClass);
     }
 
     ... // Другие методы
@@ -247,10 +264,21 @@ MainPresenter
 @InjectViewState
 public class MainPresenter extends MoxyPresenter<MainState, MainView, MainInteractor, Router> {
 
+    @NonNull
+    private final PresenterSubComponentBuilderFactory componentFactory; // Предоставляем фабрику для сабкомпонентов главного модуля
+
     @Inject
     MainPresenter(@NonNull ExecutorsFactory executors, @NonNull MainInteractor interactor,
-                  @NonNull ApplicationLogger logger) {
+                  @NonNull ApplicationLogger logger,
+                  @NonNull PresenterSubComponentBuilderFactory componentFactory) {
         super(executors, interactor, logger);
+        this.componentFactory = componentFactory;
+    }
+
+    @NonNull
+    PresenterComponentBuilder getPresenterSubComponentBuilder(
+            @NonNull Class<? extends Presenter> presenterClass) {
+        return componentFactory.get(presenterClass);
     }
 
     ... // Другие методы
@@ -369,3 +397,25 @@ public final class MainNavigator extends SupportAppNavigator {
 
 Далее уже можно приступить к написанию следующего модуля приложения на основе MoxyDaggerFragment
 примеры можно посмотреть в *app* модуле.
+
+Пример компонента презентера фрагмента главного экрана:
+```java
+@ChildPresenterScope // Обратите внимание, используем ChildPresenterScope
+@Subcomponent(modules = {
+        SamplePresenterComponent.SamplePresenterModule.class
+})
+public interface SamplePresenterComponent extends ProviderPresenterComponent<SampleState,
+        SampleView, SampleInteractor, Router, SamplePresenter> {
+
+    @Subcomponent.Builder
+    interface Builder extends PresenterComponentBuilder<SamplePresenterComponent> {
+    }
+
+    @Module(includes = {
+            SampleDomainModule.class
+    })
+    interface SamplePresenterModule {
+
+    }
+}
+```
