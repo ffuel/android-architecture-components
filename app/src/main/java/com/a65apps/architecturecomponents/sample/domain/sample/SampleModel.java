@@ -12,8 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Single;
 
-public final class SampleModel extends ReloadingModel<SampleState, Router>
-        implements SampleInteractor {
+public final class SampleModel extends ReloadingModel<SampleState, Router> {
 
     @NonNull
     private final SampleSource source;

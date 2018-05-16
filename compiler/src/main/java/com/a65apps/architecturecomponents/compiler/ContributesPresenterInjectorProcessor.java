@@ -230,10 +230,25 @@ public class ContributesPresenterInjectorProcessor extends AbstractProcessor {
                     List<? extends TypeMirror> args = ((DeclaredType) param.asType()).getTypeArguments();
                     if (!args.isEmpty() && element.getSimpleName().toString().equals("V")) {
                         if (cs != null) {
-                            names.add(ParameterizedTypeName.get(ClassName.get(param),
-                                    names.get(0), cs));
+                            names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0), cs));
                         } else {
                             names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0)));
+                        }
+                    } else if (!args.isEmpty() && element.getSimpleName().toString().equals("I")) {
+                        TypeElement routerArg = null;
+                        for (int j = 0; j < params.size(); j++) {
+                            TypeParameterElement arg = params.get(j);
+                            if (arg.getSimpleName().toString().equals("R")) {
+                                routerArg = paramsArgs.get(j);
+                                break;
+                            }
+                        }
+                        if (cs != null) {
+                            names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0),
+                                    cs, ClassName.get(routerArg)));
+                        } else {
+                            names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0),
+                                    ClassName.get(routerArg)));
                         }
                     } else {
                         names.add(ClassName.get(param));
