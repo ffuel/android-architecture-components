@@ -12,6 +12,12 @@ ___
 - *daggerarchitecturecomponents* - модуль содержит реализацию DI на основе библиотеки Dagger 2 и предоставляет базовые Dagger модули.
 - *moxyarchitecturecomponents* - модуль содержит реализацию паттерна MVP из базового модуля на основе библиотеки Moxy.
 - *moxydaggerarchitecturecomponents* - модуль содержит реализацию паттерна MVP из базового модуля на основе модуля *moxyarchitecturecomponents* и *daggerarchitecturecomponents*, т.е. Moxy + Dagger.
+- *compiler* - модуль содержит AnnotationProcessor для обработки аннотации @ContributesPresenterInjector и саму аннотацию @ContributesPresenterInjector. Необходимо подключать его таким образом:
+```
+compileOnly project(':compiler')
+annotationProcessor project(':compiler')
+```
+Пример можно посмотреть в *app* модуле.
 
 ___
 
@@ -33,7 +39,7 @@ ApplicationModule
         ResourcesModule.class,			// Модуль, предоставляющий реализацию StringResources на основе Context.getString()
         ConnectionStateModule.class,	// Модуль, предоставляющий реализацию ConnectionReceiverSource на основе ConnectionBroadcastReceiverSource
         PermissionsModule.class,		// Модуль, предоставляющий реализацию PermissionsSource и требует инициализации через конструктор параметром PermissionsManager
-        ComponentsBindings.class,		// Предоставляет PresenterComponentBuilder'ы
+        PresenterBuilder.class,		    // Предоставляет subcomponent'ы презентеров с помощью аннотации @ContributesPresenterInjector
         ActivityBuilder.class,			// Предоставляет Activity и Fragment subcomponent'ы с помощью аннотации @ContributesAndroidInjector
         MainNavigationModule.class,		// Должен предоставлять реализации Router и, опционально, NavigatorHolder(если вы используете Cicerone)
         AppDataModule.class 			// Должен предоставлять зависимости для вашего data-слоя приложения
@@ -156,54 +162,49 @@ public interface ActivityBuilder {
 
 Создаем компонент для презентера главного модуля:
 ```java
-@PresenterScope // Используем аннотацию времени жизни компонента
-@Subcomponent(modules = {
-        MainPresenterComponent.MainPresenterModule.class
-})
-public interface MainPresenterComponent extends ProviderPresenterComponent<MainState, MainView,
-        MainInteractor, Router, MainPresenter> {
+@Module
+public interface MainPresenterComponent {
 
-    @Subcomponent.Builder
-    interface Builder extends PresenterComponentBuilder<MainPresenterComponent> {
-    }
+    @ContributesPresenterInjector(modules = {MainPresenterModule.class, ChildPresenterComponent.class}) // ChildPresenterComponent предоставляет subcomponent'ы для презентеров фрагметов в @ChildPresenterScope
+    MainPresenter bindMainPresenter();
+}
+```
+Создаем компонент для презентеров фрагментов главного модуля:
+```java
+@Module
+public interface ChildPresenterComponent {
 
-    @Module(includes = {
-            MainDomainModule.class
-    }, subcomponents = {
-            SamplePresenterComponent.class, // Сабкомпонет фрагмента главного экрана
-            ... // Другие сабкомпоненты презентеров фрагментов
-    })
-    interface MainPresenterModule {
+    @ContributesPresenterInjector(modules = SamplePresenterModule.class, isChild = true) // Сообщаем AnnotationProcessor'у что нужно генерировать код компонента в @ChildPresenterScope
+    SamplePresenter bindSamplePresenter();
 
-        @Binds
-        @IntoMap
-        @PresenterKey(SamplePresenter.class) // Ключ презентера
-        @NonNull
-        PresenterComponentBuilder bindsSampleComponentBuilder(@NonNull SamplePresenterComponent.Builder builder); // Регистрируем PresenterComponentBuilder для презентера главного экрана
-
-        ... // Другие сабкомпоненты презентеров фрагментов
-    }
+    ... // Другие сабкомпоненты главного модуля
+}
+```
+Создаем модуль для презентера главного модуля:
+```java
+@Module(includes = MainDomainModule.class) // MainDomainModule - предоставляет зависимости бизнес-логики для презентера главного модуля
+public interface MainPresenterModule {
 }
 ```
 
-Регистрируем компонент презентера в ComponentsBindings:
+Создаем модуль для презентера фрагмента главного модуля:
+```java
+@Module(includes = SampleDomainModule.class) // SampleDomainModule - предоставляет зависимости бизнес-логики презентера фрагмента главного модуля
+public interface SamplePresenterModule {
+}
+```
+
+Регистрируем компонент презентера главного модуля в PresenterBuilder:
 
 ```java
-@Module(subcomponents = {
-        MainPresenterComponent.class,
-        ... // другие компоненты
+@Module(includes = {
+        com.a65apps.architecturecomponents.sample.presentation.main.MainPresenterComponent_BindMainPresenter.class
 })
-public interface ComponentsBindings {
-
-    @Binds
-    @IntoMap
-    @PresenterKey(MainPresenter.class) // Ключ презентера
-    @NonNull
-    PresenterComponentBuilder bindsMainComponentBuilder(@NonNull MainPresenterComponent.Builder builder);
-
-    ... // Другие компоненты
+public interface PresenterBuilder {
 }
 ```
+Обратите внимание на полное имя класса модуля и название класса. AnnotationProcessor сгенерирует на основе модуля MainPresenterComponent модуль MainPresenterComponent_BindMainPresenter.
+Название сгенерированного класса строится по такому паттерну: ```название класса модуля + _Bind + Название презентера```.
 
 MainDomainModule
 ```java
@@ -211,6 +212,7 @@ MainDomainModule
 public interface MainDomainModule {
 
     @Binds
+    @PresenterScope // Обязательно указываем, что MainModel будет жить в @PresenterScope
     @NonNull
     MainInteractor bindsTo(@NonNull MainModel model);
 }
@@ -397,25 +399,3 @@ public final class MainNavigator extends SupportAppNavigator {
 
 Далее уже можно приступить к написанию следующего модуля приложения на основе MoxyDaggerFragment
 примеры можно посмотреть в *app* модуле.
-
-Пример компонента презентера фрагмента главного экрана:
-```java
-@ChildPresenterScope // Обратите внимание, используем ChildPresenterScope
-@Subcomponent(modules = {
-        SamplePresenterComponent.SamplePresenterModule.class
-})
-public interface SamplePresenterComponent extends ProviderPresenterComponent<SampleState,
-        SampleView, SampleInteractor, Router, SamplePresenter> {
-
-    @Subcomponent.Builder
-    interface Builder extends PresenterComponentBuilder<SamplePresenterComponent> {
-    }
-
-    @Module(includes = {
-            SampleDomainModule.class
-    })
-    interface SamplePresenterModule {
-
-    }
-}
-```
