@@ -7,7 +7,7 @@ apply from: "$project.rootDir/tools/pmd.gradle"
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.a65apps.architecturecomponents"
+        applicationId "com.a65apps.architecturecomponents.sample"
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 3
@@ -72,6 +72,8 @@ dependencies {
     implementation project(':moxyarchitecturecomponents')
     implementation project(':daggerarchitecturecomponents')
     implementation project(':moxydaggerarchitecturecomponents')
+    compileOnly project(':compiler')
+    annotationProcessor project(':compiler')
 
     // Support
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"

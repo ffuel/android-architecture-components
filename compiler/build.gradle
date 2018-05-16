@@ -1,0 +1,14 @@
+apply plugin: 'java-library'
+
+apply from: "$project.rootDir/tools/checkstyle.gradle"
+apply from: "$project.rootDir/tools/pmd.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.squareup:javapoet:$project.ext.javapoetVersion"
+    implementation "com.google.auto.service:auto-service:$project.ext.autoServiceVersion"
+    implementation "javax.inject:javax.inject:$project.ext.injectVersion"
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
