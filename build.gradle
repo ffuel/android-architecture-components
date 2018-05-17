@@ -31,6 +31,12 @@ allprojects {
         daggerVersion = '2.11'
         javapoetVersion = '1.9.0'
         autoServiceVersion = '1.0-rc2'
+
+        // Test
+        junitVersion = '4.12'
+        mockitoVersion = '2.18.3'
+        espressoVersion = '3.0.2'
+        testRunnerVersion = '1.0.2'
     }
 }
 
