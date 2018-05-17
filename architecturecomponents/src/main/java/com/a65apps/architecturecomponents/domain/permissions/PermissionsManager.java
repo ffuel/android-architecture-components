@@ -13,6 +13,10 @@ public class PermissionsManager {
         requestBuffer = new PermissionsRequestBuffer();
     }
 
+    public PermissionsManager(@NonNull PermissionsRequestBuffer buffer) {
+        requestBuffer = buffer;
+    }
+
     @NonNull
     public PermissionsRequestHolder getPermissionsRequestHolder() {
         return requestBuffer;

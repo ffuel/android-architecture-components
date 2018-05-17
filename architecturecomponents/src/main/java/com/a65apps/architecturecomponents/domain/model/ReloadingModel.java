@@ -40,11 +40,11 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
     public void firstStart(boolean isRestoring) {
         addDisposable(reloadEvent()
                 .doOnNext(this::setState)
-                .doOnError(this::setError)
+                .onErrorReturn(error -> getError(getState(), error))
                 .subscribe());
         addDisposable(observeConnectionState()
                 .doOnNext(this::setState)
-                .doOnError(this::setError)
+                .onErrorReturn(error -> getError(getState(), error))
                 .subscribe());
     }
 
@@ -96,15 +96,13 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
     @NonNull
     private Single<S> loadData() {
         return getData()
-                .doOnSubscribe(__ -> setLoading())
-                .doOnError(this::setError);
+                .doOnSubscribe(__ -> setLoading());
     }
 
     @NonNull
     private Single<S> tryLoadDataCache() {
         return tryGetDataCached()
-                .doOnSubscribe(__ -> setLoading())
-                .doOnError(this::setError);
+                .doOnSubscribe(__ -> setLoading());
     }
 
     @NonNull
@@ -121,10 +119,6 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
                     setState(getConnectionError(getState()));
                     return tryLoadDataCache();
                 });
-    }
-
-    private void setError(@NonNull Throwable error) {
-        setState(getError(getState(), error));
     }
 
     private void setLoading() {
