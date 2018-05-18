@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import io.reactivex.observers.TestObserver;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -22,17 +24,21 @@ public class BaseModelTest {
     @Test
     public void testDefaultState() {
         BaseModel<State, Router> model = new BaseModel<State, Router>(state, router) {};
+        TestObserver<State> subscriber = new TestObserver<>();
 
-        model.observeState().subscribe(state -> assertThat(state, equalTo(this.state)));
+        model.observeState().subscribe(subscriber);
+        subscriber.assertValue(this.state);
     }
 
     @Test
     public void testSetState() {
         BaseModel<State, Router> model = new BaseModel<State, Router>(state, router) {};
         final State newState = new State() {};
+        TestObserver<State> subscriber = new TestObserver<>();
 
         model.setState(newState);
-        model.observeState().subscribe(state -> assertThat(state, equalTo(newState)));
+        model.observeState().subscribe(subscriber);
+        subscriber.assertValue(newState);
     }
 
     @Test

@@ -11,6 +11,7 @@ public abstract class StringPreferencesSource extends BasePreferencesSource<Stri
     private final SharedPreferences sharedPreferences;
 
     public StringPreferencesSource(@NonNull SharedPreferences sharedPreferences) {
+        super("");
         this.sharedPreferences = sharedPreferences;
     }
 

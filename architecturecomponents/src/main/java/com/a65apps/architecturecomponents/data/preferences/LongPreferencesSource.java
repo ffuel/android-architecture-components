@@ -11,6 +11,7 @@ public abstract class LongPreferencesSource extends BasePreferencesSource<Long> 
     private final SharedPreferences sharedPreferences;
 
     public LongPreferencesSource(@NonNull SharedPreferences sharedPreferences) {
+        super(0L);
         this.sharedPreferences = sharedPreferences;
     }
 

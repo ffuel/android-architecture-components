@@ -15,10 +15,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import io.reactivex.disposables.Disposable;
+import java.util.Collections;
+import java.util.List;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.TestObserver;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -49,14 +51,14 @@ public class RxPermissionRequestTest {
     public void testJustGranted() {
         when(worker.checkPermission(eq("test_permission")))
                 .thenReturn(true);
+        TestObserver<List<PermissionState>> subscriber = new TestObserver<>();
 
         RxPermissionRequest
                 .create(permissionsManager, permissions, false)
-                .subscribe(result -> {
-                    assertThat(result.get(0), equalTo(PermissionState.GRANTED));
-                });
+                .subscribe(subscriber);
 
         buffer.setWorker(worker);
+        subscriber.assertValue(Collections.singletonList(PermissionState.GRANTED));
     }
 
     @Test
@@ -86,14 +88,14 @@ public class RxPermissionRequestTest {
                 .thenReturn(false);
         when(worker.showRequestPermissionRationale(eq("test_permission")))
                 .thenReturn(true);
+        TestObserver<List<PermissionState>> subscriber = new TestObserver<>();
 
         RxPermissionRequest
                 .create(permissionsManager, permissions, false)
-                .subscribe(result -> {
-                    assertThat(result.get(0), equalTo(PermissionState.NEED_EXPLANATION));
-                });
+                .subscribe(subscriber);
 
         buffer.setWorker(worker);
+        subscriber.assertValue(Collections.singletonList(PermissionState.NEED_EXPLANATION));
     }
 
     @Test
@@ -119,42 +121,42 @@ public class RxPermissionRequestTest {
     public void testRequestPermissionGranted() {
         MockWorker worker = new MockWorker(true, false,
                 false);
+        TestObserver<List<PermissionState>> subscriber = new TestObserver<>();
 
         RxPermissionRequest
                 .create(permissionsManager, permissions, false)
-                .subscribe(result -> {
-                    assertThat(result.get(0), equalTo(PermissionState.GRANTED));
-                });
+                .subscribe(subscriber);
 
         buffer.setWorker(worker);
+        subscriber.assertValue(Collections.singletonList(PermissionState.GRANTED));
     }
 
     @Test
     public void testRequestPermissionShowSettings() {
         MockWorker worker = new MockWorker(false, false,
                 false);
+        TestObserver<List<PermissionState>> subscriber = new TestObserver<>();
 
         RxPermissionRequest
                 .create(permissionsManager, permissions, false)
-                .subscribe(result -> {
-                    assertThat(result.get(0), equalTo(PermissionState.SHOW_SETTINGS));
-                });
+                .subscribe(subscriber);
 
         buffer.setWorker(worker);
+        subscriber.assertValue(Collections.singletonList(PermissionState.SHOW_SETTINGS));
     }
 
     @Test
     public void testRequestPermissionForceNotGranted() {
         MockWorker worker = new MockWorker(false, true,
                 false);
+        TestObserver<List<PermissionState>> subscriber = new TestObserver<>();
 
         RxPermissionRequest
                 .create(permissionsManager, permissions, true)
-                .subscribe(result -> {
-                    assertThat(result.get(0), equalTo(PermissionState.NOT_GRANTED));
-                });
+                .subscribe(subscriber);
 
         buffer.setWorker(worker);
+        subscriber.assertValue(Collections.singletonList(PermissionState.NOT_GRANTED));
     }
 
     private static class MockWorker implements RequestPermissionsWorker {

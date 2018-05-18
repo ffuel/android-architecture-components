@@ -11,6 +11,7 @@ public abstract class BooleanPreferencesSource extends BasePreferencesSource<Boo
     private final SharedPreferences sharedPreferences;
 
     public BooleanPreferencesSource(@NonNull SharedPreferences sharedPreferences) {
+        super(false);
         this.sharedPreferences = sharedPreferences;
     }
 

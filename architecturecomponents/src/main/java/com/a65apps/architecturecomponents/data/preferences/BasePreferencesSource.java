@@ -13,7 +13,11 @@ import io.reactivex.subjects.Subject;
 public abstract class BasePreferencesSource<T> implements PreferencesSource<T> {
 
     @NonNull
-    private final Subject<T> state = BehaviorSubject.<T>create().toSerialized();
+    private final Subject<T> state;
+
+    BasePreferencesSource(@NonNull T defaultData) {
+        state = BehaviorSubject.createDefault(defaultData).toSerialized();
+    }
 
     @NonNull
     @Override

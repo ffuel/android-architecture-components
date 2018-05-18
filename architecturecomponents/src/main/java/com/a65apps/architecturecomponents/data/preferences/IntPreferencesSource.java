@@ -11,6 +11,7 @@ public abstract class IntPreferencesSource extends BasePreferencesSource<Integer
     private final SharedPreferences sharedPreferences;
 
     public IntPreferencesSource(@NonNull SharedPreferences sharedPreferences) {
+        super(0);
         this.sharedPreferences = sharedPreferences;
     }
 

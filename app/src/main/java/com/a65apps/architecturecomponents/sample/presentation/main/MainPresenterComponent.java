@@ -5,7 +5,7 @@ import com.a65apps.architecturecomponents.compiler.annotation.ContributesPresent
 import dagger.Module;
 
 @Module
-public interface MainPresenterComponent {
+interface MainPresenterComponent {
 
     @ContributesPresenterInjector(modules = {MainPresenterModule.class, ChildPresenterComponent.class})
     MainPresenter bindMainPresenter();

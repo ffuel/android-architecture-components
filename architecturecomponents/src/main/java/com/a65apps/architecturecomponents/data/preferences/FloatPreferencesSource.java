@@ -11,6 +11,7 @@ public abstract class FloatPreferencesSource extends BasePreferencesSource<Float
     private final SharedPreferences sharedPreferences;
 
     public FloatPreferencesSource(@NonNull SharedPreferences sharedPreferences) {
+        super(0.0F);
         this.sharedPreferences = sharedPreferences;
     }
 

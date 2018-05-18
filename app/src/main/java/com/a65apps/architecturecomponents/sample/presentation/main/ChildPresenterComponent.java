@@ -9,7 +9,7 @@ import com.a65apps.architecturecomponents.compiler.annotation.ContributesPresent
 import dagger.Module;
 
 @Module
-public interface ChildPresenterComponent {
+interface ChildPresenterComponent {
 
     @ContributesPresenterInjector(modules = SamplePresenterModule.class, isChild = true)
     SamplePresenter bindSamplePresenter();
