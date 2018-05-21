@@ -4,10 +4,21 @@ apply from: "$project.rootDir/tools/checkstyle.gradle"
 apply from: "$project.rootDir/tools/pmd.gradle"
 
 dependencies {
+    def guavaVersion = '25.0-jre'
+    def truthVersion = '0.40'
+    def compileTestingVersion = '0.13'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.squareup:javapoet:$project.ext.javapoetVersion"
-    implementation "com.google.auto.service:auto-service:$project.ext.autoServiceVersion"
+    implementation ("com.google.auto.service:auto-service:$project.ext.autoServiceVersion") {
+        exclude group: "com.google.guava"
+    }
     implementation "javax.inject:javax.inject:$project.ext.injectVersion"
+
+    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "com.google.testing.compile:compile-testing:$compileTestingVersion"
+    testImplementation "com.google.dagger:dagger:$project.ext.daggerVersion"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
