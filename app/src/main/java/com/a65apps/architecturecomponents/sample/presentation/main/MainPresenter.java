@@ -42,6 +42,11 @@ public class MainPresenter extends MoxyPresenter<MainState, MainView, MainIntera
     }
 
     @UiThread
+    void showPosts() {
+        getInteractor().navigatePosts();
+    }
+
+    @UiThread
     void forceContactsPermissions() {
         getInteractor().forceContactsPermissions();
     }

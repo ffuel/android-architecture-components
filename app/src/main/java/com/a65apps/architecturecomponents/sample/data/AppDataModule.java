@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.sample.data.contacts.ContactsDataModel;
+import com.a65apps.architecturecomponents.sample.data.posts.PostsDataBaseModule;
+import com.a65apps.architecturecomponents.sample.data.posts.PostsDataModule;
+import com.a65apps.architecturecomponents.sample.data.posts.PostsNetworkModule;
 import com.a65apps.architecturecomponents.sample.data.sample.SampleDataModule;
 
 import dagger.Module;
@@ -12,7 +15,10 @@ import dagger.Provides;
 
 @Module(includes = {
         SampleDataModule.class,
-        ContactsDataModel.class
+        ContactsDataModel.class,
+        PostsDataModule.class,
+        PostsNetworkModule.class,
+        PostsDataBaseModule.class
 })
 public class AppDataModule {
 

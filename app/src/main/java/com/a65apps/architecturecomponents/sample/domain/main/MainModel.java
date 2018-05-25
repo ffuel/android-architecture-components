@@ -59,6 +59,7 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
         switch (getState().screen()) {
             case SAMPLE:
             case CONTACTS:
+            case POSTS:
                 setState(MainState.create(Screen.SAMPLE));
                 break;
             case PERMISSION_EXPLANATION:
@@ -68,6 +69,12 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
                 break;
         }
         getRouter().exit();
+    }
+
+    @Override
+    public void navigatePosts() {
+        setState(MainState.create(Screen.POSTS));
+        getRouter().navigateTo(getState().screen().getName());
     }
 
     private void checkPermissionState(@NonNull PermissionState state) {

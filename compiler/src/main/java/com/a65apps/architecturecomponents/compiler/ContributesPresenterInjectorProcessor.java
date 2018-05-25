@@ -243,12 +243,13 @@ public class ContributesPresenterInjectorProcessor extends AbstractProcessor {
                                 break;
                             }
                         }
+                        TypeName routerName = ClassName.get(routerArg);
                         if (cs != null) {
                             names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0),
-                                    cs, ClassName.get(routerArg)));
+                                    cs, routerName));
                         } else {
                             names.add(ParameterizedTypeName.get(ClassName.get(param), names.get(0),
-                                    ClassName.get(routerArg)));
+                                    routerName));
                         }
                     } else {
                         names.add(ClassName.get(param));
