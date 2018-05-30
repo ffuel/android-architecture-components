@@ -26,9 +26,10 @@ public abstract class MoxyActivity<S extends State, Parcel extends Parcelable,
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getMvpDelegate().onCreate(savedInstanceState);
+
         super.onCreate(savedInstanceState);
 
-        getMvpDelegate().onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             restoreState(savedInstanceState);
         }
