@@ -18,6 +18,9 @@ abstract class PostsParcelable extends PageParcelable<PostParcelable> {
     @Override
     public abstract List<PostParcelable> items();
 
+    @NonNull
+    public abstract String error();
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder count(int count);
@@ -33,6 +36,8 @@ abstract class PostsParcelable extends PageParcelable<PostParcelable> {
         public abstract Builder isAllDataLoaded(boolean isAllDataLoaded);
 
         public abstract Builder items(List<PostParcelable> items);
+
+        public abstract Builder error(String error);
 
         public abstract PostsParcelable build();
     }

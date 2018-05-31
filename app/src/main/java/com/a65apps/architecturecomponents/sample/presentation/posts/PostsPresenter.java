@@ -40,4 +40,9 @@ public class PostsPresenter extends MoxyPresenter<PostsState, MoxyView<PostsStat
     void bind(int lastPos, int firstPos) {
         getInteractor().bind(lastPos, firstPos);
     }
+
+    @UiThread
+    void onRefresh() {
+        getInteractor().reload();
+    }
 }

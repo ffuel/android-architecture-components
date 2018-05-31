@@ -23,8 +23,9 @@ public abstract class PostsState extends PageState<PostState> {
                 .lastBindPosition(0)
                 .items(Collections.emptyList())
                 .isLoading(true)
-                .isDataChanged(false)
+                .isDataChanged(true)
                 .isAllDataLoaded(false)
+                .error("")
                 .build();
     }
 
@@ -39,6 +40,7 @@ public abstract class PostsState extends PageState<PostState> {
                 .isLoading(false)
                 .isDataChanged(true)
                 .isAllDataLoaded(isAllDataLoaded)
+                .error("")
                 .build();
     }
 
@@ -52,12 +54,30 @@ public abstract class PostsState extends PageState<PostState> {
                 .isLoading(true)
                 .isDataChanged(false)
                 .isAllDataLoaded(isAllDataLoaded())
+                .error(error())
+                .build();
+    }
+
+    @NonNull
+    public PostsState mutateError(@NonNull String error) {
+        return PostsState.builder()
+                .anchor(anchor())
+                .count(count())
+                .lastBindPosition(lastBindPosition())
+                .items(items())
+                .isLoading(isLoading())
+                .isDataChanged(isDataChanged())
+                .isAllDataLoaded(isAllDataLoaded())
+                .error(error)
                 .build();
     }
 
     @NonNull
     @Override
     public abstract List<PostState> items();
+
+    @NonNull
+    public abstract String error();
 
     @AutoValue.Builder
     public abstract static class Builder {
@@ -74,6 +94,8 @@ public abstract class PostsState extends PageState<PostState> {
         public abstract Builder isAllDataLoaded(boolean isAllDataLoaded);
 
         public abstract Builder items(List<PostState> items);
+
+        public abstract Builder error(String error);
 
         public abstract PostsState build();
     }

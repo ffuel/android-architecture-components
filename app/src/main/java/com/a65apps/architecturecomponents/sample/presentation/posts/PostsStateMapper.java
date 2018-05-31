@@ -26,6 +26,7 @@ class PostsStateMapper extends StateToParcelableMapper<PostsState, PostsParcelab
                 .isLoading(postsState.isLoading())
                 .isDataChanged(postsState.isDataChanged())
                 .isAllDataLoaded(postsState.isAllDataLoaded())
+                .error(postsState.error())
                 .items(Observable.fromIterable(postsState.items())
                         .map(post -> PostParcelable.builder()
                                 .createdBy(post.createdBy())

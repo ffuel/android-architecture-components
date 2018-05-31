@@ -6,10 +6,13 @@ import android.support.annotation.UiThread;
 import com.a65apps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65apps.architecturecomponents.domain.paging.PagingConfig;
 import com.a65apps.architecturecomponents.domain.paging.PagingModel;
+import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
+import com.a65apps.architecturecomponents.domain.resources.StringResources;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.sample.R;
 
 import java.util.List;
 
@@ -27,22 +30,41 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
     private final ThreadExecutor ioExecutor;
     @NonNull
     private final ApplicationLogger logger;
+    @NonNull
+    private final ConnectionReceiverSource connectionSource;
+    @NonNull
+    private final StringResources stringResources;
 
     @Inject
     PostsModel(@NonNull Router router, @NonNull PostsSource source,
-               @NonNull ExecutorsFactory executors, @NonNull ApplicationLogger logger) {
+               @NonNull ExecutorsFactory executors, @NonNull ApplicationLogger logger,
+               @NonNull ConnectionReceiverSource connectionSource,
+               @NonNull StringResources stringResources) {
         super(PagingConfig.builder(PAGE_SIZE).build(), PostsState.defaultState(), router,
                 executors.getExecutor(SchedulerType.IO), executors.getExecutor(SchedulerType.UI));
         this.source = source;
         ioExecutor = executors.getExecutor(SchedulerType.IO);
         this.logger = logger;
+        this.connectionSource = connectionSource;
+        this.stringResources = stringResources;
+    }
+
+    @UiThread
+    @Override
+    public void reload() {
+        setState(PostsState.defaultState());
+        onZeroItems(PAGE_SIZE);
     }
 
     @UiThread
     @Override
     protected void onZeroItems(int pageSize) {
-        addDisposable(loadingPipeline(source.data(PostsRequest.create(0, pageSize, true)),
-                0, 0, false)
+        addDisposable(loadingPipeline(connectionSource.single().flatMap(result -> {
+            if (!result.isConnected()) {
+                setState(getState().mutateError(stringResources.getString(R.string.no_connection_text)));
+            }
+            return source.data(PostsRequest.create(0, pageSize, result.isConnected()));
+        }), 0, 0, false)
                 .subscribe());
     }
 
@@ -65,7 +87,12 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
     @Override
     @NonNull
     protected Single<Integer> onBoundaryReached(int position, int pageSize) {
-        return source.data(PostsRequest.create(position, pageSize, true))
+        return connectionSource.single().flatMap(result -> {
+            if (!result.isConnected()) {
+                setState(getState().mutateError(stringResources.getString(R.string.no_connection_text)));
+            }
+            return source.data(PostsRequest.create(position, pageSize, result.isConnected()));
+        })
                 .onErrorReturn(this::onErrorPosts)
                 .map(List::size);
     }
@@ -99,12 +126,14 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
 
     private int onErrorCount(@NonNull Throwable error) {
         logger.logError(error);
+        setState(getState().mutateError(error.getMessage()));
         return getState().count();
     }
 
     @NonNull
     private List<PostState> onErrorPosts(@NonNull Throwable error) {
         logger.logError(error);
+        setState(getState().mutateError(error.getMessage()));
         return getState().items();
     }
 }
