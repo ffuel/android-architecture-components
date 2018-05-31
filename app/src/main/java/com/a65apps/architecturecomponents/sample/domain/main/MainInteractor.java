@@ -15,4 +15,7 @@ public interface MainInteractor extends Interactor<MainState, Router> {
 
     @UiThread
     void onBack();
+
+    @UiThread
+    void navigatePosts();
 }

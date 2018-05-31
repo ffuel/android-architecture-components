@@ -51,6 +51,11 @@ public class MainActivity extends ButterActivity<MainState, MainParcelable, Main
     }
 
     @Override
+    public void onShowPosts() {
+        presenter.showPosts();
+    }
+
+    @Override
     public void onUserAgree() {
         presenter.forceContactsPermissions();
     }

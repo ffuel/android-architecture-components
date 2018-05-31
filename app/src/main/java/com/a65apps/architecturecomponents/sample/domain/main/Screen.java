@@ -8,7 +8,8 @@ import com.a65apps.architecturecomponents.sample.R;
 public enum Screen {
     SAMPLE("screen_sample", R.string.sample_title),
     CONTACTS("screen_contacts", R.string.contacts_title),
-    PERMISSION_EXPLANATION("screen_permission_explanation", R.string.permissions_title);
+    PERMISSION_EXPLANATION("screen_permission_explanation", R.string.permissions_title),
+    POSTS("posts", R.string.posts_title);
 
     @NonNull
     private String name;
@@ -23,6 +24,8 @@ public enum Screen {
             return CONTACTS;
         } else if (PERMISSION_EXPLANATION.name.equals(key)) {
             return PERMISSION_EXPLANATION;
+        } else if (POSTS.name.equals(key)) {
+            return POSTS;
         }
 
         throw new IllegalArgumentException("Unknown screen: " + key);

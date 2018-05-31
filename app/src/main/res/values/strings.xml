@@ -7,6 +7,9 @@
     <string name="sample_title">Главный экран</string>
     <string name="contacts_title">Поиск контактов</string>
     <string name="permissions_title">Необходимы разешения</string>
+    <string name="posts_title">Топики GitHub Ruby</string>
 
     <string name="contacts_permissions_not_granted">Необходимо включить разрешение на чтение контактов</string>
+
+    <string name="loading">Загрузка</string>
 </resources>

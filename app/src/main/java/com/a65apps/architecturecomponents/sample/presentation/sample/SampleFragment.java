@@ -41,6 +41,8 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     TextView data;
     @BindView(R.id.contacts_btn)
     View buttonView;
+    @BindView(R.id.posts_btn)
+    View postsView;
 
     @Nullable
     private SearchContactsListener listener;
@@ -73,11 +75,13 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
             case LOADING:
                 data.setVisibility(View.GONE);
                 buttonView.setVisibility(View.GONE);
+                postsView.setVisibility(View.GONE);
                 refresh.setRefreshing(true);
                 break;
             case COMPLETE:
                 data.setVisibility(View.VISIBLE);
                 buttonView.setVisibility(View.VISIBLE);
+                postsView.setVisibility(View.VISIBLE);
                 refresh.setRefreshing(false);
                 break;
             case ERROR:
@@ -87,6 +91,7 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
                     data.setVisibility(View.VISIBLE);
                 }
                 buttonView.setVisibility(View.GONE);
+                postsView.setVisibility(View.GONE);
                 refresh.setRefreshing(false);
                 break;
 
@@ -123,6 +128,13 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     void onContactsClick() {
         if (listener != null) {
             listener.onSearchContacts();
+        }
+    }
+
+    @OnClick(R.id.posts_btn)
+    void onPostsClick() {
+        if (listener != null) {
+            listener.onShowPosts();
         }
     }
 

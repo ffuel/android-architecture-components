@@ -12,6 +12,7 @@ import android.view.View;
 import com.a65apps.architecturecomponents.sample.domain.main.Screen;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
 import com.a65apps.architecturecomponents.sample.presentation.permissions.PermissionsExplanationFragment;
+import com.a65apps.architecturecomponents.sample.presentation.posts.PostsFragment;
 import com.a65apps.architecturecomponents.sample.presentation.sample.SampleFragment;
 import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvider;
 
@@ -45,6 +46,8 @@ public final class MainNavigator extends SupportAppNavigator {
                     throw new IllegalArgumentException("Wrong data for screen " + screen.getName());
                 }
                 return PermissionsExplanationFragment.newInstance((String[]) data);
+            case POSTS:
+                return PostsFragment.newInstance();
             default:
                 break;
         }

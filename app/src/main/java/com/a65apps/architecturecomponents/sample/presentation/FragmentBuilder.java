@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragmentModule;
+import com.a65apps.architecturecomponents.sample.presentation.posts.PostsFragment;
+import com.a65apps.architecturecomponents.sample.presentation.posts.PostsFragmentModule;
 import com.a65apps.architecturecomponents.sample.presentation.sample.SampleFragment;
 import com.a65apps.architecturecomponents.sample.presentation.sample.SampleFragmentModule;
 
@@ -20,4 +22,8 @@ public interface FragmentBuilder {
     @ContributesAndroidInjector(modules = ContactsFragmentModule.class)
     @NonNull
     ContactsFragment bindContactsFragment();
+
+    @ContributesAndroidInjector(modules = PostsFragmentModule.class)
+    @NonNull
+    PostsFragment bindPostsFragment();
 }
