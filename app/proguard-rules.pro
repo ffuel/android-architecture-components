@@ -22,3 +22,25 @@
 
 -dontwarn com.google.errorprone.annotations.**
 -dontwarn java.lang.invoke.**
+
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+-keepnames class **_GsonTypeAdapter
+-keepnames @com.ryanharter.auto.value.gson.GenerateTypeAdapter class *
+-dontwarn com.ryanharter.auto.value.gson.GenerateTypeAdapter$1
+
+-keep class com.a65apps.architecturecomponents.sample.data.posts.** { *; }
