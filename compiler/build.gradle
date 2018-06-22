@@ -19,6 +19,7 @@ dependencies {
     testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation "com.google.testing.compile:compile-testing:$compileTestingVersion"
     testImplementation "com.google.dagger:dagger:$project.ext.daggerVersion"
+    testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

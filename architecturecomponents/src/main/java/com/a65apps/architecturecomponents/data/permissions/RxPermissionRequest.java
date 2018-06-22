@@ -15,6 +15,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 
 final class RxPermissionRequest implements PermissionsRequest {
@@ -57,13 +58,7 @@ final class RxPermissionRequest implements PermissionsRequest {
         }
 
         final WeakReference<RequestPermissionsWorker> managerPointer = new WeakReference<>(worker);
-
-        emitter.setDisposable(Disposables.fromRunnable(() -> {
-            RequestPermissionsWorker manager = managerPointer.get();
-            if (manager != null) {
-                manager.setResultCallback(null);
-            }
-        }));
+        emitter.setDisposable(createDisposable(managerPointer));
 
         RequestPermissionsWorker manager = managerPointer.get();
         if (manager != null) {
@@ -79,45 +74,69 @@ final class RxPermissionRequest implements PermissionsRequest {
                 return;
             }
 
-            manager.setResultCallback((requestCode, permission, grantResult) -> {
-                RequestPermissionsWorker ptr = managerPointer.get();
-                if (ptr == null) {
-                    emitter.onError(new IllegalStateException("RequestPermissionsManager is null"));
-                    return;
-                }
+            manager.setResultCallback(createCallback(managerPointer, emitter));
 
-                if (requestCode == REQUEST_CODE) {
-                    List<PermissionState> finalResult = new ArrayList<>(permissions.length);
-                    for (int i = 0; i < permissions.length; i++) {
-                        if (grantResult[i] != PackageManager.PERMISSION_GRANTED
-                                && !manager.showRequestPermissionRationale(permission[i])) {
-                            finalResult.add(PermissionState.SHOW_SETTINGS);
-                        } else if (grantResult[i] != PackageManager.PERMISSION_GRANTED) {
-                            finalResult.add(PermissionState.NOT_GRANTED);
-                        } else {
-                            finalResult.add(PermissionState.GRANTED);
-                        }
-                    }
-                    emitter.onSuccess(finalResult);
-                }
-            });
+            processNegativeCases(manager, result, emitter);
+        }
+    }
 
-            boolean canRequest = false;
-            for (String permission : permissions) {
-                canRequest = force || !manager.showRequestPermissionRationale(permission);
-                if (!canRequest) {
-                    break;
-                }
-            }
-            if (canRequest) {
-                manager.requestPermission(permissions, REQUEST_CODE);
-            } else {
-                result.clear();
-                for (int i = 0; i < permissions.length; i++) {
-                    result.add(PermissionState.NEED_EXPLANATION);
-                }
-                emitter.onSuccess(result);
+    private void processNegativeCases(@NonNull RequestPermissionsWorker manager,
+                                      @NonNull List<PermissionState> result,
+                                      @NonNull SingleEmitter<List<PermissionState>> emitter) {
+        boolean canRequest = false;
+        for (String permission : permissions) {
+            canRequest = force || !manager.showRequestPermissionRationale(permission);
+            if (!canRequest) {
+                break;
             }
         }
+        if (canRequest) {
+            manager.requestPermission(permissions, REQUEST_CODE);
+        } else {
+            result.clear();
+            for (int i = 0; i < permissions.length; i++) {
+                result.add(PermissionState.NEED_EXPLANATION);
+            }
+            emitter.onSuccess(result);
+        }
+    }
+
+    @NonNull
+    private Disposable createDisposable(@NonNull final WeakReference<RequestPermissionsWorker> managerPointer) {
+        return Disposables.fromRunnable(() -> {
+            RequestPermissionsWorker manager = managerPointer.get();
+            if (manager != null) {
+                manager.setResultCallback(null);
+            }
+        });
+    }
+
+    @NonNull
+    private RequestPermissionsWorker.OnRequestPermissionCallback createCallback(
+            @NonNull final WeakReference<RequestPermissionsWorker> managerPointer,
+            @NonNull SingleEmitter<List<PermissionState>> emitter) {
+        return (requestCode, permission, grantResult) -> {
+            RequestPermissionsWorker ptr = managerPointer.get();
+            if (ptr == null) {
+                emitter.onError(new IllegalStateException("RequestPermissionsManager is null"));
+                return;
+            }
+            if (requestCode != REQUEST_CODE) {
+                return;
+            }
+
+            List<PermissionState> finalResult = new ArrayList<>(permissions.length);
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResult[i] != PackageManager.PERMISSION_GRANTED
+                        && !ptr.showRequestPermissionRationale(permission[i])) {
+                    finalResult.add(PermissionState.SHOW_SETTINGS);
+                } else if (grantResult[i] != PackageManager.PERMISSION_GRANTED) {
+                    finalResult.add(PermissionState.NOT_GRANTED);
+                } else {
+                    finalResult.add(PermissionState.GRANTED);
+                }
+            }
+            emitter.onSuccess(finalResult);
+        };
     }
 }

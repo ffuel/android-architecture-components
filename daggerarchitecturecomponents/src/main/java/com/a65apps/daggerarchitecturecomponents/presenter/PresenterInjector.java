@@ -20,7 +20,7 @@ public final class PresenterInjector {
             @NonNull Activity activity) {
         Application application = activity.getApplication();
         if (!(application instanceof HasPresenterSubComponentBuilders)) {
-            throw new RuntimeException(
+            throw new IllegalStateException(
                     String.format(
                             "%s does not implement %s",
                             application.getClass().getCanonicalName(),
@@ -50,7 +50,7 @@ public final class PresenterInjector {
             @NonNull Fragment fragment) {
         Activity activity = fragment.requireActivity();
         if (!(activity instanceof HasPresenterSubComponentBuilders)) {
-            throw new RuntimeException(
+            throw new IllegalStateException(
                     String.format(
                             "%s does not implement %s",
                             activity.getClass().getCanonicalName(),

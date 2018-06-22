@@ -44,6 +44,8 @@ public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, M
     private PostsAdapter adapter;
     @Nullable
     private LinearLayoutManager layoutManager;
+    @Nullable
+    private RecyclerView.OnScrollListener scrollListener;
 
     @NonNull
     public static Fragment newInstance() {
@@ -58,12 +60,14 @@ public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, M
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        RecyclerPagingDelegate.attach(this, recyclerView);
+        scrollListener = RecyclerPagingDelegate.attach(this, recyclerView);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onDestroyView() {
+        RecyclerPagingDelegate.detach(recyclerView, scrollListener);
+        scrollListener = null;
         adapter = null;
         layoutManager = null;
         super.onDestroyView();

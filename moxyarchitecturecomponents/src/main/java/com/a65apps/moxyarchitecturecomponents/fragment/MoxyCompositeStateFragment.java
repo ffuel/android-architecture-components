@@ -5,8 +5,6 @@ import android.os.Parcelable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.a65apps.architecturecomponents.domain.CompositeStateInteractor;
 import com.a65apps.architecturecomponents.domain.State;
@@ -22,15 +20,13 @@ public abstract class MoxyCompositeStateFragment<S extends State, Parcel extends
         P extends CompositeStatePresenter<S, CS, V, I, R>>
         extends BaseCompositeStateFragment<S, Parcel, CS, V, I, R, P> {
 
-    private boolean isStateSaved;
     @Nullable
-    private MvpDelegate<? extends MoxyCompositeStateFragment<S, Parcel, CS, V, I, R, P>> mvpDelegate;
+    private MoxyFragmentDelegate<S, Parcel, V, I, R, P> delegate;
 
     @Override
     @CallSuper
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getMvpDelegate().onCreate(savedInstanceState);
     }
 
@@ -38,8 +34,6 @@ public abstract class MoxyCompositeStateFragment<S extends State, Parcel extends
     @CallSuper
     public void onStart() {
         super.onStart();
-
-        isStateSaved = false;
         getMvpDelegate().onAttach();
     }
 
@@ -47,8 +41,6 @@ public abstract class MoxyCompositeStateFragment<S extends State, Parcel extends
     @CallSuper
     public void onResume() {
         super.onResume();
-
-        isStateSaved = false;
         getMvpDelegate().onAttach();
     }
 
@@ -56,26 +48,20 @@ public abstract class MoxyCompositeStateFragment<S extends State, Parcel extends
     @CallSuper
     public void onStop() {
         super.onStop();
-
-        getMvpDelegate().onDetach();
+        getMvpDelegate().onStop();
     }
 
     @Override
     @CallSuper
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        isStateSaved = true;
         getMvpDelegate().onSaveInstanceState(outState);
-        getMvpDelegate().onDetach();
     }
 
     @Override
     @CallSuper
     public void onDestroyView() {
         super.onDestroyView();
-
-        getMvpDelegate().onDetach();
         getMvpDelegate().onDestroyView();
     }
 
@@ -83,42 +69,18 @@ public abstract class MoxyCompositeStateFragment<S extends State, Parcel extends
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
-
-        FragmentActivity activity = getActivity();
-        //We leave the screen and respectively all fragments will be destroyed
-        if (activity != null && activity.isFinishing()) {
-            getMvpDelegate().onDestroy();
-            return;
-        }
-
-        // When we rotate device isRemoving() return true for fragment placed in backstack
-        // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-        if (isStateSaved) {
-            isStateSaved = false;
-            return;
-        }
-
-        // See https://github.com/Arello-Mobile/Moxy/issues/24
-        boolean anyParentIsRemoving = false;
-        Fragment parent = getParentFragment();
-        while (!anyParentIsRemoving && parent != null) {
-            anyParentIsRemoving = parent.isRemoving();
-            parent = parent.getParentFragment();
-        }
-
-        if (isRemoving() || anyParentIsRemoving) {
-            getMvpDelegate().onDestroy();
-        }
+        getMvpDelegate().onDestroy(this);
     }
 
     /**
      * @return The {@link MvpDelegate} being used by this Activity.
      */
     @NonNull
-    public MvpDelegate getMvpDelegate() {
-        if (mvpDelegate == null) {
-            mvpDelegate = new MvpDelegate<>(this);
+    public MoxyFragmentDelegate<S, Parcel, V, I, R, P> getMvpDelegate() {
+        if (delegate == null) {
+            //noinspection unchecked
+            delegate = new MoxyFragmentDelegate(new MvpDelegate<>(this));
         }
-        return mvpDelegate;
+        return delegate;
     }
 }

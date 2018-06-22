@@ -23,7 +23,7 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     private final Set<ObservableEmitter<T>> emitters = new HashSet<>();
 
     @NonNull
-    private T state;
+    private volatile T state;
     @NonNull
     private final ReadWriteLock readWriteLock;
 

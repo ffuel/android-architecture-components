@@ -55,9 +55,13 @@ public final class SampleModel extends ReloadingModel<SampleState, Router> {
     @NonNull
     @Override
     protected SampleState onConnectionChanged(@NonNull SampleState lastState, boolean isConnected) {
-        SampleState.State sampleState = !isConnected
-                ? SampleState.State.ERROR : lastState.state() != SampleState.State.ERROR
-                ? lastState.state() : SampleState.State.COMPLETE;
+        SampleState.State sampleState;
+        if (!isConnected) {
+            sampleState = SampleState.State.ERROR;
+        } else {
+            sampleState = lastState.state() != SampleState.State.ERROR ? lastState.state()
+                    : SampleState.State.COMPLETE;
+        }
         return SampleState.create(
                 sampleState,
                 lastState.text(),
