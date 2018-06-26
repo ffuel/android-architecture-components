@@ -53,12 +53,13 @@ final class RxPermissionRequest implements PermissionsRequest {
 
     @Override
     public void execute(@NonNull RequestPermissionsWorker worker) {
-        if (emitter == null || emitter.isDisposed()) {
+        SingleEmitter<List<PermissionState>> localEmitter = this.emitter;
+        if (localEmitter == null || localEmitter.isDisposed()) {
             return;
         }
 
         final WeakReference<RequestPermissionsWorker> managerPointer = new WeakReference<>(worker);
-        emitter.setDisposable(createDisposable(managerPointer));
+        localEmitter.setDisposable(createDisposable(managerPointer));
 
         RequestPermissionsWorker manager = managerPointer.get();
         if (manager != null) {
@@ -70,13 +71,13 @@ final class RxPermissionRequest implements PermissionsRequest {
             }
 
             if (result.size() == permissions.length) {
-                emitter.onSuccess(result);
+                localEmitter.onSuccess(result);
                 return;
             }
 
-            manager.setResultCallback(createCallback(managerPointer, emitter));
+            manager.setResultCallback(createCallback(managerPointer, localEmitter));
 
-            processNegativeCases(manager, result, emitter);
+            processNegativeCases(manager, result, localEmitter);
         }
     }
 

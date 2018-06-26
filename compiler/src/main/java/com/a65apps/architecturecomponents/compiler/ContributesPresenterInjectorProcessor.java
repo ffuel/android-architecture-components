@@ -50,34 +50,36 @@ public class ContributesPresenterInjectorProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> annotatedElements =
                 roundEnv.getElementsAnnotatedWith(ContributesPresenterInjector.class);
-        if (annotatedElements.isEmpty()) {
-            return true;
-        }
+        if (!annotatedElements.isEmpty()) {
+            for (Element type : annotatedElements) {
+                MethodInfo info = new MethodInfo((ExecutableElement) type);
+                AnnotationInfo annotationInfo = AnnotationInfo.computeInfo(processingEnv, type,
+                        ContributesPresenterInjector.class);
+                if (!validateType(type, info, annotationInfo)) {
+                    continue;
+                }
 
-        for (Element type: annotatedElements) {
-            if (type.getKind() != ElementKind.METHOD) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                        String.format("%s is not a method", type.getSimpleName().toString()));
-                continue;
+                processModules(info, annotationInfo.getModules(), annotationInfo.isChild());
             }
-            MethodInfo info = new MethodInfo((ExecutableElement) type);
-            if (!info.isValid()) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        String.format("Method %s is not valid.", info.getName()));
-                continue;
-            }
-
-            AnnotationInfo annotationInfo = AnnotationInfo.computeInfo(processingEnv, type,
-                    ContributesPresenterInjector.class);
-
-            if (!annotationInfo.isValid()) {
-                continue;
-            }
-
-            processModules(info, annotationInfo.getModules(), annotationInfo.isChild());
         }
 
         return true;
+    }
+
+    private boolean validateType(@Nonnull Element type, @Nonnull MethodInfo methodInfo,
+                                 @Nonnull AnnotationInfo annotationInfo) {
+        if (type.getKind() != ElementKind.METHOD) {
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
+                    String.format("%s is not a method", type.getSimpleName().toString()));
+            return false;
+        }
+        if (!methodInfo.isValid()) {
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                    String.format("Method %s is not valid.", methodInfo.getName()));
+            return false;
+        }
+
+        return annotationInfo.isValid();
     }
 
     private void processModules(@Nonnull MethodInfo info, @Nonnull DeclaredType[] modules, boolean isChild) {

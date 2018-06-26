@@ -4,22 +4,27 @@ before_script:
 stages:
   - build
   - test
+  - quality
 
 buildDebug:
   stage: build
   script:
     - ./gradlew assembleDebug
-    - ./gradlew checkstyle
-    - ./gradlew pmd
-    - ./gradlew findbugs
-    - ./gradlew lintDebug
   artifacts:
     paths:
     - app/build/outputs/
+    - app/build/intermediates/classes/debug
+    - architecturecomponents/build/intermediates/classes/debug
+    - moxyarchitecturecomponents/build/intermediates/classes/debug
+    - ciceronearchitecturecomponents/build/intermediates/classes/debug
+    - daggerarchitecturecomponents/build/intermediates/classes/debug
+    - moxydaggerarchitecturecomponents/build/intermediates/classes/debug
+    - compiler/build/classes/java
     expire_in: 1 week
   only:
     - develop
     - /^feature.*$/
+    - /^fix.*$/
   tags:
     - android
 
@@ -27,13 +32,59 @@ unitTestsDebug:
   stage: test
   script:
     - ./gradlew testDebugUnitTest
+    - ./gradlew jacocoTestDebugUnitTestReport
   artifacts:
     paths:
-    - app/build/reports/tests/testDebugUnitTest/
+    - app/build/jacoco
+    - app/build/test-results/testDebugUnitTest
+    - architecturecomponents/build/jacoco
+    - architecturecomponents/build/test-results/testDebugUnitTest
+    - moxyarchitecturecomponents/build/jacoco
+    - moxyarchitecturecomponents/build/test-results/testDebugUnitTest
+    - ciceronearchitecturecomponents/build/jacoco
+    - ciceronearchitecturecomponents/build/test-results/testDebugUnitTest
+    - daggerarchitecturecomponents/build/jacoco
+    - daggerarchitecturecomponents/build/test-results/testDebugUnitTest
+    - moxydaggerarchitecturecomponents/build/jacoco
+    - moxydaggerarchitecturecomponents/build/test-results/testDebugUnitTest
+    - compiler/build/jacoco
+    - compiler/build/test-results/test
     expire_in: 1 week
   only:
     - develop
     - /^feature.*$/
+    - /^fix.*$/
+  tags:
+    - android
+
+qualityDevelop:
+  stage: quality
+  script:
+    - ./gradlew pmd
+    - ./gradlew lintDebug
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.user_token=$USER_TOKEN
+  artifacts:
+    paths:
+    - app/build/outputs/
+  only:
+    - develop
+  tags:
+    - android
+
+qualityFeature:
+  stage: quality
+  script:
+    - git checkout origin/develop
+    - git merge $CI_COMMIT_SHA --no-commit --no-ff
+    - ./gradlew pmd
+    - ./gradlew lintDebug
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.analysis.mode=preview -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.user_token=$USER_TOKEN
+  artifacts:
+    paths:
+    - app/build/outputs/
+  only:
+    - /^feature.*$/
+    - /^fix.*$/
   tags:
     - android
 
@@ -41,16 +92,19 @@ buildRelease:
   stage: build
   script:
     - ./gradlew assembleRelease
-    - ./gradlew checkstyle
-    - ./gradlew pmd
-    - ./gradlew lintRelease
   artifacts:
     paths:
     - app/build/outputs/
+    - app/build/intermediates/classes/release
+    - architecturecomponents/build/intermediates/classes/release
+    - moxyarchitecturecomponents/build/intermediates/classes/release
+    - ciceronearchitecturecomponents/build/intermediates/classes/release
+    - daggerarchitecturecomponents/build/intermediates/classes/release
+    - moxydaggerarchitecturecomponents/build/intermediates/classes/release
+    - compiler/build/classes/java
     expire_in: 1 week
   only:
     - master
-    - /^v(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
   tags:
     - android
 
@@ -58,12 +112,36 @@ unitTestsRelease:
   stage: test
   script:
     - ./gradlew testReleaseUnitTest
+    - ./gradlew jacocoTestReleaseUnitTestReport
   artifacts:
     paths:
-    - app/build/reports/tests/testReleaseUnitTest/
+    - app/build/jacoco
+    - app/build/test-results/testReleaseUnitTest
+    - architecturecomponents/build/jacoco
+    - architecturecomponents/build/test-results/testReleaseUnitTest
+    - moxyarchitecturecomponents/build/jacoco
+    - moxyarchitecturecomponents/build/test-results/testReleaseUnitTest
+    - ciceronearchitecturecomponents/build/jacoco
+    - ciceronearchitecturecomponents/build/test-results/testReleaseUnitTest
+    - daggerarchitecturecomponents/build/jacoco
+    - daggerarchitecturecomponents/build/test-results/testReleaseUnitTest
+    - moxydaggerarchitecturecomponents/build/jacoco
+    - moxydaggerarchitecturecomponents/build/test-results/testReleaseUnitTest
+    - compiler/build/jacoco
+    - compiler/build/test-results/test
     expire_in: 1 week
   only:
     - master
-    - /^v(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
+  tags:
+    - android
+
+qualityRelease:
+  stage: quality
+  script:
+    - ./gradlew pmd
+    - ./gradlew lintRelease
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/release -Dsonar.jacoco.reportPaths=build/jacoco/testReleaseUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testReleaseUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+  only:
+    - master
   tags:
     - android
