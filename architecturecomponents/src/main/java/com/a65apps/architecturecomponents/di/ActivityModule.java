@@ -9,8 +9,9 @@ import com.a65apps.architecturecomponents.presentation.mapper.StateToParcelableM
 import com.a65apps.architecturecomponents.presentation.navigation.NavigatorDelegate;
 
 public interface ActivityModule<S extends State, P extends Parcelable,
-        SM extends StateToParcelableMapper<S, P>, PM extends ParcelableToStateMapper<P, S>>
-        extends ViewModule<S, P, SM, PM> {
+        StateMapper extends StateToParcelableMapper<S, P>,
+        ParcelMapper extends ParcelableToStateMapper<P, S>>
+        extends ViewModule<S, P, StateMapper, ParcelMapper> {
 
     @NonNull
     NavigatorDelegate provideNavigatorDelegate();

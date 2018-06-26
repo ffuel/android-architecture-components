@@ -48,7 +48,7 @@ public class ConnectionBroadcastReceiverSource implements ConnectionReceiverSour
     public Observable<ConnectionState> observeReceiver() {
         return RxBroadcastReceiver.create(context,
                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-                .map(__ -> getConnectionState());
+                .map(it -> getConnectionState());
     }
 
     @NonNull

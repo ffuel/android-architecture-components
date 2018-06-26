@@ -8,11 +8,12 @@ import com.a65apps.architecturecomponents.presentation.mapper.ParcelableToStateM
 import com.a65apps.architecturecomponents.presentation.mapper.StateToParcelableMapper;
 
 public interface ViewModule<S extends State, P extends Parcelable,
-        SM extends StateToParcelableMapper<S, P>, PM extends ParcelableToStateMapper<P, S>> {
+        StateMapper extends StateToParcelableMapper<S, P>,
+        ParcelMapper extends ParcelableToStateMapper<P, S>> {
 
     @NonNull
-    SM provideStateToParcelableMapper();
+    StateMapper provideStateToParcelableMapper();
 
     @NonNull
-    PM provideParcelableToStateMapper();
+    ParcelMapper provideParcelableToStateMapper();
 }
