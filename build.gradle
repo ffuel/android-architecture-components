@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
         
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -16,6 +17,24 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.6"
+}
+
+sonarqube {
+    properties {
+        property "sonar.sources", "src"
+        property "sonar.java.source", "7"
+        property "sonar.findbugs.excludesFilters", "$project.rootDir/tools/rules-findbugs.xml"
+    }
+}
+
+project(":compiler") {
+    sonarqube {
+        properties {
+            property "sonar.java.binaries", "build/classes/java"
+            property "sonar.jacoco.reportPaths", "build/jacoco/test.exec"
+            property "sonar.junit.reportPaths", "build/test-results/test"
+        }
+    }
 }
 
 allprojects {

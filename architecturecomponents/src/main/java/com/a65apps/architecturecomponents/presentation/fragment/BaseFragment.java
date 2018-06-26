@@ -100,12 +100,13 @@ public abstract class BaseFragment<S extends State, Parcel extends Parcelable,
     protected abstract P getPresenter();
 
     private void restoreState(@NonNull Bundle savedInstanceState) {
-        state = savedInstanceState.getParcelable(VIEW_STATE);
-        if (state != null) {
+        Parcel localState = savedInstanceState.getParcelable(VIEW_STATE);
+        this.state = localState;
+        if (localState != null) {
             if (parcelMapper == null) {
                 throw new IllegalStateException("ParcelableMapper is not provided");
             }
-            getPresenter().restoreState(parcelMapper.map(state));
+            getPresenter().restoreState(parcelMapper.map(localState));
         }
     }
 }

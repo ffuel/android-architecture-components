@@ -96,19 +96,19 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
     @NonNull
     private Single<S> loadData() {
         return getData()
-                .doOnSubscribe(__ -> setLoading());
+                .doOnSubscribe(it -> setLoading());
     }
 
     @NonNull
     private Single<S> tryLoadDataCache() {
         return tryGetDataCached()
-                .doOnSubscribe(__ -> setLoading());
+                .doOnSubscribe(it -> setLoading());
     }
 
     @NonNull
     private Observable<S> reloadEvent() {
         return loadSubject
-                .flatMapSingle(__ -> connectionSource.single())
+                .flatMapSingle(it -> connectionSource.single())
                 .observeOn(executor.getScheduler())
                 .map(ConnectionState::isConnected)
                 .flatMapSingle(connected -> {
