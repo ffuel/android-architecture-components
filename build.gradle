@@ -19,10 +19,13 @@ plugins {
     id "org.sonarqube" version "2.6"
 }
 
+def projectVersion = '1.0.7'
+
 sonarqube {
     properties {
         property "sonar.sources", "src"
         property "sonar.java.source", "7"
+        property "sonar.projectVersion", projectVersion
         property "sonar.findbugs.excludesFilters", "$project.rootDir/tools/rules-findbugs.xml"
     }
 }
@@ -44,6 +47,7 @@ allprojects {
     }
 
     project.ext {
+        componentsVersion = projectVersion
         supportVersion = '27.1.1'
         rxJavaVersion = '2.1.12'
         rxAndroidVersion = '2.0.2'
