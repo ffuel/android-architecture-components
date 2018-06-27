@@ -62,7 +62,7 @@ qualityDevelop:
   script:
     - ./gradlew pmd
     - ./gradlew lintDebug
-    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.user_token=$USER_TOKEN
   artifacts:
     paths:
     - app/build/outputs/
@@ -78,7 +78,7 @@ qualityFeature:
     - git merge $CI_COMMIT_SHA --no-commit --no-ff
     - ./gradlew pmd
     - ./gradlew lintDebug
-    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.analysis.mode=preview -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.analysis.mode=preview -Dsonar.java.binaries=build/intermediates/classes/debug -Dsonar.jacoco.reportPaths=build/jacoco/testDebugUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testDebugUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.user_token=$USER_TOKEN
   artifacts:
     paths:
     - app/build/outputs/
@@ -140,7 +140,7 @@ qualityRelease:
   script:
     - ./gradlew pmd
     - ./gradlew lintRelease
-    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/release -Dsonar.jacoco.reportPaths=build/jacoco/testReleaseUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testReleaseUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+    - ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -DsystemProp.sonar.login=$SONAR_KEY -Dsonar.java.binaries=build/intermediates/classes/release -Dsonar.jacoco.reportPaths=build/jacoco/testReleaseUnitTest.exec -Dsonar.junit.reportPaths=build/test-results/testReleaseUnitTest -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.user_token=$USER_TOKEN
   only:
     - master
   tags:
