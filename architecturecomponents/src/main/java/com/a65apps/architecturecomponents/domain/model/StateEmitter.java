@@ -32,14 +32,8 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     }
 
     private StateEmitter(@NonNull T state) {
+        this.state = state;
         this.readWriteLock = new ReentrantReadWriteLock();
-
-        readWriteLock.writeLock().lock();
-        try {
-            this.state = state;
-        } finally {
-            readWriteLock.writeLock().unlock();
-        }
     }
 
     @Override
