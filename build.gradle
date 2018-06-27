@@ -25,6 +25,7 @@ sonarqube {
     properties {
         property "sonar.sources", "src"
         property "sonar.java.source", "7"
+        property "sonar.projectKey", "architecture-components"
         property "sonar.projectVersion", projectVersion
         property "sonar.findbugs.excludesFilters", "$project.rootDir/tools/rules-findbugs.xml"
     }
