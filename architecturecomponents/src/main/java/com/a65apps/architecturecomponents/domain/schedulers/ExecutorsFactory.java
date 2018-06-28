@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-public final class ExecutorsFactory {
+public class ExecutorsFactory {
     @NonNull
     private final Map<SchedulerType, ThreadExecutor> executors;
 
