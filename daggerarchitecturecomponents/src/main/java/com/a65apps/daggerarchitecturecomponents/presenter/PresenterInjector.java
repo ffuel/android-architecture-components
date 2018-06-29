@@ -15,6 +15,24 @@ public final class PresenterInjector {
 
     @NonNull
     public static <S extends State, V extends View<S>, I extends Interactor<S, R>,
+            R extends Router, P extends Presenter<S, V, I, R>>
+    P build(@NonNull Class<? extends Presenter<S, V, I, R>> presenterClass,
+            @NonNull HasPresenterSubComponentBuilders hasPresenterSubComponentBuilders) {
+        @SuppressWarnings("unchecked")
+        ProviderPresenterComponent<S, V, I, R, P> component =
+                (ProviderPresenterComponent<S, V, I, R, P>)
+                        hasPresenterSubComponentBuilders.getPresenterSubComponentBuilder(presenterClass)
+                                .build();
+
+        PresenterProvider<P> presenterProvider = new PresenterProvider<>();
+        component.inject(presenterProvider);
+        P presenter = presenterProvider.getPresenter();
+        presenter.setTag(component);
+        return presenter;
+    }
+
+    @NonNull
+    public static <S extends State, V extends View<S>, I extends Interactor<S, R>,
     R extends Router, P extends Presenter<S, V, I, R>>
     P build(@NonNull Class<? extends Presenter<S, V, I, R>> presenterClass,
             @NonNull Activity activity) {
@@ -29,18 +47,7 @@ public final class PresenterInjector {
 
         HasPresenterSubComponentBuilders hasPresenterSubComponentBuilders =
                 (HasPresenterSubComponentBuilders) application;
-
-        @SuppressWarnings("unchecked")
-        ProviderPresenterComponent<S, V, I, R, P> component =
-                (ProviderPresenterComponent<S, V, I, R, P>)
-                        hasPresenterSubComponentBuilders.getPresenterSubComponentBuilder(presenterClass)
-                .build();
-
-        PresenterProvider<P> presenterProvider = new PresenterProvider<>();
-        component.inject(presenterProvider);
-        P presenter = presenterProvider.getPresenter();
-        presenter.setTag(component);
-        return presenter;
+        return build(presenterClass, hasPresenterSubComponentBuilders);
     }
 
     @NonNull
@@ -59,18 +66,7 @@ public final class PresenterInjector {
 
         HasPresenterSubComponentBuilders hasPresenterSubComponentBuilders =
                 (HasPresenterSubComponentBuilders) activity;
-
-        @SuppressWarnings("unchecked")
-        ProviderPresenterComponent<S, V, I, R, P> component =
-                (ProviderPresenterComponent<S, V, I, R, P>)
-                        hasPresenterSubComponentBuilders.getPresenterSubComponentBuilder(presenterClass)
-                                .build();
-
-        PresenterProvider<P> presenterProvider = new PresenterProvider<>();
-        component.inject(presenterProvider);
-        P presenter = presenterProvider.getPresenter();
-        presenter.setTag(component);
-        return presenter;
+        return build(presenterClass, hasPresenterSubComponentBuilders);
     }
 
     private PresenterInjector() {

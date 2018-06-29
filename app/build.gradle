@@ -136,7 +136,9 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
 
     // test dependencies
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation "junit:junit:$project.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$project.ext.mockitoVersion"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
+    androidTestImplementation "com.android.support.test:runner:$project.ext.testRunnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$project.ext.espressoVersion"
 }

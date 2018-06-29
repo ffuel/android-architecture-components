@@ -2,9 +2,9 @@ package com.a65apps.architecturecomponents.sample.data.posts;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.a65apps.architecturecomponents.domain.Mapper;
+import com.a65apps.architecturecomponents.domain.utils.TextUtils;
 import com.a65apps.architecturecomponents.sample.domain.posts.PostState;
 
 import java.util.Collections;
