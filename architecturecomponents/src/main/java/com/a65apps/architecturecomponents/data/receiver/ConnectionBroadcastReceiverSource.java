@@ -5,10 +5,10 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionState;
+import com.a65apps.architecturecomponents.domain.utils.TextUtils;
 
 import net.jcip.annotations.ThreadSafe;
 
