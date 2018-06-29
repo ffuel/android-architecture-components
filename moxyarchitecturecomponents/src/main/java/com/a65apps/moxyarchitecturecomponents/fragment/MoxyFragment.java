@@ -6,20 +6,16 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.a65apps.architecturecomponents.domain.Interactor;
 import com.a65apps.architecturecomponents.domain.State;
 import com.a65apps.architecturecomponents.presentation.fragment.BaseFragment;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
-import com.a65apps.architecturecomponents.presentation.view.View;
 import com.arellomobile.mvp.MvpDelegate;
 
-public abstract class MoxyFragment<S extends State, Parcel extends Parcelable,
-        V extends View<S>, I extends Interactor<S, R>, R extends Router,
-        P extends Presenter<S, V, I, R>> extends BaseFragment<S, Parcel, V, I, R, P> {
+public abstract class MoxyFragment<S extends State, Parcel extends Parcelable, P extends Presenter>
+        extends BaseFragment<S, Parcel, P> {
 
     @Nullable
-    private MoxyFragmentDelegate<S, Parcel, V, I, R, P> delegate;
+    private MoxyFragmentDelegate<S, Parcel, P> delegate;
 
     @Override
     @CallSuper
@@ -74,7 +70,7 @@ public abstract class MoxyFragment<S extends State, Parcel extends Parcelable,
      * @return The {@link MvpDelegate} being used by this Activity.
      */
     @NonNull
-    public MoxyFragmentDelegate<S, Parcel, V, I, R, P> getMvpDelegate() {
+    public MoxyFragmentDelegate<S, Parcel, P> getMvpDelegate() {
         if (delegate == null) {
             //noinspection unchecked
             delegate = new MoxyFragmentDelegate(new MvpDelegate<>(this));

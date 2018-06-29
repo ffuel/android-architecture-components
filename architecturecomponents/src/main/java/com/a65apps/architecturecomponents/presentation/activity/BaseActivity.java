@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.a65apps.architecturecomponents.domain.Interactor;
 import com.a65apps.architecturecomponents.domain.State;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsManager;
 import com.a65apps.architecturecomponents.domain.permissions.RequestPermissionsWorker;
@@ -21,16 +20,14 @@ import com.a65apps.architecturecomponents.presentation.fragment.BaseFragment;
 import com.a65apps.architecturecomponents.presentation.mapper.ParcelableToStateMapper;
 import com.a65apps.architecturecomponents.presentation.mapper.StateToParcelableMapper;
 import com.a65apps.architecturecomponents.presentation.navigation.NavigatorDelegate;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
 import com.a65apps.architecturecomponents.presentation.view.View;
 
 import javax.inject.Inject;
 
 @UiThread
-public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
-        V extends View<S>, I extends Interactor<S, R>, R extends Router,
-        P extends Presenter<S, V, I, R>> extends AppCompatActivity
+public abstract class BaseActivity<S extends State, Parcel extends Parcelable, P extends Presenter>
+        extends AppCompatActivity
         implements View<S>, RequestPermissionsWorker {
 
     private static final String VIEW_STATE = "view_state";
@@ -103,6 +100,7 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable,
             if (parcelMapper == null) {
                 throw new IllegalStateException("ParcelableMapper is not provided");
             }
+            //noinspection unchecked
             getPresenter().restoreState(parcelMapper.map(localState));
         }
     }

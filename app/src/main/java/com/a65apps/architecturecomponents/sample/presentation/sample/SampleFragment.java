@@ -10,12 +10,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.TextView;
 
-import com.a65apps.architecturecomponents.domain.model.ReloadingInteractor;
 import com.a65apps.architecturecomponents.sample.R;
 import com.a65apps.architecturecomponents.sample.domain.sample.SampleState;
 import com.a65apps.architecturecomponents.sample.presentation.common.ButterFragment;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.SearchContactsListener;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjector;
 import com.a65apps.moxyarchitecturecomponents.view.MoxyView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -24,9 +22,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SampleFragment extends ButterFragment<SampleState, SampleParcelable, MoxyView<SampleState>,
-        ReloadingInteractor<SampleState, Router>, Router, SamplePresenter> implements MoxyView<SampleState>,
-        SwipeRefreshLayout.OnRefreshListener {
+public class SampleFragment extends ButterFragment<SampleState, SampleParcelable, SamplePresenter>
+        implements MoxyView<SampleState>, SwipeRefreshLayout.OnRefreshListener {
 
     @InjectPresenter
     SamplePresenter presenter;
