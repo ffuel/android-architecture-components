@@ -12,6 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
+@SuppressWarnings("squid:S1610")
 public abstract class DaggerViewModule<S extends State, P extends Parcelable,
         SM extends StateToParcelableMapper<S, P>, PM extends ParcelableToStateMapper<P, S>> {
 

@@ -10,7 +10,6 @@ import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.moxyarchitecturecomponents.view.MoxyCompositeStateView;
-import com.a65apps.moxyarchitecturecomponents.view.MoxyView;
 import com.arellomobile.mvp.viewstate.MvpViewState;
 
 import org.junit.Before;

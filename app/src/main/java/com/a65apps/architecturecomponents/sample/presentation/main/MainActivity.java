@@ -3,12 +3,10 @@ package com.a65apps.architecturecomponents.sample.presentation.main;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.sample.R;
-import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.sample.domain.main.MainState;
 import com.a65apps.architecturecomponents.sample.presentation.common.ButterActivity;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.SearchContactsListener;
 import com.a65apps.architecturecomponents.sample.presentation.permissions.PermissionsExplanationListener;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
 import com.a65apps.daggerarchitecturecomponents.presenter.HasPresenterSubComponentBuilders;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
@@ -16,8 +14,8 @@ import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjector;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-public class MainActivity extends ButterActivity<MainState, MainParcelable, MainView, MainInteractor,
-        Router, MainPresenter> implements MainView, SearchContactsListener, PermissionsExplanationListener,
+public class MainActivity extends ButterActivity<MainState, MainParcelable, MainPresenter>
+        implements MainView, SearchContactsListener, PermissionsExplanationListener,
         HasPresenterSubComponentBuilders {
 
     @InjectPresenter

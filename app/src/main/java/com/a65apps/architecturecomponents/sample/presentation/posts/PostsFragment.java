@@ -11,10 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.paging.RecyclerPagingDelegate;
 import com.a65apps.architecturecomponents.sample.R;
-import com.a65apps.architecturecomponents.sample.domain.posts.PostsInteractor;
 import com.a65apps.architecturecomponents.sample.domain.posts.PostsState;
 import com.a65apps.architecturecomponents.sample.presentation.common.ButterFragment;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjector;
@@ -26,8 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, MoxyView<PostsState>,
-        PostsInteractor, Router, PostsPresenter>
+public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, PostsPresenter>
         implements MoxyView<PostsState>, RecyclerPagingDelegate.Parent, SwipeRefreshLayout.OnRefreshListener {
 
     @InjectPresenter

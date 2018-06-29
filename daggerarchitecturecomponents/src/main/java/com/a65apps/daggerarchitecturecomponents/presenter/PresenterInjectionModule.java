@@ -11,6 +11,7 @@ import dagger.Module;
 import dagger.multibindings.Multibinds;
 
 @Module
+@SuppressWarnings("squid:S1610")
 public abstract class PresenterInjectionModule {
 
     @Multibinds

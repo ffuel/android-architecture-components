@@ -7,21 +7,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
-import com.a65apps.architecturecomponents.domain.Interactor;
 import com.a65apps.architecturecomponents.domain.State;
 import com.a65apps.architecturecomponents.presentation.activity.BaseActivity;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
-import com.a65apps.architecturecomponents.presentation.view.View;
 import com.arellomobile.mvp.MvpDelegate;
 
 @UiThread
-public abstract class MoxyActivity<S extends State, Parcel extends Parcelable,
-        V extends View<S>, I extends Interactor<S, R>, R extends Router,
-        P extends Presenter<S, V, I, R>> extends BaseActivity<S, Parcel, V, I, R, P> {
+public abstract class MoxyActivity<S extends State, Parcel extends Parcelable, P extends Presenter>
+        extends BaseActivity<S, Parcel, P> {
 
     @Nullable
-    private MvpDelegate<? extends MoxyActivity<S, Parcel, V, I, R, P>> mvpDelegate;
+    private MvpDelegate<? extends MoxyActivity<S, Parcel, P>> mvpDelegate;
 
     @Override
     @CallSuper
