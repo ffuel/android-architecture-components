@@ -7,23 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import com.a65apps.architecturecomponents.domain.Interactor;
 import com.a65apps.architecturecomponents.domain.State;
 import com.a65apps.architecturecomponents.presentation.fragment.BaseFragment;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
-import com.a65apps.architecturecomponents.presentation.view.View;
 import com.arellomobile.mvp.MvpDelegate;
 
-final class MoxyFragmentDelegate<S extends State, Parcel extends Parcelable,
-        V extends View<S>, I extends Interactor<S, R>, R extends Router,
-        P extends Presenter<S, V, I, R>> {
+final class MoxyFragmentDelegate<S extends State, Parcel extends Parcelable, P extends Presenter> {
 
     private boolean isStateSaved;
     @NonNull
-    private final MvpDelegate<? extends BaseFragment<S, Parcel, V, I, R, P>> mvpDelegate;
+    private final MvpDelegate<? extends BaseFragment<S, Parcel, P>> mvpDelegate;
 
-    MoxyFragmentDelegate(@NonNull MvpDelegate<? extends BaseFragment<S, Parcel, V, I, R, P>> mvpDelegate) {
+    MoxyFragmentDelegate(@NonNull MvpDelegate<? extends BaseFragment<S, Parcel, P>> mvpDelegate) {
         this.mvpDelegate = mvpDelegate;
     }
 

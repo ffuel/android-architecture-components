@@ -222,8 +222,8 @@ public interface MainDomainModule {
 
 MainActivity
 ```java
-public class MainActivity extends MoxyDaggerActivity<MainState, MainParcelable, MainView, MainInteractor,
-        Router, MainPresenter> implements MainView, HasPresenterSubComponentBuilders {
+public class MainActivity extends MoxyDaggerActivity<MainState, MainParcelable, MainPresenter> 
+    implements MainView, HasPresenterSubComponentBuilders {
 
     @InjectPresenter
     MainPresenter presenter;

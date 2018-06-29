@@ -12,21 +12,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.a65apps.architecturecomponents.domain.Interactor;
 import com.a65apps.architecturecomponents.domain.State;
 import com.a65apps.architecturecomponents.presentation.mapper.ParcelableToStateMapper;
 import com.a65apps.architecturecomponents.presentation.mapper.StateToParcelableMapper;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
 import com.a65apps.architecturecomponents.presentation.view.View;
 
 import javax.inject.Inject;
 
 @UiThread
-public abstract class BaseFragment<S extends State, Parcel extends Parcelable,
-        V extends View<S>, I extends Interactor<S, R>, R extends Router,
-        P extends Presenter<S, V, I, R>> extends Fragment
-        implements View<S> {
+public abstract class BaseFragment<S extends State, Parcel extends Parcelable, P extends Presenter>
+        extends Fragment implements View<S> {
 
     private static final String VIEW_STATE = "view_state";
 
@@ -106,6 +102,7 @@ public abstract class BaseFragment<S extends State, Parcel extends Parcelable,
             if (parcelMapper == null) {
                 throw new IllegalStateException("ParcelableMapper is not provided");
             }
+            //noinspection unchecked
             getPresenter().restoreState(parcelMapper.map(localState));
         }
     }

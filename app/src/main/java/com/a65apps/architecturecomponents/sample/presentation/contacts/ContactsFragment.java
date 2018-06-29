@@ -12,11 +12,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.a65apps.architecturecomponents.sample.R;
-import com.a65apps.architecturecomponents.sample.domain.contacts.ContactsInteractor;
 import com.a65apps.architecturecomponents.sample.domain.contacts.ContactsListState;
 import com.a65apps.architecturecomponents.sample.domain.contacts.ContactsState;
 import com.a65apps.architecturecomponents.sample.presentation.common.ButterCompositeStateFragment;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjector;
 import com.a65apps.moxyarchitecturecomponents.view.MoxyCompositeStateView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,8 +25,7 @@ import java.util.Collections;
 import butterknife.BindView;
 
 public class ContactsFragment extends ButterCompositeStateFragment<ContactsState, ContactsParcelable,
-        ContactsListState, MoxyCompositeStateView<ContactsState, ContactsListState>, ContactsInteractor,
-        Router, ContactsPresenter>
+        ContactsListState, ContactsPresenter>
         implements MoxyCompositeStateView<ContactsState, ContactsListState> {
 
     @InjectPresenter
