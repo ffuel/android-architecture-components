@@ -53,7 +53,7 @@ public class MainPresenter extends MoxyPresenter<MainState, MainView, MainIntera
 
     @UiThread
     @NonNull
-    PresenterComponentBuilder getPresenterSubComponentBuilder(
+    public PresenterComponentBuilder getPresenterSubComponentBuilder(
             @NonNull Class<? extends Presenter> presenterClass) {
         return componentFactory.get(presenterClass);
     }

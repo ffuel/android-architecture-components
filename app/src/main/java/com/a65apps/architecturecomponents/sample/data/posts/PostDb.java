@@ -1,10 +1,14 @@
 package com.a65apps.architecturecomponents.sample.data.posts;
 
+import android.annotation.TargetApi;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Build;
 import android.support.annotation.NonNull;
+
+import java.util.Objects;
 
 @Entity(tableName = "posts", indices = {
         @Index(value = "name", unique = true)
@@ -41,7 +45,7 @@ class PostDb {
     @ColumnInfo(name = "curated")
     private final boolean curated;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
+    @SuppressWarnings({"checkstyle:ParameterNumber", "squid:S00107"})
     PostDb(@NonNull String name, @NonNull String displayName, @NonNull String shortDescription,
            @NonNull String description, @NonNull String createdBy, double score, boolean featured,
            boolean curated) {
@@ -90,5 +94,31 @@ class PostDb {
 
     public boolean isCurated() {
         return curated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PostDb postDb = (PostDb) o;
+        return Double.compare(postDb.score, score) == 0
+                && featured == postDb.featured
+                && curated == postDb.curated
+                && name.equals(postDb.name)
+                && displayName.equals(postDb.displayName)
+                && shortDescription.equals(postDb.shortDescription)
+                && description.equals(postDb.description)
+                && createdBy.equals(postDb.createdBy);
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, displayName, shortDescription, description, createdBy, score, featured, curated);
     }
 }
