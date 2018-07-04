@@ -8,12 +8,19 @@ import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.presentation.schedulers.UiExecutorThread;
 
+import java.util.Map;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import dagger.multibindings.Multibinds;
 
 @Module
 public interface SchedulersModule {
+
+    @Multibinds
+    @NonNull
+    Map<SchedulerType, ThreadExecutor> multibindsThreadExecutor();
 
     @Binds
     @IntoMap

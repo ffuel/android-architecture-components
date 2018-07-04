@@ -35,8 +35,7 @@ public final class PresenterInjector {
     public static <S extends State, V extends View<S>, I extends Interactor<S, R>,
     R extends Router, P extends Presenter<S, V, I, R>>
     P build(@NonNull Class<? extends Presenter<S, V, I, R>> presenterClass,
-            @NonNull Activity activity) {
-        Application application = activity.getApplication();
+            @NonNull Application application) {
         if (!(application instanceof HasPresenterSubComponentBuilders)) {
             throw new IllegalStateException(
                     String.format(

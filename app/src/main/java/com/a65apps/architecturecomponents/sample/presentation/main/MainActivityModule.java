@@ -7,7 +7,11 @@ import com.a65apps.architecturecomponents.sample.domain.main.MainState;
 import com.a65apps.architecturecomponents.di.ActivityModule;
 import com.a65apps.architecturecomponents.presentation.navigation.NavigatorDelegate;
 import com.a65apps.ciceronearchitecturecomponents.CiceroneDelegate;
+import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
+import com.a65apps.ciceronearchitecturecomponents.IntentFabric;
 import com.a65apps.daggerarchitecturecomponents.activity.DaggerActivityModule;
+
+import java.util.Map;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,7 +31,9 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
     @NonNull
     ActivityModule<MainState, MainParcelable, MainStateMapper,
                 MainParcelMapper> providesModule(@NonNull FragmentActivity activity,
-                                                 @NonNull NavigatorHolder holder) {
+                                                 @NonNull NavigatorHolder holder,
+                                                 @NonNull Map<String, FragmentFabric> fragmentMap,
+                                                 @NonNull Map<String, IntentFabric> intentMap) {
         return new ActivityModule<MainState, MainParcelable, MainStateMapper,
                 MainParcelMapper>() {
 
@@ -46,7 +52,8 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
             @NonNull
             @Override
             public NavigatorDelegate provideNavigatorDelegate() {
-                return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider()));
+                return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider(),
+                        fragmentMap, intentMap));
             }
         };
     }
