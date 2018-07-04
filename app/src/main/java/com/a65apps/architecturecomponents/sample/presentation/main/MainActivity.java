@@ -40,7 +40,7 @@ public class MainActivity extends ButterActivity<MainState, MainParcelable, Main
     @ProvidePresenter
     @NonNull
     MainPresenter provideMainPresenter() {
-        return PresenterInjector.build(MainPresenter.class, (HasPresenterSubComponentBuilders) getApplication());
+        return PresenterInjector.build(MainPresenter.class, getApplication());
     }
 
     @Override

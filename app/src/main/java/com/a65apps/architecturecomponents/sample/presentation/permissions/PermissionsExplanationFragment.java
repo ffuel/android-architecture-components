@@ -35,11 +35,10 @@ public class PermissionsExplanationFragment extends Fragment {
     TextView messagesView;
 
     @NonNull
-    public static Fragment newInstance(@NonNull String... messages) {
+    public static Fragment newInstance(Bundle bundle, @NonNull String... messages) {
         Fragment fragment = new PermissionsExplanationFragment();
-        Bundle args = new Bundle();
-        args.putStringArray(MESSAGES_ARG, messages);
-        fragment.setArguments(args);
+        bundle.putStringArray(MESSAGES_ARG, messages);
+        fragment.setArguments(bundle);
 
         return fragment;
     }

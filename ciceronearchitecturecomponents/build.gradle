@@ -47,7 +47,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
     implementation "net.jcip:jcip-annotations:$project.ext.jcipVersion"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:$project.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$project.ext.mockitoVersion"
+    androidTestImplementation "com.android.support.test:runner:$project.ext.testRunnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$project.ext.espressoVersion"
 }
