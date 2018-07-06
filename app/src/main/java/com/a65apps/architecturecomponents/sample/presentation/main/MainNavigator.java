@@ -9,6 +9,7 @@ import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvi
 import com.a65apps.ciceronearchitecturecomponents.BasicNavigator;
 import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
 import com.a65apps.ciceronearchitecturecomponents.IntentFabric;
+import com.a65apps.ciceronearchitecturecomponents.NavigationInterceptor;
 
 import java.util.Map;
 
@@ -20,8 +21,9 @@ public final class MainNavigator extends BasicNavigator {
     MainNavigator(@NonNull FragmentActivity activity,
                   @NonNull ContainerIdProvider idProvider,
                   @NonNull Map<String, FragmentFabric> fragmentMap,
-                  @NonNull Map<String, IntentFabric> intentMap) {
-        super(activity, idProvider, fragmentMap, intentMap);
+                  @NonNull Map<String, IntentFabric> intentMap,
+                  @NonNull Map<String, NavigationInterceptor> interceptorMap) {
+        super(activity, idProvider, fragmentMap, intentMap, interceptorMap);
         this.activity = activity;
     }
 
