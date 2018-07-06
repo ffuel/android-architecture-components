@@ -11,9 +11,12 @@ import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvi
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
+
+import ru.terrakok.cicerone.commands.Forward;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -37,9 +40,13 @@ public class BasicNavigatorTest {
     @Mock
     private Map<String, IntentFabric> intentMap;
     @Mock
+    private Map<String, NavigationInterceptor> interceptorMap;
+    @Mock
     private IntentFabric intentFabric;
     @Mock
     private FragmentFabric fragmentFabric;
+    @Mock
+    private NavigationInterceptor interceptor;
     @Mock
     private Context context;
     @Mock
@@ -83,8 +90,55 @@ public class BasicNavigatorTest {
         navigator.createFragment("test", null);
     }
 
+    @Test
+    public void interceptorsTest() {
+        when(interceptorMap.get(eq("test")))
+                .thenReturn(interceptor);
+        Forward forward = new Forward("test", null);
+        when(interceptor.intercept(eq(activity), eq(forward)))
+                .thenReturn(true);
+        BasicNavigator navigator = createNavigator();
+
+        navigator.applyCommand(forward);
+
+        verify(interceptor, times(1))
+                .intercept(eq(activity), eq(forward));
+        verify(navigator, times(0)).createFragment(any(), any());
+        verify(navigator, times(0)).createActivityIntent(any(), any(), any());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void interceptorsNotFoundTest() {
+        when(interceptorMap.get(any(String.class)))
+                .thenReturn(null);
+        Forward forward = new Forward("test", null);
+        BasicNavigator navigator = createNavigator();
+
+        navigator.applyCommand(forward);
+
+        verify(navigator, times(1)).createFragment(any(), any());
+        verify(navigator, times(1)).createActivityIntent(any(), any(), any());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void interceptorsNotInterceptTest() {
+        when(interceptorMap.get(eq("test")))
+                .thenReturn(interceptor);
+        Forward forward = new Forward("test", null);
+        when(interceptor.intercept(eq(activity), eq(forward)))
+                .thenReturn(false);
+        BasicNavigator navigator = createNavigator();
+
+        navigator.applyCommand(forward);
+
+        verify(interceptor, times(1))
+                .intercept(eq(activity), eq(forward));
+        verify(navigator, times(1)).createFragment(any(), any());
+        verify(navigator, times(1)).createActivityIntent(any(), any(), any());
+    }
+
     @NonNull
     private BasicNavigator createNavigator() {
-        return new BasicNavigator(activity, idProvider, fragmentMap, intentMap);
+        return Mockito.spy(new BasicNavigator(activity, idProvider, fragmentMap, intentMap, interceptorMap));
     }
 }
