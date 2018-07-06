@@ -9,6 +9,7 @@ import com.a65apps.architecturecomponents.sample.presentation.PresenterBuilder;
 import com.a65apps.architecturecomponents.sample.presentation.main.MainNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.FragmentNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.IntentNavigationModule;
+import com.a65apps.architecturecomponents.sample.presentation.navigation.InterceptorNavigationModule;
 import com.a65apps.daggerarchitecturecomponents.ConnectionStateModule;
 import com.a65apps.daggerarchitecturecomponents.LoggerModule;
 import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
@@ -32,6 +33,7 @@ import dagger.android.AndroidInjectionModule;
         ActivityBuilder.class,
         MainNavigationModule.class,
         FragmentNavigationModule.class,
+        InterceptorNavigationModule.class,
         IntentNavigationModule.class,
         AppDataModule.class
 })
