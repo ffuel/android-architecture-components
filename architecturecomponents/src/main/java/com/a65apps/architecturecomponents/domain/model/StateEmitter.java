@@ -56,7 +56,7 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
         }
     }
 
-    void setState(@NonNull T state) {
+    public void setState(@NonNull T state) {
         readWriteLock.writeLock().lock();
         try {
             this.state = state;
@@ -67,7 +67,7 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     }
 
     @NonNull
-    T getState() {
+    public T getState() {
         readWriteLock.readLock().lock();
         try {
             return this.state;
