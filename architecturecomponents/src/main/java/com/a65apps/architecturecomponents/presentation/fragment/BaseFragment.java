@@ -95,6 +95,11 @@ public abstract class BaseFragment<S extends State, Parcel extends Parcelable, P
     @NonNull
     protected abstract P getPresenter();
 
+    @Nullable
+    protected Parcel getState() {
+        return state;
+    }
+
     private void restoreState(@NonNull Bundle savedInstanceState) {
         Parcel localState = savedInstanceState.getParcelable(VIEW_STATE);
         this.state = localState;

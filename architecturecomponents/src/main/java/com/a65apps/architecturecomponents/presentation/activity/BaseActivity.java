@@ -168,6 +168,11 @@ public abstract class BaseActivity<S extends State, Parcel extends Parcelable, P
     @NonNull
     protected abstract P getPresenter();
 
+    @Nullable
+    protected Parcel getState() {
+        return state;
+    }
+
     @Override
     public final void setResultCallback(@Nullable OnRequestPermissionCallback callback) {
         this.permissionsCallback = callback;
