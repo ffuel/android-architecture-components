@@ -42,6 +42,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':architecturecomponents')
 
+    implementation "com.android.support:design:$project.ext.supportVersion"
+
     // MVP dependencies
     implementation "com.arello-mobile:moxy:$project.ext.moxyVersion"
     implementation "com.arello-mobile:moxy-app-compat:$project.ext.moxyVersion"

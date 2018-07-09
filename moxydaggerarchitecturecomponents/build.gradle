@@ -45,6 +45,8 @@ dependencies {
     implementation project(':daggerarchitecturecomponents')
 
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
+    implementation "com.android.support:design:$project.ext.supportVersion"
+
     implementation "javax.inject:javax.inject:$project.ext.injectVersion"
     implementation "com.google.dagger:dagger:$project.ext.daggerVersion"
     implementation ("com.google.dagger:dagger-android-support:$project.ext.daggerVersion") {

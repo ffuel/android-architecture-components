@@ -83,7 +83,7 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
     }
 
     @Override
-    protected void updateState(@NonNull ContactsParcelable state) {
+    public void updateState(@NonNull ContactsParcelable state) {
         if (!state.query().equals(searchView.getText().toString())) {
             searchView.removeTextChangedListener(searchWatcher);
             searchView.setText(state.query());
@@ -99,13 +99,13 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
     }
 
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutRes() {
         return R.layout.fragment_contacts;
     }
 
     @NonNull
     @Override
-    protected ContactsPresenter getPresenter() {
+    public ContactsPresenter getPresenter() {
         return presenter;
     }
 

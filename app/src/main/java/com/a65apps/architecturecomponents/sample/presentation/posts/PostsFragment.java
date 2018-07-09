@@ -71,7 +71,7 @@ public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, P
     }
 
     @Override
-    protected void updateState(@NonNull PostsParcelable state) {
+    public void updateState(@NonNull PostsParcelable state) {
         if (layoutManager != null && state.isLoading()) {
             int firstItem = layoutManager.findFirstVisibleItemPosition();
             if (firstItem == RecyclerView.NO_POSITION || firstItem == 0) {
@@ -93,13 +93,13 @@ public class PostsFragment extends ButterFragment<PostsState, PostsParcelable, P
     }
 
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutRes() {
         return R.layout.fragment_posts;
     }
 
     @NonNull
     @Override
-    protected PostsPresenter getPresenter() {
+    public PostsPresenter getPresenter() {
         return presenter;
     }
 

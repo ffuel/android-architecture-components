@@ -44,6 +44,7 @@ dependencies {
     // support dependencies
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
     implementation "com.android.support:recyclerview-v7:$project.ext.supportVersion"
+    implementation "com.android.support:design:$project.ext.supportVersion"
 
     // rxJava dependencies
     implementation "io.reactivex.rxjava2:rxjava:$project.ext.rxJavaVersion"

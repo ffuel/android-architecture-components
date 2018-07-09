@@ -2,6 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.sample;
 
 import android.support.annotation.NonNull;
 
+import com.a65apps.architecturecomponents.presentation.fragment.FragmentDelegate;
 import com.a65apps.architecturecomponents.sample.domain.sample.SampleState;
 import com.a65apps.architecturecomponents.di.ViewModule;
 import com.a65apps.daggerarchitecturecomponents.view.DaggerViewModule;
@@ -31,5 +32,13 @@ public class SampleFragmentModule extends DaggerViewModule<SampleState, SamplePa
                 return new SampleParcelMapper();
             }
         };
+    }
+
+    @Provides
+    @NonNull
+    FragmentDelegate.FragmentInterface<SampleParcelable, SamplePresenter> providesFragmentInterface(
+            @NonNull SampleFragment fragment
+    ) {
+        return fragment;
     }
 }
