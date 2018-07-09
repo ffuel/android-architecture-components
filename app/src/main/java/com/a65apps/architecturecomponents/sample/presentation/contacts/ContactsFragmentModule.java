@@ -2,6 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.contacts;
 
 import android.support.annotation.NonNull;
 
+import com.a65apps.architecturecomponents.presentation.fragment.FragmentDelegate;
 import com.a65apps.architecturecomponents.sample.domain.contacts.ContactsState;
 import com.a65apps.architecturecomponents.di.ViewModule;
 import com.a65apps.daggerarchitecturecomponents.view.DaggerViewModule;
@@ -31,5 +32,13 @@ public class ContactsFragmentModule extends DaggerViewModule<ContactsState, Cont
                 return new ContactsParcelMapper();
             }
         };
+    }
+
+    @Provides
+    @NonNull
+    FragmentDelegate.FragmentInterface<ContactsParcelable, ContactsPresenter> providesFragmentInterface(
+            @NonNull ContactsFragment fragment
+    ) {
+        return fragment;
     }
 }

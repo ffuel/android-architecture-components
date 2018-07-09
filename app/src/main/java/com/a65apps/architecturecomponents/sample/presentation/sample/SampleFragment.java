@@ -65,7 +65,7 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     }
 
     @Override
-    protected void updateState(@NonNull SampleParcelable state) {
+    public void updateState(@NonNull SampleParcelable state) {
         text.setText(state.text());
         data.setText(state.data());
         switch (state.state()) {
@@ -105,13 +105,13 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     }
 
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutRes() {
         return R.layout.fragment_sample;
     }
 
     @NonNull
     @Override
-    protected SamplePresenter getPresenter() {
+    public SamplePresenter getPresenter() {
         return presenter;
     }
 

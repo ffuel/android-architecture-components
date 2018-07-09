@@ -13,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 9
-        versionName '1.0.9'
+        versionCode 10
+        versionName '1.0.10'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -44,6 +44,7 @@ dependencies {
     // support dependencies
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
     implementation "com.android.support:recyclerview-v7:$project.ext.supportVersion"
+    implementation "com.android.support:design:$project.ext.supportVersion"
 
     // rxJava dependencies
     implementation "io.reactivex.rxjava2:rxjava:$project.ext.rxJavaVersion"
