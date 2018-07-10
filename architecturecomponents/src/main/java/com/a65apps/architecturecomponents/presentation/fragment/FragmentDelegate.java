@@ -49,7 +49,7 @@ public class FragmentDelegate<S extends State, Parcel extends Parcelable, P exte
     @Nullable
     public android.view.View onCreateView(@NonNull LayoutInflater inflater,
                                           @Nullable ViewGroup container,
-                                          @Nullable Bundle savedInstanceState) {
+                                          @SuppressWarnings("unused") @Nullable Bundle savedInstanceState) {
         return inflater.inflate(fragment.getLayoutRes(), container, false);
     }
 
@@ -62,7 +62,7 @@ public class FragmentDelegate<S extends State, Parcel extends Parcelable, P exte
 
     @CallSuper
     public void updateState(@NonNull S state) {
-        this.state = stateMapper.map(state);
+        this.state = map(state);
         fragment.updateState(this.state);
     }
 
@@ -76,12 +76,22 @@ public class FragmentDelegate<S extends State, Parcel extends Parcelable, P exte
         return state;
     }
 
+    @NonNull
+    public Parcel map(@NonNull S state) {
+        return stateMapper.map(state);
+    }
+
+    @NonNull
+    public S map(@NonNull Parcel state) {
+        return parcelMapper.map(state);
+    }
+
     private void restoreState(@NonNull Bundle savedInstanceState) {
         Parcel localState = savedInstanceState.getParcelable(VIEW_STATE);
         this.state = localState;
         if (localState != null) {
             //noinspection unchecked
-            fragment.getPresenter().restoreState(parcelMapper.map(localState));
+            fragment.getPresenter().restoreState(map(localState));
         }
     }
 
