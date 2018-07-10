@@ -68,4 +68,14 @@ public abstract class BaseBottomSheetDialogFragment<S extends State, Parcel exte
     protected Parcel getState() {
         return fragmentDelegate.getState();
     }
+
+    @NonNull
+    protected Parcel map(@NonNull S state) {
+        return fragmentDelegate.map(state);
+    }
+
+    @NonNull
+    protected S map(@NonNull Parcel state) {
+        return fragmentDelegate.map(state);
+    }
 }
