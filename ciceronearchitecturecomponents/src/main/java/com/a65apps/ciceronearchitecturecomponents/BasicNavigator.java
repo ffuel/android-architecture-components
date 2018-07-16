@@ -21,9 +21,9 @@ import ru.terrakok.cicerone.commands.Replace;
 public class BasicNavigator extends SupportAppNavigator {
 
     @NonNull
-    private final Map<String, FragmentFabric> fragmentMap;
+    private final Map<String, FragmentFactory> fragmentMap;
     @NonNull
-    private final Map<String, IntentFabric> intentMap;
+    private final Map<String, IntentFactory> intentMap;
     @NonNull
     private final Map<String, NavigationInterceptor> interceptorMap;
     @NonNull
@@ -31,8 +31,8 @@ public class BasicNavigator extends SupportAppNavigator {
 
     public BasicNavigator(@NonNull FragmentActivity activity,
                           @NonNull ContainerIdProvider idProvider,
-                          @NonNull Map<String, FragmentFabric> fragmentMap,
-                          @NonNull Map<String, IntentFabric> intentMap,
+                          @NonNull Map<String, FragmentFactory> fragmentMap,
+                          @NonNull Map<String, IntentFactory> intentMap,
                           @NonNull Map<String, NavigationInterceptor> interceptorMap) {
         super(activity, idProvider.get());
         this.fragmentMap = fragmentMap;
@@ -67,9 +67,9 @@ public class BasicNavigator extends SupportAppNavigator {
     @Nullable
     protected Intent createActivityIntent(@NonNull Context context, @NonNull String screenKey,
                                           @Nullable Object data) {
-        IntentFabric fabric = intentMap.get(screenKey);
-        if (fabric != null) {
-            return fabric.build(context, new Bundle(), data);
+        IntentFactory factory = intentMap.get(screenKey);
+        if (factory != null) {
+            return factory.build(context, new Bundle(), data);
         }
 
         return null;
@@ -78,11 +78,11 @@ public class BasicNavigator extends SupportAppNavigator {
     @Override
     @NonNull
     protected Fragment createFragment(@NonNull String screenKey, @Nullable Object data) {
-        FragmentFabric fabric = fragmentMap.get(screenKey);
-        if (fabric == null) {
+        FragmentFactory factory = fragmentMap.get(screenKey);
+        if (factory == null) {
             throw new IllegalArgumentException("Unknown screen key: " + screenKey);
         }
 
-        return fabric.build(new Bundle(), data);
+        return factory.build(new Bundle(), data);
     }
 }

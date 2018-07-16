@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvider;
 import com.a65apps.ciceronearchitecturecomponents.BasicNavigator;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
-import com.a65apps.ciceronearchitecturecomponents.IntentFabric;
+import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
+import com.a65apps.ciceronearchitecturecomponents.IntentFactory;
 import com.a65apps.ciceronearchitecturecomponents.NavigationInterceptor;
 
 import java.util.Map;
@@ -20,8 +20,8 @@ public final class MainNavigator extends BasicNavigator {
 
     MainNavigator(@NonNull FragmentActivity activity,
                   @NonNull ContainerIdProvider idProvider,
-                  @NonNull Map<String, FragmentFabric> fragmentMap,
-                  @NonNull Map<String, IntentFabric> intentMap,
+                  @NonNull Map<String, FragmentFactory> fragmentMap,
+                  @NonNull Map<String, IntentFactory> intentMap,
                   @NonNull Map<String, NavigationInterceptor> interceptorMap) {
         super(activity, idProvider, fragmentMap, intentMap, interceptorMap);
         this.activity = activity;

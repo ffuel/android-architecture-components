@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public interface IntentFabric {
+public interface IntentFactory {
 
     @NonNull
     Intent build(@NonNull Context context, @NonNull Bundle bundle,

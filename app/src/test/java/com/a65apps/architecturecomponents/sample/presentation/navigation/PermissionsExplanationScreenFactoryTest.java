@@ -19,15 +19,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class PermissionsExplanationScreenFabricTest {
+public class PermissionsExplanationScreenFactoryTest {
 
     @Mock
     private Bundle bundle;
 
     @Test
     public void buildTest() {
-        PermissionsExplanationScreenFabric fabric = new PermissionsExplanationScreenFabric();
-        Fragment fragment = fabric.build(bundle, new String[] {"test"});
+        PermissionsExplanationScreenFactory factory = new PermissionsExplanationScreenFactory();
+        Fragment fragment = factory.build(bundle, new String[] {"test"});
         assertNotNull(fragment);
         assertThat(fragment.getClass(), equalTo(PermissionsExplanationFragment.class));
         verify(bundle, times(1))

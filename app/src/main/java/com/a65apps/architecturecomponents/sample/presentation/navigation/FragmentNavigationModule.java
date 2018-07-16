@@ -3,7 +3,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.sample.domain.main.MainConstants;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
+import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
 
 import java.util.Map;
 
@@ -18,29 +18,29 @@ public interface FragmentNavigationModule {
 
     @Multibinds
     @NonNull
-    Map<String, FragmentFabric> multibindsFragmentFabric();
+    Map<String, FragmentFactory> multibindsFragmentFactory();
 
     @Binds
     @IntoMap
     @StringKey(MainConstants.SAMPLE_KEY)
     @NonNull
-    FragmentFabric bindsSampleScreenFabric(@NonNull SampleScreenFabric fabric);
+    FragmentFactory bindsSampleScreenFactory(@NonNull SampleScreenFactory factory);
 
     @Binds
     @IntoMap
     @StringKey(MainConstants.CONTACTS_KEY)
     @NonNull
-    FragmentFabric bindsContactsScreenFabric(@NonNull ContactsScreenFabric fabric);
+    FragmentFactory bindsContactsScreenFactory(@NonNull ContactsScreenFactory factory);
 
     @Binds
     @IntoMap
     @StringKey(MainConstants.PERMISSION_EXPLANATION_KEY)
     @NonNull
-    FragmentFabric bindsPermissionsExplanationScreenFabric(@NonNull PermissionsExplanationScreenFabric fabric);
+    FragmentFactory bindsPermissionsExplanationScreenFactory(@NonNull PermissionsExplanationScreenFactory factory);
 
     @Binds
     @IntoMap
     @StringKey(MainConstants.POSTS_KEY)
     @NonNull
-    FragmentFabric bindsPostsScreenFabric(@NonNull PostsScreenFabric fabric);
+    FragmentFactory bindsPostsScreenFactory(@NonNull PostsScreenFactory factory);
 }
