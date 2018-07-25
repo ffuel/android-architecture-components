@@ -7,6 +7,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -40,7 +41,7 @@ public final class SubComponentBuilder {
                         boolean isChild) {
         this.processingEnv = processingEnv;
         this.subComponentName = subComponentName;
-        this.modules = modules;
+        this.modules = Arrays.copyOf(modules, modules.length);
         this.baseProvider = baseProvider;
         this.presenterComponentBuilder = presenterComponentBuilder;
         this.isChild = isChild;

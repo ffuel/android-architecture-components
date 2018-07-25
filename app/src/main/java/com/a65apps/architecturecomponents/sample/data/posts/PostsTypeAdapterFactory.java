@@ -6,6 +6,7 @@ import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 
 @GsonTypeAdapterFactory
+@SuppressWarnings("squid:S1118")
 public abstract class PostsTypeAdapterFactory implements TypeAdapterFactory {
 
     @NonNull
