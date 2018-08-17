@@ -13,10 +13,8 @@ public interface StringResources extends DataSource {
     String getString(int id, @NonNull Object... args);
 
     @NonNull
-    String getQuantityString (int id, int quantity);
+    String getQuantityString(int id, int quantity);
 
     @NonNull
-    String getQuantityString (int id, int quantity, @NonNull Object... formatArgs);
-
-
+    String getQuantityString(int id, int quantity, @NonNull Object... formatArgs);
 }
