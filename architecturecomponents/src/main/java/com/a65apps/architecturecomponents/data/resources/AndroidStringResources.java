@@ -32,4 +32,17 @@ public class AndroidStringResources implements StringResources {
     public String getString(int id, @NonNull Object... args) {
         return resources.getString(id, args);
     }
+
+
+    @NonNull
+    @Override
+    public String getQuantityString(int id, int quantity) {
+        return resources.getQuantityString(id, quantity);
+    }
+
+    @NonNull
+    @Override
+    public String getQuantityString(int id, int quantity, @NonNull Object... formatArgs) {
+        return resources.getQuantityString(id, quantity, formatArgs);
+    }
 }
