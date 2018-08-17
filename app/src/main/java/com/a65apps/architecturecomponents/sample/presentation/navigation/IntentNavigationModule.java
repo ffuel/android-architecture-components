@@ -2,7 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.a65apps.ciceronearchitecturecomponents.IntentFabric;
+import com.a65apps.ciceronearchitecturecomponents.IntentFactory;
 
 import java.util.Map;
 
@@ -14,5 +14,5 @@ public interface IntentNavigationModule {
 
     @Multibinds
     @NonNull
-    Map<String, IntentFabric> multibindsIntentFabric();
+    Map<String, IntentFactory> multibindsIntentFactory();
 }

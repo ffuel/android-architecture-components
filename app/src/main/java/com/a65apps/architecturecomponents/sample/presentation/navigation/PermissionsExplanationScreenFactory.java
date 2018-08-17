@@ -7,14 +7,14 @@ import android.support.v4.app.Fragment;
 
 import com.a65apps.architecturecomponents.sample.domain.main.Screen;
 import com.a65apps.architecturecomponents.sample.presentation.permissions.PermissionsExplanationFragment;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
+import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
 
 import javax.inject.Inject;
 
-class PermissionsExplanationScreenFabric implements FragmentFabric {
+class PermissionsExplanationScreenFactory implements FragmentFactory {
 
     @Inject
-    PermissionsExplanationScreenFabric() {
+    PermissionsExplanationScreenFactory() {
 //      Inject constructor
     }
 

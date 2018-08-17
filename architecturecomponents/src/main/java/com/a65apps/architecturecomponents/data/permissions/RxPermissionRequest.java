@@ -11,6 +11,7 @@ import com.a65apps.architecturecomponents.domain.permissions.RequestPermissionsW
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -41,7 +42,7 @@ final class RxPermissionRequest implements PermissionsRequest {
     private RxPermissionRequest(@NonNull PermissionsManager permissionsManager,
                                 @NonNull String[] permissions, boolean force) {
         this.permissionsManager = permissionsManager;
-        this.permissions = permissions;
+        this.permissions = Arrays.copyOf(permissions, permissions.length);
         this.force = force;
     }
 

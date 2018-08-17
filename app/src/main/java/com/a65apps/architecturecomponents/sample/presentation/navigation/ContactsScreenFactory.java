@@ -6,14 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFabric;
+import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
 
 import javax.inject.Inject;
 
-class ContactsScreenFabric implements FragmentFabric {
+class ContactsScreenFactory implements FragmentFactory {
 
     @Inject
-    ContactsScreenFabric() {
+    ContactsScreenFactory() {
 //      Inject constructor
     }
 

@@ -36,15 +36,15 @@ public class BasicNavigatorTest {
     @Mock
     private ContainerIdProvider idProvider;
     @Mock
-    private Map<String, FragmentFabric> fragmentMap;
+    private Map<String, FragmentFactory> fragmentMap;
     @Mock
-    private Map<String, IntentFabric> intentMap;
+    private Map<String, IntentFactory> intentMap;
     @Mock
     private Map<String, NavigationInterceptor> interceptorMap;
     @Mock
-    private IntentFabric intentFabric;
+    private IntentFactory intentFactory;
     @Mock
-    private FragmentFabric fragmentFabric;
+    private FragmentFactory fragmentFactory;
     @Mock
     private NavigationInterceptor interceptor;
     @Mock
@@ -57,8 +57,8 @@ public class BasicNavigatorTest {
     @Test
     public void createActivityIntentTest() {
         when(intentMap.get(eq("test")))
-                .thenReturn(intentFabric);
-        when(intentFabric.build(eq(context), any(), isNull()))
+                .thenReturn(intentFactory);
+        when(intentFactory.build(eq(context), any(), isNull()))
                 .thenReturn(intent);
         BasicNavigator navigator = createNavigator();
 
@@ -67,15 +67,15 @@ public class BasicNavigatorTest {
 
         assertThat(intent, equalTo(intent));
         assertTrue(intentNull == null);
-        verify(intentFabric, times(1))
+        verify(intentFactory, times(1))
                 .build(eq(context), any(), isNull());
     }
 
     @Test
     public void createFragmentTest() {
         when(fragmentMap.get(eq("test")))
-                .thenReturn(fragmentFabric);
-        when(fragmentFabric.build(any(), isNull()))
+                .thenReturn(fragmentFactory);
+        when(fragmentFactory.build(any(), isNull()))
                 .thenReturn(fragment);
         BasicNavigator navigator = createNavigator();
 

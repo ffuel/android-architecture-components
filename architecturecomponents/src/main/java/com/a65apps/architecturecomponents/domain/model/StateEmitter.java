@@ -8,6 +8,7 @@ import com.a65apps.architecturecomponents.domain.State;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -32,6 +33,7 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     }
 
     private StateEmitter(@NonNull T state) {
+        Objects.requireNonNull(state);
         this.state = state;
         this.readWriteLock = new ReentrantReadWriteLock();
     }
