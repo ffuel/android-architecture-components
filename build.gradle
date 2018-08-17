@@ -19,7 +19,7 @@ plugins {
     id "org.sonarqube" version "2.6"
 }
 
-def projectVersion = '1.0.10'
+def projectVersion = '1.0.11'
 
 sonarqube {
     properties {
