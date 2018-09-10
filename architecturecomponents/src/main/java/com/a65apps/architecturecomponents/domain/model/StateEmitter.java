@@ -18,7 +18,10 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposables;
 
 @ThreadSafe
-public final class StateEmitter<T extends State> implements ObservableOnSubscribe<T> {
+public final class StateEmitter<T extends State> implements ObservableOnSubscribe<T>,
+        AppendOnlyList.Predicate<Object> {
+
+    private static final int CAPACITY = 4;
 
     @NonNull
     private final Set<ObservableEmitter<T>> emitters = new HashSet<>();
@@ -27,14 +30,16 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     private volatile T state;
     @NonNull
     private final ReadWriteLock readWriteLock;
+    @Nullable
+    private AppendOnlyList<? super Event> queue;
+    private boolean emitting;
 
     public static <T extends State> StateEmitter<T> create(@NonNull T state) {
         return new StateEmitter<>(state);
     }
 
     private StateEmitter(@NonNull T state) {
-        Objects.requireNonNull(state);
-        this.state = state;
+        this.state = Objects.requireNonNull(state);
         this.readWriteLock = new ReentrantReadWriteLock();
     }
 
@@ -43,29 +48,65 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
         emitter.setDisposable(Disposables.fromAction(() -> {
             readWriteLock.writeLock().lock();
             try {
+                if (emitting) {
+                    AppendOnlyList<? super Event> q = queue;
+                    if (q == null) {
+                        q = new AppendOnlyList<>(CAPACITY);
+                        queue = q;
+                    }
+                    q.add(new DisposeEvent<>(emitter));
+                    return;
+                }
+                emitting = true;
                 emitters.remove(emitter);
             } finally {
                 readWriteLock.writeLock().unlock();
             }
+
+            emitLoop();
         }));
 
         readWriteLock.writeLock().lock();
         try {
+            if (emitting) {
+                AppendOnlyList<? super Event> q = queue;
+                if (q == null) {
+                    q = new AppendOnlyList<>(CAPACITY);
+                    queue = q;
+                }
+                q.add(new SubscribeEvent<>(emitter));
+                return;
+            }
+            emitting = true;
             emitters.add(emitter);
             emit(state, emitter);
         } finally {
             readWriteLock.writeLock().unlock();
         }
+
+        emitLoop();
     }
 
     public void setState(@NonNull T state) {
         readWriteLock.writeLock().lock();
         try {
+            if (emitting) {
+                AppendOnlyList<? super Event> q = queue;
+                if (q == null) {
+                    q = new AppendOnlyList<>(CAPACITY);
+                    queue = q;
+                }
+                q.add(new EmitEvent<>(state));
+                return;
+            }
+            emitting = true;
             this.state = state;
             deliverState(state);
         } finally {
             readWriteLock.writeLock().unlock();
         }
+
+        emitLoop();
     }
 
     @NonNull
@@ -75,6 +116,59 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
             return this.state;
         } finally {
             readWriteLock.readLock().unlock();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean test(@NonNull Object event) {
+        if (event instanceof SubscribeEvent) {
+            readWriteLock.readLock().lock();
+            try {
+                SubscribeEvent<T> subscribeEvent = (SubscribeEvent<T>) event;
+                emit(state, subscribeEvent.getEmitter());
+            } finally {
+                readWriteLock.readLock().unlock();
+            }
+            return false;
+        }
+        if (event instanceof DisposeEvent) {
+            DisposeEvent<T> disposeEvent = (DisposeEvent<T>) event;
+            readWriteLock.writeLock().lock();
+            try {
+                emitters.remove(disposeEvent.getEmitter());
+            } finally {
+                readWriteLock.writeLock().unlock();
+            }
+            return false;
+        }
+
+        EmitEvent<T> emitEvent = (EmitEvent<T>) event;
+        readWriteLock.writeLock().lock();
+        try {
+            this.state = emitEvent.getState();
+            deliverState(emitEvent.getState());
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+        return false;
+    }
+
+    private void emitLoop() {
+        for (;;) {
+            AppendOnlyList<? super Event> q;
+            readWriteLock.writeLock().lock();
+            try {
+                q = queue;
+                if (q == null) {
+                    emitting = false;
+                    return;
+                }
+                queue = null;
+            } finally {
+                readWriteLock.writeLock().unlock();
+            }
+            q.forEachWhile(this);
         }
     }
 
@@ -89,5 +183,54 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
             return;
         }
         emitter.onNext(state);
+    }
+
+    private interface Event {
+
+    }
+
+    private static final class SubscribeEvent<T> implements Event {
+
+        @NonNull
+        private final ObservableEmitter<T> emitter;
+
+        private SubscribeEvent(@NonNull ObservableEmitter<T> emitter) {
+            this.emitter = emitter;
+        }
+
+        @NonNull
+        ObservableEmitter<T> getEmitter() {
+            return emitter;
+        }
+    }
+
+    private static final class DisposeEvent<T> implements Event {
+
+        @NonNull
+        private final ObservableEmitter<T> emitter;
+
+        private DisposeEvent(@NonNull ObservableEmitter<T> emitter) {
+            this.emitter = emitter;
+        }
+
+        @NonNull
+        ObservableEmitter<T> getEmitter() {
+            return emitter;
+        }
+    }
+
+    private static final class EmitEvent<T> implements Event {
+
+        @NonNull
+        private final T state;
+
+        private EmitEvent(@NonNull T state) {
+            this.state = state;
+        }
+
+        @NonNull
+        public T getState() {
+            return state;
+        }
     }
 }
