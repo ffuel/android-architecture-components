@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvider;
 import com.a65apps.ciceronearchitecturecomponents.BasicNavigator;
+import com.a65apps.ciceronearchitecturecomponents.FragmentAnimationFactory;
 import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
 import com.a65apps.ciceronearchitecturecomponents.IntentFactory;
 import com.a65apps.ciceronearchitecturecomponents.NavigationInterceptor;
@@ -22,8 +23,9 @@ public final class MainNavigator extends BasicNavigator {
                   @NonNull ContainerIdProvider idProvider,
                   @NonNull Map<String, FragmentFactory> fragmentMap,
                   @NonNull Map<String, IntentFactory> intentMap,
-                  @NonNull Map<String, NavigationInterceptor> interceptorMap) {
-        super(activity, idProvider, fragmentMap, intentMap, interceptorMap);
+                  @NonNull Map<String, NavigationInterceptor> interceptorMap,
+                  @NonNull Map<String, FragmentAnimationFactory> animationMap) {
+        super(activity, idProvider, fragmentMap, intentMap, interceptorMap, animationMap);
         this.activity = activity;
     }
 
