@@ -20,6 +20,7 @@ class ContactsScreenFactory implements FragmentFactory {
     @NonNull
     @Override
     public Fragment build(@NonNull Bundle bundle, @Nullable Object data) {
-        return ContactsFragment.newInstance();
+        bundle.putString(ContactsFragment.SEARCH_ARG, "тест");
+        return ContactsFragment.newInstance(bundle);
     }
 }

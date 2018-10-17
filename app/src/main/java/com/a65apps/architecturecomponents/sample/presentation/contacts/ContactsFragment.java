@@ -28,6 +28,8 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
         ContactsListState, ContactsPresenter>
         implements MoxyCompositeStateView<ContactsState, ContactsListState> {
 
+    public static final String SEARCH_ARG = "search_arg";
+
     @InjectPresenter
     ContactsPresenter presenter;
 
@@ -62,8 +64,10 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
     };
 
     @NonNull
-    public static Fragment newInstance() {
-        return new ContactsFragment();
+    public static Fragment newInstance(@NonNull Bundle bundle) {
+        Fragment fragment = new ContactsFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -112,6 +116,14 @@ public class ContactsFragment extends ButterCompositeStateFragment<ContactsState
     @ProvidePresenter
     @NonNull
     ContactsPresenter provideSamplePresenter() {
-        return PresenterInjector.build(ContactsPresenter.class, this);
+        Bundle args = getArguments();
+        if (args == null) {
+            throw new IllegalArgumentException("Can't find arguments");
+        }
+        String search = args.getString(SEARCH_ARG);
+        if (search == null) {
+            throw new IllegalArgumentException("Can't find argument " + SEARCH_ARG);
+        }
+        return PresenterInjector.build(ContactsPresenter.class, this, search);
     }
 }
