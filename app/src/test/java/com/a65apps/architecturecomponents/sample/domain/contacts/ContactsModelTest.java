@@ -3,6 +3,7 @@ package com.a65apps.architecturecomponents.sample.domain.contacts;
 import android.Manifest;
 import android.support.annotation.NonNull;
 
+import com.a65apps.architecturecomponents.domain.argument.ArgumentContainer;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionState;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsSource;
 import com.a65apps.architecturecomponents.domain.resources.StringResources;
@@ -11,7 +12,6 @@ import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.domain.source.SingleSourceWithParam;
 import com.a65apps.architecturecomponents.presentation.navigation.Router;
-import com.a65apps.architecturecomponents.sample.R;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +44,8 @@ public class ContactsModelTest {
     private PermissionsSource permissionsSource;
     @Mock
     private ThreadExecutor executor;
+    @Mock
+    private ArgumentContainer argumentContainer;
 
     @Before
     public void setup() {
@@ -59,7 +61,8 @@ public class ContactsModelTest {
 
     @Test
     public void constructorTest() {
-        when(source.data(eq("")))
+        when(argumentContainer.argument(eq(String.class))).thenReturn("test");
+        when(source.data(eq("test")))
                 .thenReturn(Single.just(
                         ContactsListState.create(Collections.emptyList())));
         ContactsModel model = createModel();
@@ -69,12 +72,13 @@ public class ContactsModelTest {
         model.observeState().subscribe(observer);
         model.observeDependentState().subscribe(observerDependent);
 
-        observer.assertValue(ContactsState.create(""));
+        observer.assertValue(ContactsState.create("test"));
         observerDependent.assertValue(ContactsListState.create(Collections.emptyList()));
     }
 
     @Test
     public void queryTest() {
+        when(argumentContainer.argument(eq(String.class))).thenReturn("");
         when(source.data(any()))
                 .thenReturn(Single.just(
                         ContactsListState.create(Collections.emptyList())));
@@ -92,6 +96,7 @@ public class ContactsModelTest {
 
     @Test
     public void restoreDependentStateTest() {
+        when(argumentContainer.argument(eq(String.class))).thenReturn("");
         when(source.data(any()))
                 .thenReturn(Single.just(
                         ContactsListState.create(Collections.emptyList())));
@@ -107,6 +112,6 @@ public class ContactsModelTest {
 
     @NonNull
     private ContactsModel createModel() {
-        return new ContactsModel(router, source, executors, permissionsSource, stringResources);
+        return new ContactsModel(router, source, executors, permissionsSource, stringResources, argumentContainer);
     }
 }

@@ -52,7 +52,7 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
                 .build();
         component.inject(this);
 
-        presenter = PresenterInjector.build(MainPresenter.class, this);
+        presenter = PresenterInjector.build(MainPresenter.class, this, null);
     }
 
     @Override

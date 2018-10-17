@@ -88,9 +88,9 @@ public class SamplePresenterTest implements HasPresenterSubComponentBuilders {
         when(source.data())
                 .thenReturn(Single.just("ArchitectureComponents"));
 
-        MainPresenter mainPresenter = PresenterInjector.build(MainPresenter.class, this);
+        MainPresenter mainPresenter = PresenterInjector.build(MainPresenter.class, this, null);
         presenter = PresenterInjector.build(SamplePresenter.class,
-                mainPresenter::getPresenterSubComponentBuilder);
+                mainPresenter::getPresenterSubComponentBuilder, null);
 
         when(sharedPreferences.getString(eq(PreferenceKeys.SAMPLE_DATA_KEY), eq("")))
                 .thenReturn("ArchitectureComponents");
