@@ -4,6 +4,7 @@ import android.Manifest;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
+import com.a65apps.architecturecomponents.domain.argument.ArgumentContainer;
 import com.a65apps.architecturecomponents.sample.R;
 import com.a65apps.architecturecomponents.domain.model.BaseCompositeStateModel;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionState;
@@ -40,8 +41,10 @@ final class ContactsModel extends BaseCompositeStateModel<ContactsState, Contact
                   @NonNull SingleSourceWithParam<ContactsListState, String> source,
                   @NonNull ExecutorsFactory executors,
                   @NonNull PermissionsSource permissionsSource,
-                  @NonNull StringResources stringResources) {
-        super(ContactsState.create(""), ContactsListState.create(Collections.emptyList()), router);
+                  @NonNull StringResources stringResources,
+                  @NonNull ArgumentContainer argumentContainer) {
+        super(ContactsState.create(argumentContainer.argument(String.class)),
+                ContactsListState.create(Collections.emptyList()), router);
         this.source = source;
         this.ioExecutor = executors.getExecutor(SchedulerType.IO);
         this.uiExecutor = executors.getExecutor(SchedulerType.UI);
