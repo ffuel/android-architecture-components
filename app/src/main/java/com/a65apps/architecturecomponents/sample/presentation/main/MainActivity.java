@@ -54,6 +54,11 @@ public class MainActivity extends ButterActivity<MainState, MainParcelable, Main
     }
 
     @Override
+    public void onShowMvi() {
+        presenter.showMvi();
+    }
+
+    @Override
     public void onUserAgree() {
         presenter.forceContactsPermissions();
     }

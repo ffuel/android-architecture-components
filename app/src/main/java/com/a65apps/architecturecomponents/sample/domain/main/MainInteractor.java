@@ -18,4 +18,7 @@ public interface MainInteractor extends Interactor<MainState, Router> {
 
     @UiThread
     void navigatePosts();
+
+    @UiThread
+    void navigateMvi();
 }

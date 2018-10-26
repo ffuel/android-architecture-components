@@ -40,6 +40,8 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     View buttonView;
     @BindView(R.id.posts_btn)
     View postsView;
+    @BindView(R.id.mvi_btn)
+    View mviView;
 
     @Nullable
     private SearchContactsListener listener;
@@ -73,12 +75,14 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
                 data.setVisibility(View.GONE);
                 buttonView.setVisibility(View.GONE);
                 postsView.setVisibility(View.GONE);
+                mviView.setVisibility(View.GONE);
                 refresh.setRefreshing(true);
                 break;
             case COMPLETE:
                 data.setVisibility(View.VISIBLE);
                 buttonView.setVisibility(View.VISIBLE);
                 postsView.setVisibility(View.VISIBLE);
+                mviView.setVisibility(View.VISIBLE);
                 refresh.setRefreshing(false);
                 break;
             case ERROR:
@@ -89,6 +93,7 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
                 }
                 buttonView.setVisibility(View.GONE);
                 postsView.setVisibility(View.GONE);
+                mviView.setVisibility(View.GONE);
                 refresh.setRefreshing(false);
                 break;
 
@@ -132,6 +137,13 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
     void onPostsClick() {
         if (listener != null) {
             listener.onShowPosts();
+        }
+    }
+
+    @OnClick(R.id.mvi_btn)
+    void onMviClick() {
+        if (listener != null) {
+            listener.onShowMvi();
         }
     }
 

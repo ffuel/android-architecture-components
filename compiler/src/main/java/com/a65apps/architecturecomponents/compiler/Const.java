@@ -4,6 +4,7 @@ public final class Const {
     public static final String COM_A65APPS_DAGGERARCHITECTURECOMPONENTS_PRESENTER =
             "com.a65apps.daggerarchitecturecomponents.presenter";
     public static final String PROVIDER_PRESENTER_COMPONENT = "ProviderPresenterComponent";
+    public static final String PROVIDER_MVI_PRESENTER_COMPONENT = "ProviderMviPresenterComponent";
     public static final String PRESENTER_COMPONENT_BUILDER = "PresenterComponentBuilder";
     public static final String DAGGER = "dagger";
     public static final String S_BIND_S = "%s_Bind%s";

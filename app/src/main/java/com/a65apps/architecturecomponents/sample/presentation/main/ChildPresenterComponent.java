@@ -2,6 +2,8 @@ package com.a65apps.architecturecomponents.sample.presentation.main;
 
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsPresenter;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsPresenterModule;
+import com.a65apps.architecturecomponents.sample.presentation.mvi.MviPresenter;
+import com.a65apps.architecturecomponents.sample.presentation.mvi.MviPresenterModule;
 import com.a65apps.architecturecomponents.sample.presentation.posts.PostsPresenter;
 import com.a65apps.architecturecomponents.sample.presentation.posts.PostsPresenterModule;
 import com.a65apps.architecturecomponents.sample.presentation.sample.SamplePresenter;
@@ -21,4 +23,7 @@ interface ChildPresenterComponent {
 
     @ContributesPresenterInjector(modules = PostsPresenterModule.class, isChild = true)
     PostsPresenter bindPostsPresenter();
+
+    @ContributesPresenterInjector(modules = MviPresenterModule.class, isChild = true)
+    MviPresenter bindMviPresenter();
 }

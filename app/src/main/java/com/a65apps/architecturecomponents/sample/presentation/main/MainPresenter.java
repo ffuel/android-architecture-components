@@ -57,4 +57,9 @@ public class MainPresenter extends MoxyPresenter<MainState, MainView, MainIntera
             @NonNull Class<? extends Presenter> presenterClass) {
         return componentFactory.get(presenterClass);
     }
+
+    @UiThread
+    void showMvi() {
+        getInteractor().navigateMvi();
+    }
 }

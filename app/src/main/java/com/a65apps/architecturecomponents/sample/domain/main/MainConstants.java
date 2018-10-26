@@ -6,6 +6,7 @@ public final class MainConstants {
     public static final String CONTACTS_KEY = "screen_contacts";
     public static final String PERMISSION_EXPLANATION_KEY = "screen_permission_explanation";
     public static final String POSTS_KEY = "posts";
+    public static final String MVI_KEY = "mvi";
 
     private MainConstants() {
 
