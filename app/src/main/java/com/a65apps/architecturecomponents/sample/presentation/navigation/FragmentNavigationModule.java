@@ -43,4 +43,10 @@ public interface FragmentNavigationModule {
     @StringKey(MainConstants.POSTS_KEY)
     @NonNull
     FragmentFactory bindsPostsScreenFactory(@NonNull PostsScreenFactory factory);
+
+    @Binds
+    @IntoMap
+    @StringKey(MainConstants.MVI_KEY)
+    @NonNull
+    FragmentFactory bindsMviScreenFactory(@NonNull MviScreenFactory factory);
 }

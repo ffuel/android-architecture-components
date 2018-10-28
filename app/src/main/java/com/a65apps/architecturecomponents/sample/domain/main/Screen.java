@@ -9,7 +9,8 @@ public enum Screen {
     SAMPLE(MainConstants.SAMPLE_KEY, R.string.sample_title),
     CONTACTS(MainConstants.CONTACTS_KEY, R.string.contacts_title),
     PERMISSION_EXPLANATION(MainConstants.PERMISSION_EXPLANATION_KEY, R.string.permissions_title),
-    POSTS(MainConstants.POSTS_KEY, R.string.posts_title);
+    POSTS(MainConstants.POSTS_KEY, R.string.posts_title),
+    MVI(MainConstants.MVI_KEY, R.string.mvi_screen_title);
 
     @NonNull
     private String name;

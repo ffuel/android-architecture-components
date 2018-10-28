@@ -37,6 +37,7 @@ import javax.tools.Diagnostic;
 public class ContributesPresenterInjectorProcessor extends AbstractProcessor {
 
     private static final List<String> TYPES;
+    private static final int MAX_GENERIC_PARAMS = 5;
 
     static {
         TYPES = new ArrayList<>();
@@ -83,14 +84,21 @@ public class ContributesPresenterInjectorProcessor extends AbstractProcessor {
     }
 
     private void processModules(@Nonnull MethodInfo info, @Nonnull DeclaredType[] modules, boolean isChild) {
-        ClassName providerPresenterComponentClass =
-                ClassName.get(Const.COM_A65APPS_DAGGERARCHITECTURECOMPONENTS_PRESENTER,
-                        Const.PROVIDER_PRESENTER_COMPONENT);
+        ClassName providerPresenterComponentClass;
         ClassName presenterComponentBuilder =
                 ClassName.get(Const.COM_A65APPS_DAGGERARCHITECTURECOMPONENTS_PRESENTER,
                         Const.PRESENTER_COMPONENT_BUILDER);
         List<TypeName> names = getComponentTypeNames(info);
         names.add(info.getReturnType());
+
+        if (names.size() < MAX_GENERIC_PARAMS) {
+            providerPresenterComponentClass = ClassName.get(Const.COM_A65APPS_DAGGERARCHITECTURECOMPONENTS_PRESENTER,
+                    Const.PROVIDER_MVI_PRESENTER_COMPONENT);
+        } else {
+            providerPresenterComponentClass =
+                    ClassName.get(Const.COM_A65APPS_DAGGERARCHITECTURECOMPONENTS_PRESENTER,
+                            Const.PROVIDER_PRESENTER_COMPONENT);
+        }
 
         ParameterizedTypeName baseProvider = ParameterizedTypeName.get(providerPresenterComponentClass,
                 names.toArray(new TypeName[names.size()]));

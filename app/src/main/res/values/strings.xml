@@ -8,8 +8,12 @@
     <string name="contacts_title">Поиск контактов</string>
     <string name="permissions_title">Необходимы разешения</string>
     <string name="posts_title">Топики GitHub Ruby</string>
+    <string name="mvi_screen_title">MVI</string>
 
     <string name="contacts_permissions_not_granted">Необходимо включить разрешение на чтение контактов</string>
 
     <string name="loading">Загрузка</string>
+
+    <string name="mvi_title">Привет Intent</string>
+    <string name="mvi_subtitle">Подзаголовок Intent</string>
 </resources>

@@ -77,6 +77,12 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
         getRouter().navigateTo(getState().screen().getName());
     }
 
+    @Override
+    public void navigateMvi() {
+        setState(MainState.create(Screen.MVI));
+        getRouter().navigateTo(getState().screen().getName());
+    }
+
     private void checkPermissionState(@NonNull PermissionState state) {
         switch (state) {
             case GRANTED:

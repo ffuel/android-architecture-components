@@ -5,4 +5,6 @@ public interface SearchContactsListener {
     void onSearchContacts();
 
     void onShowPosts();
+
+    void onShowMvi();
 }
