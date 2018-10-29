@@ -6,11 +6,11 @@ apply from: "$project.rootDir/tools/checkstyle.gradle"
 apply from: "$project.rootDir/tools/pmd.gradle"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.a65apps.architecturecomponents.sample"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 10
         versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -69,7 +69,7 @@ android {
 
 dependencies {
     def autoValueParcelVersion = '0.2.6'
-    def autoValueGsonVersion = '0.7.0'
+    def autoValueGsonVersion = '0.8.0'
     def butterKnifeVersion = '8.8.1'
     def retrofitVersion = '2.4.0'
     def roomVersion = '1.1.0'
@@ -91,9 +91,7 @@ dependencies {
 
     // Dagger
     implementation "com.google.dagger:dagger:$project.ext.daggerVersion"
-    implementation ("com.google.dagger:dagger-android-support:$project.ext.daggerVersion") {
-        exclude group: "com.android.support"
-    }
+    implementation "com.google.dagger:dagger-android-support:$project.ext.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$project.ext.daggerVersion"
 
@@ -103,7 +101,9 @@ dependencies {
     annotationProcessor "com.arello-mobile:moxy-compiler:$project.ext.moxyVersion"
 
     // AutoValue
-    compileOnly "com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion"
+    compileOnly ("com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion") {
+        exclude group: "com.google.guava"
+    }
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$autoValueParcelVersion"
     annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion"
 
