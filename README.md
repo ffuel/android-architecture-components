@@ -2,6 +2,14 @@
 
 [![build status](http://gitlab.65apps.com/65AppsAndroid/architecture-components/badges/master/build.svg)](http://gitlab.65apps.com/65AppsAndroid/architecture-components/commits/master)
 
+---
+## Update 29.10.2018:
+Добавлена парадигма MVI(Module View Intent)
+
+Данная парадигма позволяет избежать разрастания реализации сущности Interactor и удобным оброзам переиспользовать уже существующие реализации *Намерений*
+
+Пример использования парадигмы MVI(Module View Intent) можно посмотреть в модуле *app* в соответствующих пакетах *domain.mvi* и *presentation.mvi*
+
 ___
 ## Intro
 Репозиторий представляет из себя набор gradle модулей, содержащих набор архитектурных компонентов и приложение - пример.
@@ -32,17 +40,21 @@ ___
 ApplicationModule
 ```java
 @Module(includes = {
-        AndroidInjectionModule.class, 	// Необходимый модуль для работы Dagger AndroidInjection 
-        PresenterInjectionModule.class, // Необходимый модуль для работы Dagger PresenterInjection
-        SchedulersModule.class,			// Модуль, предоставляющий зависимости для RxSchedulers
-        LoggerModule.class,				// Модуль, предоставляющий реализацию лога на основе AndroidLog
-        ResourcesModule.class,			// Модуль, предоставляющий реализацию StringResources на основе Context.getString()
-        ConnectionStateModule.class,	// Модуль, предоставляющий реализацию ConnectionReceiverSource на основе ConnectionBroadcastReceiverSource
-        PermissionsModule.class,		// Модуль, предоставляющий реализацию PermissionsSource и требует инициализации через конструктор параметром PermissionsManager
-        PresenterBuilder.class,		    // Предоставляет subcomponent'ы презентеров с помощью аннотации @ContributesPresenterInjector
-        ActivityBuilder.class,			// Предоставляет Activity и Fragment subcomponent'ы с помощью аннотации @ContributesAndroidInjector
-        MainNavigationModule.class,		// Должен предоставлять реализации Router и, опционально, NavigatorHolder(если вы используете Cicerone)
-        AppDataModule.class 			// Должен предоставлять зависимости для вашего data-слоя приложения
+        AndroidInjectionModule.class, 	   // Необходимый модуль для работы Dagger AndroidInjection 
+        PresenterInjectionModule.class,    // Необходимый модуль для работы Dagger PresenterInjection
+        SchedulersModule.class,			   // Модуль, предоставляющий зависимости для RxSchedulers
+        LoggerModule.class,				   // Модуль, предоставляющий реализацию лога на основе AndroidLog
+        ResourcesModule.class,			   // Модуль, предоставляющий реализацию StringResources на основе Context.getString()
+        ConnectionStateModule.class,	   // Модуль, предоставляющий реализацию ConnectionReceiverSource на основе ConnectionBroadcastReceiverSource
+        PermissionsModule.class,		   // Модуль, предоставляющий реализацию PermissionsSource и требует инициализации через конструктор параметром PermissionsManager
+        PresenterBuilder.class,		       // Предоставляет subcomponent'ы презентеров с помощью аннотации @ContributesPresenterInjector
+        ActivityBuilder.class,			   // Предоставляет Activity и Fragment subcomponent'ы с помощью аннотации @ContributesAndroidInjector
+        FragmentNavigationModule.class,    // Должен предоставлять Map реализаций фабрик фрагментов по средством аннотации @IntoMap
+        IntentNavigationModule.class,      // Должен предоставлять Map реализаций фабрик Intent'ов по средством аннотации @IntoMap
+        InterceptorNavigationModule.class, // Должен предоставлять Map реализаций фабрик перехватчиков событий навигации
+        FragmentAnimationModule.class,     // Должен предоставлять Map реализаций фабрик перехватчиков событий анимации фрагментов
+        MainNavigationModule.class,		   // Должен предоставлять реализации Router и, опционально, NavigatorHolder(если вы используете Cicerone)
+        AppDataModule.class 			   // Должен предоставлять зависимости для вашего data-слоя приложения
 })
 public class ApplicationModule {
 
@@ -122,8 +134,12 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
     @Provides
     @NonNull
     ActivityModule<MainState, MainParcelable, MainStateMapper,
-                MainParcelMapper> providesModule(@NonNull FragmentActivity activity,
-                                                 @NonNull NavigatorHolder holder) {
+            MainParcelMapper> providesModule(@NonNull FragmentActivity activity,
+                                             @NonNull NavigatorHolder holder,
+                                             @NonNull Map<String, FragmentFactory> fragmentMap,
+                                             @NonNull Map<String, IntentFactory> intentMap,
+                                             @NonNull Map<String, NavigationInterceptor> interceptorMap,
+                                             @NonNull Map<String, FragmentAnimationFactory> animationMap) {
         return new ActivityModule<MainState, MainParcelable, MainStateMapper,
                 MainParcelMapper>() {
 
@@ -142,7 +158,8 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
             @NonNull
             @Override
             public NavigatorDelegate provideNavigatorDelegate() {
-                return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider()));
+                return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider(),
+                        fragmentMap, intentMap, interceptorMap, animationMap));
             }
         };
     }
@@ -379,20 +396,15 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
 
 MainNavigator - реализация навигатора Cicerone
 ```java
-public final class MainNavigator extends SupportAppNavigator {
+public final class MainNavigator extends BasicNavigator {
 
-    MainNavigator(@NonNull FragmentActivity activity, @NonNull ContainerIdProvider idProvider) {
-        super(activity, idProvider.get());
-    }
-
-    @Override
-    protected Intent createActivityIntent(Context context, String screenKey, Object data) {
-    	// Здесь предоставляем Intent
-    }
-
-    @Override
-    protected Fragment createFragment(@NonNull String screenKey, @Nullable Object data) {
-        // Здесь предоставляем Fragment
+    MainNavigator(@NonNull FragmentActivity activity,
+                  @NonNull ContainerIdProvider idProvider,
+                  @NonNull Map<String, FragmentFactory> fragmentMap,
+                  @NonNull Map<String, IntentFactory> intentMap,
+                  @NonNull Map<String, NavigationInterceptor> interceptorMap,
+                  @NonNull Map<String, FragmentAnimationFactory> animationMap) {
+        super(activity, idProvider, fragmentMap, intentMap, interceptorMap, animationMap);
     }
 }
 ```
