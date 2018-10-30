@@ -123,12 +123,12 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
     @SuppressWarnings("unchecked")
     public boolean test(@NonNull Object event) {
         if (event instanceof SubscribeEvent) {
-            readWriteLock.readLock().lock();
+            readWriteLock.writeLock().lock();
             try {
                 SubscribeEvent<T> subscribeEvent = (SubscribeEvent<T>) event;
                 emit(state, subscribeEvent.getEmitter());
             } finally {
-                readWriteLock.readLock().unlock();
+                readWriteLock.writeLock().unlock();
             }
             return false;
         }
