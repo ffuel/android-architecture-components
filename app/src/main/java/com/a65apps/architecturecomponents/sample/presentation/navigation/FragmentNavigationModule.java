@@ -3,7 +3,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.sample.domain.main.MainConstants;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
 
 import java.util.Map;
 

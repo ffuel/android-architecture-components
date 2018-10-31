@@ -2,7 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.a65apps.ciceronearchitecturecomponents.FragmentAnimationFactory;
+import com.a65apps.ciceronev4architecturecomponents.FragmentAnimationFactory;
 
 import java.util.Map;
 

@@ -2,11 +2,13 @@ package com.a65apps.architecturecomponents.sample.presentation.mvi;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 
 import com.a65apps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65apps.architecturecomponents.domain.model.IntentInteractor;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.sample.domain.mvi.MviConstants;
 import com.a65apps.architecturecomponents.sample.domain.mvi.MviState;
 import com.a65apps.moxyarchitecturecomponents.presenter.MviMoxyPresenter;
@@ -26,10 +28,14 @@ public class MviPresenter extends MviMoxyPresenter<MviState, MoxyView<MviState>,
             IntentInteractor.Command.create(MviConstants.SUBTITLE_INTENT)
     );
 
+    @NonNull
+    private final MainInteractor mainInteractor;
+
     @Inject
     public MviPresenter(@NonNull ExecutorsFactory executors, @NonNull IntentInteractor<MviState, Router> interactor,
-                        @NonNull ApplicationLogger logger) {
+                        @NonNull ApplicationLogger logger, @NonNull MainInteractor mainInteractor) {
         super(executors, interactor, logger);
+        this.mainInteractor = mainInteractor;
     }
 
     @CallSuper
@@ -37,5 +43,11 @@ public class MviPresenter extends MviMoxyPresenter<MviState, MoxyView<MviState>,
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         getInteractor().execute(INIT_COMMANDS);
+    }
+
+    @UiThread
+    @Override
+    public void onBackPressed() {
+        mainInteractor.onBack();
     }
 }

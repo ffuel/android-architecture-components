@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentActivity;
 import com.a65apps.architecturecomponents.sample.domain.main.MainState;
 import com.a65apps.architecturecomponents.di.ActivityModule;
 import com.a65apps.architecturecomponents.presentation.navigation.NavigatorDelegate;
-import com.a65apps.ciceronearchitecturecomponents.CiceroneDelegate;
-import com.a65apps.ciceronearchitecturecomponents.FragmentAnimationFactory;
-import com.a65apps.ciceronearchitecturecomponents.FragmentFactory;
-import com.a65apps.ciceronearchitecturecomponents.IntentFactory;
-import com.a65apps.ciceronearchitecturecomponents.NavigationInterceptor;
+import com.a65apps.ciceronev4architecturecomponents.CiceroneDelegate;
+import com.a65apps.ciceronev4architecturecomponents.FragmentAnimationFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.IntentFactory;
+import com.a65apps.ciceronev4architecturecomponents.NavigationInterceptor;
 import com.a65apps.daggerarchitecturecomponents.activity.DaggerActivityModule;
 
 import java.util.Map;
@@ -57,7 +57,7 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
             @Override
             public NavigatorDelegate provideNavigatorDelegate() {
                 return new CiceroneDelegate(holder, new MainNavigator(activity, new MainContainerIdProvider(),
-                        fragmentMap, intentMap, interceptorMap, animationMap));
+                        interceptorMap, animationMap));
             }
         };
     }

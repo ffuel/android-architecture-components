@@ -1,1 +1,3 @@
-include ':app', ':architecturecomponents', ':moxyarchitecturecomponents', ':ciceronearchitecturecomponents', ':daggerarchitecturecomponents', ':moxydaggerarchitecturecomponents', ':compiler'
+include ':app', ':architecturecomponents', ':moxyarchitecturecomponents', ':ciceronearchitecturecomponents',
+        ':daggerarchitecturecomponents', ':moxydaggerarchitecturecomponents', ':compiler',
+        ':ciceronev4architecturecomponents'

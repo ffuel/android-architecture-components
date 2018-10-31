@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
-import com.a65apps.ciceronearchitecturecomponents.FragmentAnimationFactory;
+import com.a65apps.ciceronev4architecturecomponents.FragmentAnimationFactory;
 
 import javax.inject.Inject;
 
@@ -21,7 +21,7 @@ class PostsEnterAnimationFactory implements FragmentAnimationFactory {
     @Override
     public void setupTransactionAnimation(@NonNull Command command,
                                           @Nullable Fragment currentFragment,
-                                          @NonNull Fragment nextFragment,
+                                          @Nullable Fragment nextFragment,
                                           @NonNull FragmentTransaction fragmentTransaction) {
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);

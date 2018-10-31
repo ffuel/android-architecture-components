@@ -59,6 +59,7 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
         switch (getState().screen()) {
             case SAMPLE:
             case CONTACTS:
+            case MVI:
             case POSTS:
                 setState(MainState.create(Screen.SAMPLE));
                 break;
