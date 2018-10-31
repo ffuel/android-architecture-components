@@ -3,7 +3,11 @@ package com.a65apps.architecturecomponents.sample.presentation.main;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.presentation.navigation.Router;
-import com.a65apps.ciceronearchitecturecomponents.CiceroneRouter;
+import com.a65apps.ciceronev4architecturecomponents.CiceroneRouter;
+import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.IntentFactory;
+
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -15,19 +19,25 @@ import ru.terrakok.cicerone.NavigatorHolder;
 @Module
 public class MainNavigationModule {
 
-    private final Cicerone<CiceroneRouter> router = Cicerone.create(new CiceroneRouter());
+    @Provides
+    @Singleton
+    @NonNull
+    Cicerone<CiceroneRouter> providesCicerone(@NonNull Map<String, FragmentFactory> fragmentMap,
+                                              @NonNull Map<String, IntentFactory> intentMap) {
+        return Cicerone.create(new CiceroneRouter(fragmentMap, intentMap));
+    }
 
     @Provides
     @Singleton
     @NonNull
-    Router providesRouter() {
+    Router providesRouter(@NonNull Cicerone<CiceroneRouter> router) {
         return router.getRouter();
     }
 
     @Provides
     @Singleton
     @NonNull
-    NavigatorHolder providesNavigatorHolder() {
+    NavigatorHolder providesNavigatorHolder(@NonNull Cicerone<CiceroneRouter> router) {
         return router.getNavigatorHolder();
     }
 }

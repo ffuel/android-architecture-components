@@ -2,7 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.a65apps.ciceronearchitecturecomponents.IntentFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.IntentFactory;
 
 import java.util.Map;
 

@@ -55,6 +55,7 @@ allprojects {
         injectVersion = '1'
         moxyVersion = '1.5.3'
         ciceroneVersion = '3.0.0'
+        ciceroneV4Version = '4.0.2'
         daggerVersion = '2.16'
         javapoetVersion = '1.11.1'
         autoServiceVersion = '1.0-rc4'
