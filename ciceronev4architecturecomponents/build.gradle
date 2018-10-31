@@ -13,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 15
-        versionName '1.0.15'
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -39,24 +39,14 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':architecturecomponents')
 
-    // support dependencies
+    implementation "ru.terrakok.cicerone:cicerone:$project.ext.ciceroneV4Version"
+
     implementation "com.android.support:appcompat-v7:$project.ext.supportVersion"
-    implementation "com.android.support:recyclerview-v7:$project.ext.supportVersion"
-    implementation "com.android.support:design:$project.ext.supportVersion"
-
-    // rxJava dependencies
-    implementation "io.reactivex.rxjava2:rxjava:$project.ext.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$project.ext.rxAndroidVersion"
-
-    // JCIP dependencies
     implementation "net.jcip:jcip-annotations:$project.ext.jcipVersion"
 
-    // Javax.inject annotations
-    implementation "javax.inject:javax.inject:$project.ext.injectVersion"
-
-    // test dependencies
     testImplementation "junit:junit:$project.ext.junitVersion"
     testImplementation "org.mockito:mockito-core:$project.ext.mockitoVersion"
     androidTestImplementation "com.android.support.test:runner:$project.ext.testRunnerVersion"

@@ -3,6 +3,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.a65apps.architecturecomponents.presentation.navigationv2.BasicScreen;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
 
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class ContactsScreenFactoryTest {
     @Test
     public void buildTest() {
         ContactsScreenFactory factory = new ContactsScreenFactory();
-        Fragment fragment = factory.build(bundle, null);
+        Fragment fragment = factory.build(bundle, new BasicScreen("", null));
         assertNotNull(fragment);
         assertThat(fragment.getClass(), equalTo(ContactsFragment.class));
         verify(bundle, times(1))

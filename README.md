@@ -3,6 +3,12 @@
 [![build status](http://gitlab.65apps.com/65AppsAndroid/architecture-components/badges/master/build.svg)](http://gitlab.65apps.com/65AppsAndroid/architecture-components/commits/master)
 
 ---
+## Update 31.10.2018:
+Добавлен модуль совместимости с api cicerone v4
+
+В примере показаны минимальные изменения необходимые для перехода на cicerone v4
+
+---
 ## Update 29.10.2018:
 Добавлена парадигма MVI(Module View Intent)
 
