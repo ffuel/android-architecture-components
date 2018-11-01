@@ -1,6 +1,7 @@
 package com.a65apps.architecturecomponents.sample.presentation.main;
 
 import android.Manifest;
+import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsManager;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsRequestBuffer;
@@ -9,7 +10,7 @@ import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
 import com.a65apps.architecturecomponents.sample.DaggerTestApplicationComponent;
 import com.a65apps.architecturecomponents.sample.TestApplicationComponent;
 import com.a65apps.architecturecomponents.sample.domain.main.MainState;
-import com.a65apps.architecturecomponents.sample.domain.main.Screen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.Screen;
 import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
 import com.a65apps.daggerarchitecturecomponents.presenter.HasPresenterSubComponentBuilders;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
@@ -21,6 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -55,8 +58,10 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
         presenter = PresenterInjector.build(MainPresenter.class, this, null);
     }
 
+    @NonNull
     @Override
-    public PresenterComponentBuilder getPresenterSubComponentBuilder(Class<? extends Presenter> presenterClass) {
+    public PresenterComponentBuilder getPresenterSubComponentBuilder(
+            @NonNull Class<? extends Presenter> presenterClass) {
         return componentFactory.get(presenterClass);
     }
 
@@ -68,8 +73,9 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
         presenter.attachView(view);
         presenter.showContacts();
 
-        verify(view, times(1))
-                .updateState(eq(MainState.create(Screen.CONTACTS)));
+        verify(view).updateState(eq(MainState.builder().screen(Screen.CONTACTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
     }
 
     @Test
@@ -77,8 +83,19 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
         presenter.attachView(view);
         presenter.showPosts();
 
-        verify(view, times(1))
-                .updateState(eq(MainState.create(Screen.POSTS)));
+        verify(view).updateState(eq(MainState.builder().screen(Screen.POSTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
+    }
+
+    @Test
+    public void showMviTest() {
+        presenter.attachView(view);
+        presenter.showMvi();
+
+        verify(view).updateState(eq(MainState.builder().screen(Screen.MVI)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
     }
 
     @Test
@@ -90,10 +107,11 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
         presenter.showContacts();
         presenter.onBackPressed();
 
-        verify(view, times(1))
-                .updateState(eq(MainState.create(Screen.CONTACTS)));
+        verify(view).updateState(eq(MainState.builder().screen(Screen.CONTACTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
         verify(view, times(2))
-                .updateState(eq(MainState.create(Screen.SAMPLE)));
+                .updateState(eq(MainState.DEFAULT));
     }
 
     @Test
@@ -103,9 +121,32 @@ public class MainPresenterTest implements HasPresenterSubComponentBuilders {
         presenter.showPosts();
         presenter.onBackPressed();
 
-        verify(view, times(1))
-                .updateState(eq(MainState.create(Screen.POSTS)));
+        verify(view).updateState(eq(MainState.builder().screen(Screen.POSTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
         verify(view, times(2))
-                .updateState(eq(MainState.create(Screen.SAMPLE)));
+                .updateState(eq(MainState.DEFAULT));
+    }
+
+    @Test
+    public void onBackPressedMviTest() {
+        presenter.attachView(view);
+
+        presenter.showMvi();
+        presenter.onBackPressed();
+
+        verify(view).updateState(eq(MainState.builder().screen(Screen.MVI)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build()));
+        verify(view, times(2))
+                .updateState(eq(MainState.DEFAULT));
+    }
+
+    @Test
+    public void showSystemMessageTest() {
+        presenter.attachView(view);
+        presenter.getInteractor().broadcastSystemMessage("message");
+
+        verify(view).showSystemMessage(eq("message"));
     }
 }

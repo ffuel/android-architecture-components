@@ -7,7 +7,7 @@ import android.support.annotation.UiThread;
 import com.a65apps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65apps.architecturecomponents.domain.model.IntentInteractor;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.sample.domain.mvi.MviConstants;
 import com.a65apps.architecturecomponents.sample.domain.mvi.MviState;

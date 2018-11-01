@@ -11,7 +11,8 @@ import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.domain.source.SingleSourceWithParam;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
+import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +47,8 @@ public class ContactsModelTest {
     private ThreadExecutor executor;
     @Mock
     private ArgumentContainer argumentContainer;
+    @Mock
+    private MainInteractor mainInteractor;
 
     @Before
     public void setup() {
@@ -112,6 +115,7 @@ public class ContactsModelTest {
 
     @NonNull
     private ContactsModel createModel() {
-        return new ContactsModel(router, source, executors, permissionsSource, stringResources, argumentContainer);
+        return new ContactsModel(router, source, executors, permissionsSource, stringResources, argumentContainer,
+                mainInteractor);
     }
 }

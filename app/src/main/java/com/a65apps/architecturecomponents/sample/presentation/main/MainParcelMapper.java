@@ -10,13 +10,16 @@ import javax.inject.Inject;
 public class MainParcelMapper extends ParcelableToStateMapper<MainParcelable, MainState> {
 
     @Inject
-    public MainParcelMapper() {
+    MainParcelMapper() {
         super();
     }
 
     @NonNull
     @Override
     public MainState map(@NonNull MainParcelable mainParcelable) {
-        return MainState.create(mainParcelable.screen());
+        return MainState.builder()
+                .screen(mainParcelable.screen())
+                .backStack(mainParcelable.backStack())
+                .build();
     }
 }

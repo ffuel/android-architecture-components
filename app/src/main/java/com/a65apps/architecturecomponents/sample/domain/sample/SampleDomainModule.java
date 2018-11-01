@@ -3,7 +3,7 @@ package com.a65apps.architecturecomponents.sample.domain.sample;
 import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.model.ReloadingInteractor;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 
 import dagger.Binds;
 import dagger.Module;

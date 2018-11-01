@@ -7,6 +7,7 @@ import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSour
 import com.a65apps.architecturecomponents.domain.resources.StringResources;
 import com.a65apps.architecturecomponents.domain.source.SingleSource;
 import com.a65apps.architecturecomponents.sample.presentation.main.MainPresenterTest;
+import com.a65apps.architecturecomponents.sample.presentation.mvi.MviPresenterTest;
 import com.a65apps.architecturecomponents.sample.presentation.sample.SamplePresenterTest;
 import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
 import com.a65apps.daggerarchitecturecomponents.source.Remote;
@@ -32,6 +33,7 @@ public interface TestApplicationComponent {
 
     void inject(MainPresenterTest presenterTest);
     void inject(SamplePresenterTest presenterTest);
+    void inject(MviPresenterTest presenterTest);
 
     @Component.Builder
     interface Builder {

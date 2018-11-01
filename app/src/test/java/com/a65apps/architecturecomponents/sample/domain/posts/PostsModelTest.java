@@ -9,7 +9,7 @@ import com.a65apps.architecturecomponents.domain.resources.StringResources;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 
 import org.junit.Before;
 import org.junit.Test;
