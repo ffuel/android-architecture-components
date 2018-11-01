@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.a65apps.architecturecomponents.presentation.navigationv2.Screen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.ContactsScreen;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
 import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
 
@@ -20,7 +21,12 @@ class ContactsScreenFactory implements FragmentFactory {
     @NonNull
     @Override
     public Fragment build(@NonNull Bundle bundle, @NonNull Screen screen) {
-        bundle.putString(ContactsFragment.SEARCH_ARG, "тест");
+        if (!(screen instanceof ContactsScreen)) {
+            throw new IllegalArgumentException("wrong screen type: " + screen.getClass().getName());
+        }
+
+        ContactsScreen contactsScreen = (ContactsScreen) screen;
+        bundle.putString(ContactsFragment.SEARCH_ARG, contactsScreen.query());
         return ContactsFragment.newInstance(bundle);
     }
 }

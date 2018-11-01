@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.a65apps.architecturecomponents.presentation.navigationv2.Screen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.MviScreen;
 import com.a65apps.architecturecomponents.sample.presentation.mvi.MviFragment;
 import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
 
@@ -20,6 +21,10 @@ class MviScreenFactory implements FragmentFactory {
     @NonNull
     @Override
     public Fragment build(@NonNull Bundle bundle, @NonNull Screen screen) {
+        if (!(screen instanceof MviScreen)) {
+            throw new IllegalArgumentException("wrong screen type: " + screen.getClass().getName());
+        }
+
         return MviFragment.newInstance();
     }
 }

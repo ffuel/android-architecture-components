@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 
 import org.junit.Before;
 import org.junit.Test;

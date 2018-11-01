@@ -8,7 +8,7 @@ import com.a65apps.architecturecomponents.domain.StateProvider;
 import com.a65apps.architecturecomponents.domain.model.DefaultIntentFactory;
 import com.a65apps.architecturecomponents.domain.model.IntentInteractor;
 import com.a65apps.architecturecomponents.domain.model.IntentModel;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 
 import dagger.Binds;
 import dagger.Module;

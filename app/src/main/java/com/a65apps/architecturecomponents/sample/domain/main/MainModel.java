@@ -9,30 +9,44 @@ import com.a65apps.architecturecomponents.domain.model.BaseModel;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionState;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsSource;
 import com.a65apps.architecturecomponents.domain.resources.StringResources;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
+import com.a65apps.architecturecomponents.sample.domain.navigation.Screen;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
-final class MainModel extends BaseModel<MainState, Router> implements MainInteractor {
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
+
+class MainModel extends BaseModel<MainState, Router> implements MainInteractor {
 
     @NonNull
     private final StringResources stringResources;
     @NonNull
     private final PermissionsSource permissionsSource;
+    @NonNull
+    private final ScreenBuilder screenBuilder;
+
+    @NonNull
+    private final Subject<String> messageBus = PublishSubject.<String>create().toSerialized();
 
     @Inject
     MainModel(@NonNull Router router, @NonNull StringResources stringResources,
               @NonNull PermissionsSource permissionsSource) {
-        super(MainState.create(Screen.SAMPLE), router);
+        super(MainState.DEFAULT, router);
         this.stringResources = stringResources;
         this.permissionsSource = permissionsSource;
+        screenBuilder = new ScreenBuilder(stringResources);
     }
 
     @UiThread
     @Override
     public void firstStart(boolean isRestoring) {
         if (!isRestoring) {
-            getRouter().newRootScreen(getState().screen().getName());
+            getRouter().newRootScreen(screenBuilder.build(getState().screen()));
         }
     }
 
@@ -56,53 +70,66 @@ final class MainModel extends BaseModel<MainState, Router> implements MainIntera
     @UiThread
     @Override
     public void onBack() {
-        switch (getState().screen()) {
-            case SAMPLE:
-            case CONTACTS:
-            case MVI:
-            case POSTS:
-                setState(MainState.create(Screen.SAMPLE));
-                break;
-            case PERMISSION_EXPLANATION:
-                setState(MainState.create(Screen.CONTACTS));
-                break;
-            default:
-                break;
+        MainState state = getState();
+        List<Screen> backStack = new ArrayList<>(state.backStack());
+        if (!backStack.isEmpty()) {
+            Screen screen = backStack.get(backStack.size() - 1);
+            backStack.remove(backStack.size() - 1);
+            setState(MainState.builder()
+                    .screen(screen)
+                    .backStack(backStack)
+                    .build());
         }
+
         getRouter().exit();
     }
 
     @Override
     public void navigatePosts() {
-        setState(MainState.create(Screen.POSTS));
-        getRouter().navigateTo(getState().screen().getName());
+        forward(Screen.POSTS);
     }
 
     @Override
     public void navigateMvi() {
-        setState(MainState.create(Screen.MVI));
-        getRouter().navigateTo(getState().screen().getName());
+        forward(Screen.MVI);
+    }
+
+    @NonNull
+    @Override
+    public Observable<String> observeSystemMessages() {
+        return messageBus;
+    }
+
+    @Override
+    public void broadcastSystemMessage(@NonNull String message) {
+        messageBus.onNext(message);
     }
 
     private void checkPermissionState(@NonNull PermissionState state) {
         switch (state) {
             case GRANTED:
-                setState(MainState.create(Screen.CONTACTS));
-                getRouter().navigateTo(getState().screen().getName());
+                forward(Screen.CONTACTS);
                 break;
             case SHOW_SETTINGS:
             case NOT_GRANTED:
-                getRouter().showSystemMessage(stringResources.getString(
-                        R.string.contacts_permissions_not_granted));
+                broadcastSystemMessage(stringResources.getString(R.string.contacts_permissions_not_granted));
                 break;
             case NEED_EXPLANATION:
-                setState(MainState.create(Screen.PERMISSION_EXPLANATION));
-                getRouter().navigateTo(getState().screen().getName(), new String[] {
-                        stringResources.getString(R.string.contacts_permissions_not_granted)
-                });
+                forward(Screen.PERMISSION_EXPLANATION);
                 break;
             default:
                 break;
         }
+    }
+
+    private void forward(@NonNull Screen screen) {
+        MainState state = getState();
+        List<Screen> backStack = new ArrayList<>(state.backStack());
+        backStack.add(state.screen());
+        setState(MainState.builder()
+                .screen(screen)
+                .backStack(backStack)
+                .build());
+        getRouter().navigateTo(screenBuilder.build(getState().screen()));
     }
 }

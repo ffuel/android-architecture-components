@@ -6,7 +6,7 @@ import com.a65apps.architecturecomponents.domain.model.ReloadingModel;
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 
 import javax.inject.Inject;
 

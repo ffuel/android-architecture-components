@@ -8,8 +8,6 @@ import com.a65apps.architecturecomponents.di.ActivityModule;
 import com.a65apps.architecturecomponents.presentation.navigation.NavigatorDelegate;
 import com.a65apps.ciceronev4architecturecomponents.CiceroneDelegate;
 import com.a65apps.ciceronev4architecturecomponents.FragmentAnimationFactory;
-import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
-import com.a65apps.architecturecomponents.presentation.navigationv2.IntentFactory;
 import com.a65apps.ciceronev4architecturecomponents.NavigationInterceptor;
 import com.a65apps.daggerarchitecturecomponents.activity.DaggerActivityModule;
 
@@ -34,8 +32,6 @@ public class MainActivityModule extends DaggerActivityModule<MainState, MainParc
     ActivityModule<MainState, MainParcelable, MainStateMapper,
                 MainParcelMapper> providesModule(@NonNull FragmentActivity activity,
                                                  @NonNull NavigatorHolder holder,
-                                                 @NonNull Map<String, FragmentFactory> fragmentMap,
-                                                 @NonNull Map<String, IntentFactory> intentMap,
                                                  @NonNull Map<String, NavigationInterceptor> interceptorMap,
                                                  @NonNull Map<String, FragmentAnimationFactory> animationMap) {
         return new ActivityModule<MainState, MainParcelable, MainStateMapper,

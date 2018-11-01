@@ -14,7 +14,8 @@ import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
 import com.a65apps.architecturecomponents.domain.schedulers.SchedulerType;
 import com.a65apps.architecturecomponents.domain.schedulers.ThreadExecutor;
 import com.a65apps.architecturecomponents.domain.source.SingleSourceWithParam;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
+import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 
 import java.util.Collections;
 
@@ -35,6 +36,8 @@ final class ContactsModel extends BaseCompositeStateModel<ContactsState, Contact
     private final PermissionsSource permissionsSource;
     @NonNull
     private final StringResources stringResources;
+    @NonNull
+    private final MainInteractor mainInteractor;
 
     @Inject
     ContactsModel(@NonNull Router router,
@@ -42,7 +45,8 @@ final class ContactsModel extends BaseCompositeStateModel<ContactsState, Contact
                   @NonNull ExecutorsFactory executors,
                   @NonNull PermissionsSource permissionsSource,
                   @NonNull StringResources stringResources,
-                  @NonNull ArgumentContainer argumentContainer) {
+                  @NonNull ArgumentContainer argumentContainer,
+                  @NonNull MainInteractor mainInteractor) {
         super(ContactsState.create(argumentContainer.argument(String.class)),
                 ContactsListState.create(Collections.emptyList()), router);
         this.source = source;
@@ -50,6 +54,7 @@ final class ContactsModel extends BaseCompositeStateModel<ContactsState, Contact
         this.uiExecutor = executors.getExecutor(SchedulerType.UI);
         this.permissionsSource = permissionsSource;
         this.stringResources = stringResources;
+        this.mainInteractor = mainInteractor;
         loadContacts(getState());
     }
 
@@ -83,7 +88,7 @@ final class ContactsModel extends BaseCompositeStateModel<ContactsState, Contact
                         .subscribeOn(ioExecutor.getScheduler());
             case SHOW_SETTINGS:
             case NOT_GRANTED:
-                getRouter().showSystemMessage(stringResources.getString(
+                mainInteractor.broadcastSystemMessage(stringResources.getString(
                         R.string.contacts_permissions_not_granted));
                 break;
             case NEED_EXPLANATION:

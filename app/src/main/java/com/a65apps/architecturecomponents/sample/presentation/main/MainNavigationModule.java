@@ -2,10 +2,10 @@ package com.a65apps.architecturecomponents.sample.presentation.main;
 
 import android.support.annotation.NonNull;
 
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
-import com.a65apps.ciceronev4architecturecomponents.CiceroneRouter;
 import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
 import com.a65apps.architecturecomponents.presentation.navigationv2.IntentFactory;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
+import com.a65apps.ciceronev4architecturecomponents.CiceroneRouter;
 
 import java.util.Map;
 
