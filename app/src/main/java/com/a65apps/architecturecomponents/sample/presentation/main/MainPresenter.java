@@ -1,5 +1,6 @@
 package com.a65apps.architecturecomponents.sample.presentation.main;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
@@ -7,7 +8,7 @@ import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.sample.domain.main.MainState;
 import com.a65apps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 import com.a65apps.architecturecomponents.presentation.presenter.Presenter;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterComponentBuilder;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterSubComponentBuilderFactory;
@@ -30,10 +31,26 @@ public class MainPresenter extends MoxyPresenter<MainState, MainView, MainIntera
         this.componentFactory = componentFactory;
     }
 
+    @Override
+    @CallSuper
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        disposeOnDestroy(getInteractor().observeSystemMessages()
+                .observeOn(getUiScheduler())
+                .subscribe(getViewState()::showSystemMessage, getLogger()::logError));
+    }
+
     @UiThread
     @Override
     public void onBackPressed() {
         getInteractor().onBack();
+    }
+
+    @UiThread
+    @NonNull
+    public PresenterComponentBuilder getPresenterSubComponentBuilder(
+            @NonNull Class<? extends Presenter> presenterClass) {
+        return componentFactory.get(presenterClass);
     }
 
     @UiThread
@@ -49,13 +66,6 @@ public class MainPresenter extends MoxyPresenter<MainState, MainView, MainIntera
     @UiThread
     void forceContactsPermissions() {
         getInteractor().forceContactsPermissions();
-    }
-
-    @UiThread
-    @NonNull
-    public PresenterComponentBuilder getPresenterSubComponentBuilder(
-            @NonNull Class<? extends Presenter> presenterClass) {
-        return componentFactory.get(presenterClass);
     }
 
     @UiThread

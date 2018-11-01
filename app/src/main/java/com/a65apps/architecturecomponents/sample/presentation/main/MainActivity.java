@@ -1,6 +1,8 @@
 package com.a65apps.architecturecomponents.sample.presentation.main;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.a65apps.architecturecomponents.sample.R;
 import com.a65apps.architecturecomponents.sample.domain.main.MainState;
@@ -14,12 +16,17 @@ import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjector;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import butterknife.BindView;
+
 public class MainActivity extends ButterActivity<MainState, MainParcelable, MainPresenter>
         implements MainView, SearchContactsListener, PermissionsExplanationListener,
         HasPresenterSubComponentBuilders {
 
     @InjectPresenter
     MainPresenter presenter;
+
+    @BindView(R.id.container)
+    View container;
 
     @Override
     protected void updateState(@NonNull MainParcelable state) {
@@ -68,5 +75,10 @@ public class MainActivity extends ButterActivity<MainState, MainParcelable, Main
     public PresenterComponentBuilder getPresenterSubComponentBuilder(
             @NonNull Class<? extends Presenter> presenterClass) {
         return presenter.getPresenterSubComponentBuilder(presenterClass);
+    }
+
+    @Override
+    public void showSystemMessage(@NonNull String message) {
+        Snackbar.make(container, message, Snackbar.LENGTH_LONG).show();
     }
 }

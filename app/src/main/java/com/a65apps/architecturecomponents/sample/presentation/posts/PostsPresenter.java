@@ -5,7 +5,7 @@ import android.support.annotation.UiThread;
 
 import com.a65apps.architecturecomponents.domain.log.ApplicationLogger;
 import com.a65apps.architecturecomponents.domain.schedulers.ExecutorsFactory;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 import com.a65apps.architecturecomponents.sample.domain.main.MainInteractor;
 import com.a65apps.architecturecomponents.sample.domain.posts.PostsInteractor;
 import com.a65apps.architecturecomponents.sample.domain.posts.PostsState;

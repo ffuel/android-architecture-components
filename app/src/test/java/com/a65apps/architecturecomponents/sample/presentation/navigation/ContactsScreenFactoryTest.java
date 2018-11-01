@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.a65apps.architecturecomponents.presentation.navigationv2.BasicScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.ContactsScreen;
 import com.a65apps.architecturecomponents.sample.presentation.contacts.ContactsFragment;
 
 import org.junit.Test;
@@ -27,10 +28,16 @@ public class ContactsScreenFactoryTest {
     @Test
     public void buildTest() {
         ContactsScreenFactory factory = new ContactsScreenFactory();
-        Fragment fragment = factory.build(bundle, new BasicScreen("", null));
+        Fragment fragment = factory.build(bundle, ContactsScreen.create("тест"));
         assertNotNull(fragment);
         assertThat(fragment.getClass(), equalTo(ContactsFragment.class));
         verify(bundle, times(1))
                 .putString(eq(ContactsFragment.SEARCH_ARG), eq("тест"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildIllegalScreenTest() {
+        ContactsScreenFactory factory = new ContactsScreenFactory();
+        factory.build(new Bundle(), new BasicScreen("", null));
     }
 }

@@ -1,6 +1,7 @@
 package com.a65apps.architecturecomponents.sample.presentation.sample;
 
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsManager;
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
@@ -100,8 +101,10 @@ public class SamplePresenterTest implements HasPresenterSubComponentBuilders {
         when(editor.commit()).thenReturn(true);
     }
 
+    @NonNull
     @Override
-    public PresenterComponentBuilder getPresenterSubComponentBuilder(Class<? extends Presenter> presenterClass) {
+    public PresenterComponentBuilder getPresenterSubComponentBuilder(
+            @NonNull Class<? extends Presenter> presenterClass) {
         return componentFactory.get(presenterClass);
     }
 

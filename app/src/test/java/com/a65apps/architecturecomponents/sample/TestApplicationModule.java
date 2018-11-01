@@ -3,7 +3,7 @@ package com.a65apps.architecturecomponents.sample;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 import com.a65apps.architecturecomponents.sample.data.TestAppDataModule;
 import com.a65apps.architecturecomponents.sample.presentation.PresenterBuilder;
 import com.a65apps.daggerarchitecturecomponents.LoggerModule;

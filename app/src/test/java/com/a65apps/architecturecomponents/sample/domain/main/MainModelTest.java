@@ -6,8 +6,14 @@ import android.support.annotation.NonNull;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionState;
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsSource;
 import com.a65apps.architecturecomponents.domain.resources.StringResources;
-import com.a65apps.architecturecomponents.presentation.navigation.Router;
+import com.a65apps.architecturecomponents.presentation.navigationv2.Router;
 import com.a65apps.architecturecomponents.sample.R;
+import com.a65apps.architecturecomponents.sample.domain.navigation.ContactsScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.MviScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.PermissionExplanationScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.PostsScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.SampleScreen;
+import com.a65apps.architecturecomponents.sample.domain.navigation.Screen;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +21,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collections;
+
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,7 +55,7 @@ public class MainModelTest {
 
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.SAMPLE));
+        observer.assertValue(MainState.DEFAULT);
     }
 
     @Test
@@ -57,7 +66,7 @@ public class MainModelTest {
         model.firstStart(false);
 
         verify(router, times(1))
-                .newRootScreen(eq(Screen.SAMPLE.getName()));
+                .newRootScreen(eq(SampleScreen.create()));
     }
 
     @Test
@@ -71,11 +80,13 @@ public class MainModelTest {
         model.navigateContacts();
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.CONTACTS));
+        observer.assertValue(MainState.builder().screen(Screen.CONTACTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build());
         verify(permissionsSource, times(1))
                 .requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
         verify(router, times(1))
-                .navigateTo(eq(Screen.CONTACTS.getName()));
+                .navigateTo(eq(ContactsScreen.create("тест")));
     }
 
     @Test
@@ -89,11 +100,9 @@ public class MainModelTest {
         model.navigateContacts();
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.SAMPLE));
-        verify(permissionsSource, times(1))
-                .requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
-        verify(router, times(1))
-                .showSystemMessage(eq("not granted"));
+        observer.assertValue(MainState.DEFAULT);
+        verify(permissionsSource).requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
+        verify(model).broadcastSystemMessage(eq("not granted"));
     }
 
     @Test
@@ -107,11 +116,9 @@ public class MainModelTest {
         model.navigateContacts();
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.SAMPLE));
-        verify(permissionsSource, times(1))
-                .requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
-        verify(router, times(1))
-                .showSystemMessage(eq("not granted"));
+        observer.assertValue(MainState.DEFAULT);
+        verify(permissionsSource).requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
+        verify(model).broadcastSystemMessage(eq("not granted"));
     }
 
     @Test
@@ -125,12 +132,11 @@ public class MainModelTest {
         model.navigateContacts();
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.PERMISSION_EXPLANATION));
-        verify(permissionsSource, times(1))
-                .requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
-        verify(router, times(1))
-                .navigateTo(eq(Screen.PERMISSION_EXPLANATION.getName()),
-                        eq(new String[] {"not granted"}));
+        observer.assertValue(MainState.builder().screen(Screen.PERMISSION_EXPLANATION)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build());
+        verify(permissionsSource).requestPermission(eq(false), eq(Manifest.permission.READ_CONTACTS));
+        verify(router).navigateTo(eq(PermissionExplanationScreen.create(Collections.singletonList("not granted"))));
     }
 
     @Test
@@ -158,30 +164,45 @@ public class MainModelTest {
 
         model.onBack();
         model.observeState().subscribe(observer);
-        observer.assertValue(MainState.create(Screen.SAMPLE));
+        observer.assertValue(MainState.DEFAULT);
 
         observer = new TestObserver<>();
         model.navigateContacts();
         model.observeState().subscribe(observer);
         model.onBack();
-        observer.assertValues(MainState.create(Screen.CONTACTS),
-                MainState.create(Screen.SAMPLE));
+        observer.assertValues(MainState.builder().screen(Screen.CONTACTS)
+                        .backStack(Collections.singletonList(Screen.SAMPLE))
+                        .build(),
+                MainState.DEFAULT);
 
         observer = new TestObserver<>();
         model.navigateContacts();
         model.observeState().subscribe(observer);
         model.onBack();
-        observer.assertValues(MainState.create(Screen.PERMISSION_EXPLANATION),
-                MainState.create(Screen.CONTACTS));
+        observer.assertValues(MainState.builder().screen(Screen.PERMISSION_EXPLANATION)
+                        .backStack(Collections.singletonList(Screen.SAMPLE))
+                        .build(),
+                MainState.DEFAULT);
 
         observer = new TestObserver<>();
         model.navigatePosts();
         model.observeState().subscribe(observer);
         model.onBack();
-        observer.assertValues(MainState.create(Screen.POSTS),
-                MainState.create(Screen.SAMPLE));
+        observer.assertValues(MainState.builder().screen(Screen.POSTS)
+                        .backStack(Collections.singletonList(Screen.SAMPLE))
+                        .build(),
+                MainState.DEFAULT);
 
-        verify(router, times(4)).exit();
+        observer = new TestObserver<>();
+        model.navigateMvi();
+        model.observeState().subscribe(observer);
+        model.onBack();
+        observer.assertValues(MainState.builder().screen(Screen.MVI)
+                        .backStack(Collections.singletonList(Screen.SAMPLE))
+                        .build(),
+                MainState.DEFAULT);
+
+        verify(router, times(5)).exit();
     }
 
     @Test
@@ -192,13 +213,28 @@ public class MainModelTest {
         model.navigatePosts();
         model.observeState().subscribe(observer);
 
-        observer.assertValue(MainState.create(Screen.POSTS));
-        verify(router, times(1))
-                .navigateTo(eq(Screen.POSTS.getName()));
+        observer.assertValue(MainState.builder().screen(Screen.POSTS)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build());
+        verify(router).navigateTo(eq(PostsScreen.create()));
+    }
+
+    @Test
+    public void navigateMviTest() {
+        MainModel model = createModel();
+        TestObserver<MainState> observer = new TestObserver<>();
+
+        model.navigateMvi();
+        model.observeState().subscribe(observer);
+
+        observer.assertValue(MainState.builder().screen(Screen.MVI)
+                .backStack(Collections.singletonList(Screen.SAMPLE))
+                .build());
+        verify(router).navigateTo(eq(MviScreen.create()));
     }
 
     @NonNull
     private MainModel createModel() {
-        return new MainModel(router, stringResources, permissionsSource);
+        return spy(new MainModel(router, stringResources, permissionsSource));
     }
 }

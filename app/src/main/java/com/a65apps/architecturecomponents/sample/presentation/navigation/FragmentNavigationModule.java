@@ -2,7 +2,7 @@ package com.a65apps.architecturecomponents.sample.presentation.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.a65apps.architecturecomponents.sample.domain.main.MainConstants;
+import com.a65apps.architecturecomponents.sample.domain.navigation.NavigationConstants;
 import com.a65apps.architecturecomponents.presentation.navigationv2.FragmentFactory;
 
 import java.util.Map;
@@ -22,31 +22,31 @@ public interface FragmentNavigationModule {
 
     @Binds
     @IntoMap
-    @StringKey(MainConstants.SAMPLE_KEY)
+    @StringKey(NavigationConstants.SAMPLE_KEY)
     @NonNull
     FragmentFactory bindsSampleScreenFactory(@NonNull SampleScreenFactory factory);
 
     @Binds
     @IntoMap
-    @StringKey(MainConstants.CONTACTS_KEY)
+    @StringKey(NavigationConstants.CONTACTS_KEY)
     @NonNull
     FragmentFactory bindsContactsScreenFactory(@NonNull ContactsScreenFactory factory);
 
     @Binds
     @IntoMap
-    @StringKey(MainConstants.PERMISSION_EXPLANATION_KEY)
+    @StringKey(NavigationConstants.PERMISSION_EXPLANATION_KEY)
     @NonNull
     FragmentFactory bindsPermissionsExplanationScreenFactory(@NonNull PermissionsExplanationScreenFactory factory);
 
     @Binds
     @IntoMap
-    @StringKey(MainConstants.POSTS_KEY)
+    @StringKey(NavigationConstants.POSTS_KEY)
     @NonNull
     FragmentFactory bindsPostsScreenFactory(@NonNull PostsScreenFactory factory);
 
     @Binds
     @IntoMap
-    @StringKey(MainConstants.MVI_KEY)
+    @StringKey(NavigationConstants.MVI_KEY)
     @NonNull
     FragmentFactory bindsMviScreenFactory(@NonNull MviScreenFactory factory);
 }
