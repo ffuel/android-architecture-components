@@ -126,6 +126,7 @@ public final class StateEmitter<T extends State> implements ObservableOnSubscrib
             readWriteLock.writeLock().lock();
             try {
                 SubscribeEvent<T> subscribeEvent = (SubscribeEvent<T>) event;
+                emitters.add(subscribeEvent.getEmitter());
                 emit(state, subscribeEvent.getEmitter());
             } finally {
                 readWriteLock.writeLock().unlock();
