@@ -60,6 +60,7 @@ public abstract class SampleState implements ReloadingState {
     public enum State {
         LOADING,
         COMPLETE,
+        NO_INTERNET,
         ERROR
     }
 }

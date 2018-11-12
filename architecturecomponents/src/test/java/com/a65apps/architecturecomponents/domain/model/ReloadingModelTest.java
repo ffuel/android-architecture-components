@@ -94,7 +94,6 @@ public class ReloadingModelTest {
         when(noDataState.isLoading()).thenReturn(false);
         when(noDataState.hasData()).thenReturn(false);
         when(loadingState.isLoading()).thenReturn(true);
-        when(loadingState.hasData()).thenReturn(false);
         Mockito.reset(state);
 
         if (model != null) {

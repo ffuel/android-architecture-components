@@ -37,6 +37,7 @@ unitTestsDebug:
     paths:
     - app/build/jacoco
     - app/build/test-results/testDebugUnitTest
+    - app/build/reports/jgiven/testDebugUnitTest
     - architecturecomponents/build/jacoco
     - architecturecomponents/build/test-results/testDebugUnitTest
     - moxyarchitecturecomponents/build/jacoco
@@ -117,6 +118,7 @@ unitTestsRelease:
     paths:
     - app/build/jacoco
     - app/build/test-results/testReleaseUnitTest
+    - app/build/reports/jgiven/testReleaseUnitTest
     - architecturecomponents/build/jacoco
     - architecturecomponents/build/test-results/testReleaseUnitTest
     - moxyarchitecturecomponents/build/jacoco
