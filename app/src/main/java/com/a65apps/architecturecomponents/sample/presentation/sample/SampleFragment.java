@@ -85,6 +85,7 @@ public class SampleFragment extends ButterFragment<SampleState, SampleParcelable
                 mviView.setVisibility(View.VISIBLE);
                 refresh.setRefreshing(false);
                 break;
+            case NO_INTERNET:
             case ERROR:
                 if (state.data().isEmpty()) {
                     data.setVisibility(View.GONE);

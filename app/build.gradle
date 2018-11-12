@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
+apply plugin: "com.tngtech.jgiven.gradle-plugin"
 
 apply from: "$project.rootDir/tools/findbugs.gradle"
 apply from: "$project.rootDir/tools/checkstyle.gradle"
@@ -64,6 +65,12 @@ android {
 
     lintOptions {
         warningsAsErrors true
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -140,6 +147,23 @@ dependencies {
     testImplementation "junit:junit:$project.ext.junitVersion"
     testImplementation "org.mockito:mockito-core:$project.ext.mockitoVersion"
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
+    testAnnotationProcessor "com.google.dagger:dagger-android-processor:$project.ext.daggerVersion"
+    testImplementation 'androidx.test.ext:junit:1.0.0'
+    testImplementation 'androidx.test:rules:1.1.0'
+    testImplementation 'androidx.test:runner:1.1.0'
+    testImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    testImplementation "org.robolectric:robolectric:4.0.2"
+    testImplementation "com.tngtech.jgiven:jgiven-junit:0.17.0"
+    testImplementation 'org.slf4j:slf4j-simple:1.7.25'
+    testCompileOnly project(':compiler')
+    testAnnotationProcessor project(':compiler')
+
     androidTestImplementation "com.android.support.test:runner:$project.ext.testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$project.ext.espressoVersion"
+}
+
+afterEvaluate {
+    testDebugUnitTest {
+        finalizedBy jgivenTestDebugUnitTestReport
+    }
 }

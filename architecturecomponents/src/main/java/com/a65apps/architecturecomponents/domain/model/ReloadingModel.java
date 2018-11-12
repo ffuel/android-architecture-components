@@ -41,11 +41,11 @@ public abstract class ReloadingModel<S extends ReloadingState, R extends Router>
         addDisposable(reloadEvent()
                 .doOnNext(this::setState)
                 .onErrorReturn(error -> getError(getState(), error))
-                .subscribe());
+                .subscribe(this::setState));
         addDisposable(observeConnectionState()
                 .doOnNext(this::setState)
                 .onErrorReturn(error -> getError(getState(), error))
-                .subscribe());
+                .subscribe(this::setState));
     }
 
     @Override

@@ -57,17 +57,16 @@ public final class SampleModel extends ReloadingModel<SampleState, Router> {
     protected SampleState onConnectionChanged(@NonNull SampleState lastState, boolean isConnected) {
         SampleState.State sampleState;
         if (!isConnected) {
-            sampleState = SampleState.State.ERROR;
+            sampleState = SampleState.State.NO_INTERNET;
         } else {
-            sampleState = lastState.state() != SampleState.State.ERROR ? lastState.state()
-                    : SampleState.State.COMPLETE;
+            sampleState = lastState.state();
         }
         return SampleState.create(
                 sampleState,
                 lastState.text(),
                 lastState.data(),
-                sampleState == SampleState.State.ERROR
-                        ? source.noConnectionText() : "");
+                sampleState == SampleState.State.NO_INTERNET
+                        ? source.noConnectionText() : lastState.error());
     }
 
     @NonNull
