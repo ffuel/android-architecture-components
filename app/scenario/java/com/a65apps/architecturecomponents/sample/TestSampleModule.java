@@ -14,6 +14,7 @@ import com.a65apps.architecturecomponents.sample.presentation.navigation.Interce
 import com.a65apps.daggerarchitecturecomponents.LoggerModule;
 import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
 import com.a65apps.daggerarchitecturecomponents.ResourcesModule;
+import com.a65apps.daggerarchitecturecomponents.SchedulersModule;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjectionModule;
 
 import dagger.Module;
@@ -23,7 +24,7 @@ import dagger.android.AndroidInjectionModule;
 @Module(includes = {
         AndroidInjectionModule.class,
         PresenterInjectionModule.class,
-        TestSchedulersModule.class,
+        SchedulersModule.class,
         LoggerModule.class,
         ResourcesModule.class,
         TestConnectionStateModule.class,

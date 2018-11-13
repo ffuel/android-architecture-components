@@ -10,11 +10,11 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.a65apps.architecturecomponents.sample"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 28
         versionCode 12
         versionName "1.0.11"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.a65apps.architecturecomponents.sample.SampleTestRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -53,6 +53,7 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             signingConfig signingConfigs.debug
+            testCoverageEnabled true
 
             buildConfigField "String", "GITHUB_TOKEN", '"9e923caede2fa69d3a84009ae79cabb28dcd4b53"'
         }
@@ -70,6 +71,16 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += 'scenario/java'
+        }
+
+        test {
+            java.srcDirs += 'scenario/java'
         }
     }
 }
@@ -158,12 +169,90 @@ dependencies {
     testCompileOnly project(':compiler')
     testAnnotationProcessor project(':compiler')
 
-    androidTestImplementation "com.android.support.test:runner:$project.ext.testRunnerVersion"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$project.ext.espressoVersion"
+    // android test dependencies
+    androidTestImplementation "com.tngtech.jgiven:jgiven-junit:0.17.0", {
+        exclude group: 'com.google.code.gson'
+        exclude group: 'net.bytebuddy'
+    }
+    androidTestImplementation 'org.slf4j:slf4j-simple:1.7.25'
+    androidTestImplementation "org.mockito:mockito-android:$project.ext.mockitoVersion"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$project.ext.daggerVersion"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-android-processor:$project.ext.daggerVersion"
+    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:core:1.0.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestCompileOnly project(':compiler')
+    androidTestAnnotationProcessor project(':compiler')
+}
+
+def targetDir = 'build/jgiven-results'
+def adb = android.getAdbExe().toString()
+def reportsDir = '/storage/emulated/0/Download/jgiven-results/testDebugUnitTest'
+
+task cleanJGivenReports(type: Delete) {
+    delete targetDir
+}
+
+import com.android.ddmlib.AndroidDebugBridge
+import com.android.ddmlib.IDevice
+
+static def executeForAllDevices(android, Closure<IDevice> closure) {
+    AndroidDebugBridge.initIfNeeded(false)
+    AndroidDebugBridge bridge = AndroidDebugBridge.createBridge(android.getAdbExe().absolutePath, false)
+
+    long timeOut = 30000 // 30 sec
+    int sleepTime = 1000
+    while (!bridge.hasInitialDeviceList() && timeOut > 0) {
+        sleep(sleepTime)
+        timeOut -= sleepTime
+    }
+    if (timeOut <= 0 && !bridge.hasInitialDeviceList()) {
+        throw new RuntimeException("Timeout getting device list.", null)
+    }
+    IDevice[] devices = bridge.devices
+    for (IDevice device : devices) {
+        closure(device)
+    }
 }
 
 afterEvaluate {
-    testDebugUnitTest {
-        finalizedBy jgivenTestDebugUnitTestReport
+    task pullJGivenReports(type: Exec, dependsOn: cleanJGivenReports) {
+        doFirst {
+            if (!file(targetDir).mkdirs()) {
+                println("Cannot create dir "+targetDir)
+            }
+        }
+
+        executeForAllDevices(android) {
+            commandLine adb, '-s', it.serialNumber, 'pull', reportsDir, targetDir
+        }
+
+        doLast {
+            println("Pulled " + reportsDir + " to " + targetDir)
+        }
+    }
+
+    task cleanJGivenReportsFromDevice(type: Exec) {
+        executeForAllDevices(android) {
+            commandLine adb, '-s', it.serialNumber, 'shell', 'rm -rf', reportsDir
+        }
+
+        doLast {
+            println("Deleted "+reportsDir)
+        }
+    }
+
+    connectedDebugAndroidTest {
+        finalizedBy pullJGivenReports
+    }
+
+    pullJGivenReports {
+        finalizedBy jgivenTestDebugUnitTestReport, cleanJGivenReportsFromDevice
+    }
+
+    project.getTasks().withType(Test.class) {
+        finalizedBy project.getTasks().getByName("jgiven" + it.name.capitalize() + "Report")
     }
 }
