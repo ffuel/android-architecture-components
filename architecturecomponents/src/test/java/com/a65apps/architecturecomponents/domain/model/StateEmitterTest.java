@@ -7,12 +7,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import io.reactivex.observers.TestObserver;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -43,6 +46,18 @@ public class StateEmitterTest {
                 .setDisposable(any());
         verify(mockEmitter1, times(1))
                 .onNext(eq(state));
+    }
+
+    @Test
+    public void testSubscribeWhileSubscribeAndDispose() {
+        Observable<State> observable = Observable.create(StateEmitter.create(state));
+        TestObserver<State> observer = new TestObserver<>();
+
+        observable.flatMap(it -> observable)
+                .subscribe(observer);
+        observer.dispose();
+
+        observer.assertValue(state);
     }
 
     @Test
@@ -77,5 +92,44 @@ public class StateEmitterTest {
                 .setDisposable(any());
         verify(mockEmitter1, times(2))
                 .onNext(any());
+    }
+
+    @Test
+    public void testUpdateStateWhileSubscribe() {
+        State state1 = mock(State.class);
+        StateEmitter<State> emitter = StateEmitter.create(state);
+        Observable<State> observable = Observable.create(emitter);
+        TestObserver<State> observer = new TestObserver<>();
+
+        boolean[] flag = new boolean[1];
+        flag[0] = false;
+        observable.doOnNext(it -> {
+            if (!flag[0]) {
+                flag[0] = true;
+                emitter.setState(state1);
+            }
+        }).subscribe(observer);
+        observer.dispose();
+
+        observer.assertValues(state, state1);
+    }
+
+    @Test
+    public void testDisposeWhileDispose() {
+        State state1 = mock(State.class);
+        StateEmitter<State> emitter = StateEmitter.create(state);
+        Observable<State> observable = Observable.create(emitter);
+        TestObserver<State> observer1 = new TestObserver<>();
+        TestObserver<State> observer2 = new TestObserver<>();
+
+        observable.doOnNext(it -> {
+            Observable.create(emitter).subscribe(observer2);
+            observer1.dispose();
+            observer2.dispose();
+            emitter.setState(state1);
+        }).subscribe(observer1);
+
+        observer1.assertValue(state);
+        observer2.assertNoValues();
     }
 }

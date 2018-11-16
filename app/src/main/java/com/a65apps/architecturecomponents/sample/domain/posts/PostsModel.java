@@ -64,7 +64,7 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
                 setState(getState().mutateError(stringResources.getString(R.string.no_connection_text)));
             }
             return source.data(PostsRequest.create(0, pageSize, result.isConnected()));
-        }), 0, 0, false)
+        }), 0, 0, pageSize, false)
                 .subscribe());
     }
 
@@ -73,7 +73,7 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
     protected void onLoad(int position, int pageSize, int lastBindPosition, int anchor,
                           boolean isAllDataLoaded) {
         addDisposable(loadingPipeline(source.data(PostsRequest.create(position, pageSize, false)),
-                lastBindPosition, anchor, isAllDataLoaded)
+                lastBindPosition, anchor, pageSize, isAllDataLoaded)
                 .subscribe());
     }
 
@@ -105,10 +105,11 @@ class PostsModel extends PagingModel<PostState, PostsState, Router> implements P
 
     @NonNull
     private Single<Integer> loadingPipeline(@NonNull Single<List<PostState>> input,
-                                            int lastBindPosition, int anchor, boolean isAllDataLoaded) {
+                                            int lastBindPosition, int anchor, int pageSize, boolean isAllDataLoaded) {
         return input.subscribeOn(ioExecutor.getScheduler())
                 .onErrorReturn(this::onErrorPosts)
-                .flatMap(posts -> getCount(posts, lastBindPosition, anchor, isAllDataLoaded));
+                .flatMap(posts -> getCount(posts, lastBindPosition, anchor, isAllDataLoaded
+                        || !posts.isEmpty() && posts.size() < pageSize));
     }
 
     private void setPosts(@NonNull List<PostState> posts, int count, int lastBindPosition, int anchor,

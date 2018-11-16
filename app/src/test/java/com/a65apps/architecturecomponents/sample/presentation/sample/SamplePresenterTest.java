@@ -117,7 +117,7 @@ public class SamplePresenterTest implements HasPresenterSubComponentBuilders {
         presenter.attachView(view);
         presenter.refresh();
 
-        verify(view, times(2))
+        verify(view, times(3))
                 .updateState(eq(SampleState
                         .create(SampleState.State.COMPLETE, "Hello World!",
                                 "ArchitectureComponents", "")));

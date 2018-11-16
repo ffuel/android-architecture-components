@@ -116,7 +116,7 @@ public class SampleModelTest {
         SampleState state = model.onConnectionChanged(SampleState.create(SampleState.State.LOADING, "test",
                 "", ""), false);
 
-        assertThat(state, equalTo(SampleState.create(SampleState.State.ERROR, "test",
+        assertThat(state, equalTo(SampleState.create(SampleState.State.NO_INTERNET, "test",
                 "", "no connection")));
     }
 
@@ -127,7 +127,7 @@ public class SampleModelTest {
         SampleState state = model.onConnectionChanged(SampleState.create(SampleState.State.ERROR, "test",
                 "", ""), true);
 
-        assertThat(state, equalTo(SampleState.create(SampleState.State.COMPLETE, "test",
+        assertThat(state, equalTo(SampleState.create(SampleState.State.ERROR, "test",
                 "", "")));
     }
 

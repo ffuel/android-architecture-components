@@ -23,7 +23,10 @@ public class PermissionsRequestBuffer implements PermissionsRequestHolder {
         this.worker = worker;
         while (!pendingRequests.isEmpty()) {
             if (worker != null) {
-                executeRequest(pendingRequests.poll());
+                PermissionsRequest request = pendingRequests.poll();
+                if (request != null) {
+                    executeRequest(request);
+                }
             } else {
                 break;
             }
