@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -45,11 +46,19 @@ public class PostsNetworkModule {
                 .build();
 
         return new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
+                .baseUrl(constructBaseUrl())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build()
                 .create(PostsApi.class);
+    }
+
+    @NonNull
+    protected HttpUrl constructBaseUrl() {
+        return new HttpUrl.Builder()
+                .host("api.github.com")
+                .scheme("https")
+                .build();
     }
 }

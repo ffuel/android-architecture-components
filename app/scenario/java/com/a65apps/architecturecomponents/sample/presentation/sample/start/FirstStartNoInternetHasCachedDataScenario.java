@@ -1,8 +1,11 @@
-package com.a65apps.architecturecomponents.sample.presentation.sample.scenario;
+package com.a65apps.architecturecomponents.sample.presentation.sample.start;
 
 import com.a65apps.architecturecomponents.sample.data.sample.PreferenceKeys;
 import com.a65apps.architecturecomponents.sample.presentation.common.BaseScenario;
 import com.a65apps.architecturecomponents.sample.presentation.common.Story;
+import com.a65apps.architecturecomponents.sample.presentation.sample.SampleGivenState;
+import com.a65apps.architecturecomponents.sample.presentation.sample.SampleThenState;
+import com.a65apps.architecturecomponents.sample.presentation.sample.SampleWhenState;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

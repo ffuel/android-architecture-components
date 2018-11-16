@@ -6,6 +6,25 @@ apply from: "$project.rootDir/tools/findbugs.gradle"
 apply from: "$project.rootDir/tools/checkstyle.gradle"
 apply from: "$project.rootDir/tools/pmd.gradle"
 
+jacocoAndroidUnitTestReport {
+    excludes += ['**/AutoValue_*.*',
+                 '**/*JavascriptBridge.class',
+                 '**/*_Impl*',
+                 '**/*_MembersInjector.class',
+                 '**/Dagger*Component.class',
+                 '**/Dagger*Component$Builder.class',
+                 '**/*Module_*Factory.class',
+                 '**/R.class',
+                 '**/R$*.class',
+                 '**/*$ViewInjector*.*',
+                 '**/*$ViewBinder*.*',
+                 '**/BuildConfig.*',
+                 '**/Manifest*.*',
+                 '**/*..PresentersBinder.class',
+                 '**/*..ViewStateProvider.class',
+                 '**/*..State.class']
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -16,12 +35,16 @@ android {
         versionName "1.0.11"
         testInstrumentationRunner "com.a65apps.architecturecomponents.sample.SampleTestRunner"
 
+        multiDexEnabled true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath = true
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        buildConfigField "String", "GITHUB_TOKEN", '"9e923caede2fa69d3a84009ae79cabb28dcd4b53"'
     }
 
     signingConfigs {
@@ -44,8 +67,6 @@ android {
             minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            buildConfigField "String", "GITHUB_TOKEN", '"9e923caede2fa69d3a84009ae79cabb28dcd4b53"'
         }
 
         debug {
@@ -54,8 +75,7 @@ android {
             versionNameSuffix '-debug'
             signingConfig signingConfigs.debug
             testCoverageEnabled true
-
-            buildConfigField "String", "GITHUB_TOKEN", '"9e923caede2fa69d3a84009ae79cabb28dcd4b53"'
+            debuggable true
         }
     }
 
@@ -69,6 +89,8 @@ android {
     }
 
     testOptions {
+        animationsDisabled = true
+
         unitTests {
             includeAndroidResources = true
         }
@@ -77,10 +99,12 @@ android {
     sourceSets {
         androidTest {
             java.srcDirs += 'scenario/java'
+            resources.srcDirs += 'scenario/resources'
         }
 
         test {
             java.srcDirs += 'scenario/java'
+            resources.srcDirs += 'scenario/resources'
         }
     }
 }
@@ -163,9 +187,12 @@ dependencies {
     testImplementation 'androidx.test:rules:1.1.0'
     testImplementation 'androidx.test:runner:1.1.0'
     testImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    testImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+    testImplementation 'androidx.test:core:1.0.0'
     testImplementation "org.robolectric:robolectric:4.0.2"
     testImplementation "com.tngtech.jgiven:jgiven-junit:0.17.0"
     testImplementation 'org.slf4j:slf4j-simple:1.7.25'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
     testCompileOnly project(':compiler')
     testAnnotationProcessor project(':compiler')
 
@@ -183,6 +210,9 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test:core:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+    androidTestImplementation 'com.android.support:multidex:1.0.2'
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
     androidTestCompileOnly project(':compiler')
     androidTestAnnotationProcessor project(':compiler')
 }

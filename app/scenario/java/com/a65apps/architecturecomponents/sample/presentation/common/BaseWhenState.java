@@ -7,7 +7,12 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import org.junit.Rule;
 
 import androidx.annotation.NonNull;
+import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class BaseWhenState<T extends BaseWhenState<T>> extends Stage<T> {
 
@@ -18,6 +23,18 @@ public class BaseWhenState<T extends BaseWhenState<T>> extends Stage<T> {
     @NonNull
     public T activity_launch() {
         activityRule.launchActivity(null);
+        return self();
+    }
+
+    @NonNull
+    public T user_click_on_$(@NonNull @Quoted String text) {
+        onView(withText(text)).perform(click());
+        return self();
+    }
+
+    @NonNull
+    public T user_press_back_button() {
+        Espresso.pressBack();
         return self();
     }
 }

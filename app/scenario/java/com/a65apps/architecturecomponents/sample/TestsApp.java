@@ -3,7 +3,6 @@ package com.a65apps.architecturecomponents.sample;
 import android.support.annotation.Nullable;
 
 import com.a65apps.architecturecomponents.domain.permissions.PermissionsManager;
-import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
@@ -30,7 +29,7 @@ public class TestsApp extends SampleApplication {
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         component = (TestSampleComponent) DaggerTestSampleComponent.builder()
-                .permissionsModule(new PermissionsModule(new PermissionsManager()))
+                .permissionsModule(new TestPermissionsModule(new PermissionsManager()))
                 .create(this);
         return component;
     }

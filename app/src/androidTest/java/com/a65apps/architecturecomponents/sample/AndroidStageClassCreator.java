@@ -18,7 +18,7 @@ public class AndroidStageClassCreator extends ByteBuddyStageClassCreator {
 
     @Override
     protected ClassLoadingStrategy getClassLoadingStrategy(Class<?> stageClass) {
-        return new AndroidClassLoadingStrategy.Injecting(ContextCompat.getCodeCacheDir(
+        return new AndroidClassLoadingStrategy.Wrapping(ContextCompat.getCodeCacheDir(
                 ApplicationProvider.getApplicationContext()));
     }
 }
