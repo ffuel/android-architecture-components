@@ -11,7 +11,7 @@ import io.reactivex.Single;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-interface PostDao {
+public interface PostDao {
 
     @Insert(onConflict = REPLACE)
     void insert(PostDb... post);
@@ -21,4 +21,7 @@ interface PostDao {
 
     @Query("SELECT COUNT(*) FROM posts")
     Single<Integer> count();
+
+    @Query("DELETE FROM posts")
+    void deleteAll();
 }

@@ -3,12 +3,15 @@ package com.a65apps.architecturecomponents.sample.presentation.common;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 
+import com.a65apps.architecturecomponents.domain.permissions.PermissionState;
+import com.a65apps.architecturecomponents.domain.permissions.PermissionsSource;
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionReceiverSource;
 import com.a65apps.architecturecomponents.domain.receiver.ConnectionState;
 import com.a65apps.architecturecomponents.sample.TestSampleComponent;
 import com.a65apps.architecturecomponents.sample.TestsApp;
 import com.a65apps.architecturecomponents.sample.presentation.main.MainActivity;
 import com.tngtech.jgiven.Stage;
+import com.tngtech.jgiven.annotation.AfterScenario;
 import com.tngtech.jgiven.annotation.BeforeScenario;
 import com.tngtech.jgiven.annotation.BeforeStage;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
@@ -24,6 +27,7 @@ import androidx.test.rule.ActivityTestRule;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 
 public abstract class BaseGivenState<T extends BaseGivenState<T>> extends Stage<T> {
@@ -64,6 +68,11 @@ public abstract class BaseGivenState<T extends BaseGivenState<T>> extends Stage<
     ConnectionReceiverSource connectionSource;
     @Inject
     SharedPreferences sharedPreferences;
+    @Inject
+    PermissionsSource permissionsSource;
+    @Inject
+    @ProvidedScenarioState
+    public ScreenshotCapture screenshotCapture;
 
     @NonNull
     private final SharedPreferences.Editor editor = Mockito.mock(SharedPreferences.Editor.class);
@@ -77,11 +86,15 @@ public abstract class BaseGivenState<T extends BaseGivenState<T>> extends Stage<
         inject(app.getComponent());
     }
 
+    @AfterScenario
+    public void tearDown() {
+//      empty
+    }
+
     @BeforeStage
     @CallSuper
-    public void setup() {
-        Mockito.reset(connectionSource);
-        Mockito.reset(sharedPreferences);
+    public void setup() throws Exception {
+        Mockito.reset(connectionSource, sharedPreferences, permissionsSource);
     }
 
     @NonNull
@@ -115,6 +128,14 @@ public abstract class BaseGivenState<T extends BaseGivenState<T>> extends Stage<
     public T get_from_shared_preferences_with_key_$_return_$(@NonNull @Quoted String key,
                                                              @NonNull @Quoted String value) {
         Mockito.when(sharedPreferences.getString(eq(key), eq(""))).thenReturn(value);
+
+        return self();
+    }
+
+    @NonNull
+    public T has_permission_$(@NonNull @Quoted String permission) {
+        Mockito.when(permissionsSource.requestPermission(anyBoolean(), eq(permission)))
+                .thenReturn(Single.just(PermissionState.GRANTED));
 
         return self();
     }

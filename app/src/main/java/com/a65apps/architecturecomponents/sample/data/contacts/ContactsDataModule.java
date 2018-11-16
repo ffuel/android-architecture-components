@@ -11,7 +11,7 @@ import dagger.Binds;
 import dagger.Module;
 
 @Module
-public interface ContactsDataModel {
+public interface ContactsDataModule {
 
     @Singleton
     @Binds

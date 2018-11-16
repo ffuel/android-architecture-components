@@ -1,4 +1,4 @@
-package com.a65apps.architecturecomponents.sample.presentation.sample.scenario;
+package com.a65apps.architecturecomponents.sample.presentation.sample;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -15,10 +15,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static org.hamcrest.CoreMatchers.endsWith;
 
-class SampleThenState extends BaseThenState<SampleThenState> {
+public class SampleThenState extends BaseThenState<SampleThenState> {
 
     @NonNull
-    SampleThenState user_should_see_loading() {
+    public SampleThenState user_should_see_loading() {
         onView(withClassName(endsWith("SwipeRefreshLayout")))
                 .check(matches(new BoundedMatcher<View, SwipeRefreshLayout>(SwipeRefreshLayout.class) {
                     @Override
@@ -32,6 +32,16 @@ class SampleThenState extends BaseThenState<SampleThenState> {
                     }
                 }));
 
+        return self();
+    }
+
+    @NonNull
+    public SampleThenState wait_posts_loaded() {
+        try {
+            Thread.sleep(2000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return self();
     }
 }

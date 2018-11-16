@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 import com.a65apps.architecturecomponents.sample.data.TestAppDataModule;
 import com.a65apps.architecturecomponents.sample.presentation.ActivityBuilder;
 import com.a65apps.architecturecomponents.sample.presentation.PresenterBuilder;
+import com.a65apps.architecturecomponents.sample.presentation.common.TestUtilityModule;
 import com.a65apps.architecturecomponents.sample.presentation.main.MainNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.AnimationNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.FragmentNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.IntentNavigationModule;
 import com.a65apps.architecturecomponents.sample.presentation.navigation.InterceptorNavigationModule;
 import com.a65apps.daggerarchitecturecomponents.LoggerModule;
-import com.a65apps.daggerarchitecturecomponents.PermissionsModule;
 import com.a65apps.daggerarchitecturecomponents.ResourcesModule;
 import com.a65apps.daggerarchitecturecomponents.SchedulersModule;
 import com.a65apps.daggerarchitecturecomponents.presenter.PresenterInjectionModule;
@@ -28,7 +28,7 @@ import dagger.android.AndroidInjectionModule;
         LoggerModule.class,
         ResourcesModule.class,
         TestConnectionStateModule.class,
-        PermissionsModule.class,
+        TestPermissionsModule.class,
         PresenterBuilder.class,
         ActivityBuilder.class,
         MainNavigationModule.class,
@@ -36,7 +36,8 @@ import dagger.android.AndroidInjectionModule;
         InterceptorNavigationModule.class,
         IntentNavigationModule.class,
         AnimationNavigationModule.class,
-        TestAppDataModule.class
+        TestAppDataModule.class,
+        TestUtilityModule.class
 })
 public class TestSampleModule {
 
