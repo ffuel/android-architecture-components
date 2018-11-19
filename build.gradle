@@ -66,6 +66,7 @@ allprojects {
         mockitoVersion = '2.18.3'
         espressoVersion = '3.0.2'
         testRunnerVersion = '1.0.2'
+        robolectricVersion = '4.0.2'
     }
 }
 
