@@ -17,6 +17,7 @@ buildDebug:
     - architecturecomponents/build/intermediates/classes/debug
     - moxyarchitecturecomponents/build/intermediates/classes/debug
     - ciceronearchitecturecomponents/build/intermediates/classes/debug
+    - ciceronev4architecturecomponents/build/intermediates/classes/debug
     - daggerarchitecturecomponents/build/intermediates/classes/debug
     - moxydaggerarchitecturecomponents/build/intermediates/classes/debug
     - compiler/build/classes/java
@@ -44,6 +45,8 @@ unitTestsDebug:
     - moxyarchitecturecomponents/build/test-results/testDebugUnitTest
     - ciceronearchitecturecomponents/build/jacoco
     - ciceronearchitecturecomponents/build/test-results/testDebugUnitTest
+    - ciceronev4architecturecomponents/build/jacoco
+    - ciceronev4architecturecomponents/build/test-results/testDebugUnitTest
     - daggerarchitecturecomponents/build/jacoco
     - daggerarchitecturecomponents/build/test-results/testDebugUnitTest
     - moxydaggerarchitecturecomponents/build/jacoco
@@ -100,6 +103,7 @@ buildRelease:
     - architecturecomponents/build/intermediates/classes/release
     - moxyarchitecturecomponents/build/intermediates/classes/release
     - ciceronearchitecturecomponents/build/intermediates/classes/release
+    - ciceronev4architecturecomponents/build/intermediates/classes/release
     - daggerarchitecturecomponents/build/intermediates/classes/release
     - moxydaggerarchitecturecomponents/build/intermediates/classes/release
     - compiler/build/classes/java
@@ -125,6 +129,8 @@ unitTestsRelease:
     - moxyarchitecturecomponents/build/test-results/testReleaseUnitTest
     - ciceronearchitecturecomponents/build/jacoco
     - ciceronearchitecturecomponents/build/test-results/testReleaseUnitTest
+    - ciceronev4architecturecomponents/build/jacoco
+    - ciceronev4architecturecomponents/build/test-results/testReleaseUnitTest
     - daggerarchitecturecomponents/build/jacoco
     - daggerarchitecturecomponents/build/test-results/testReleaseUnitTest
     - moxydaggerarchitecturecomponents/build/jacoco
