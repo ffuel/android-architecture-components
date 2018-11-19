@@ -6,6 +6,10 @@ apply from: "$project.rootDir/tools/findbugs.gradle"
 apply from: "$project.rootDir/tools/checkstyle.gradle"
 apply from: "$project.rootDir/tools/pmd.gradle"
 
+jacoco {
+    toolVersion = "0.8.1"
+}
+
 jacocoAndroidUnitTestReport {
     excludes += ['**/AutoValue_*.*',
                  '**/*JavascriptBridge.class',
@@ -93,6 +97,11 @@ android {
 
         unitTests {
             includeAndroidResources = true
+        }
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
         }
     }
 

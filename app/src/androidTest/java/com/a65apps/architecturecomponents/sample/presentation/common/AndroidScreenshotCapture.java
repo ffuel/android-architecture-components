@@ -29,6 +29,8 @@ class AndroidScreenshotCapture implements ScreenshotCapture {
         view.draw(canvas);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        return new Data(outputStream.toByteArray());
+        Data result = new Data(outputStream.toByteArray());
+        bitmap.recycle();
+        return result;
     }
 }
