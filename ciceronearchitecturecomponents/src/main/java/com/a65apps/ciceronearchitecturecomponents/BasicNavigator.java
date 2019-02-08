@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import com.a65apps.architecturecomponents.presentation.activity.ContainerIdProvider;
+import com.a65apps.ciceronearchitecturecomponents.commands.ContextMessage;
 
 import java.util.Map;
 
@@ -32,9 +33,12 @@ public class BasicNavigator extends SupportAppNavigator {
     private final Map<String, FragmentAnimationFactory> animationMap;
     @NonNull
     private final FragmentActivity activity;
+    @NonNull
+    private final ContextMessageInterceptor contextMessagesInterceptor;
 
     public BasicNavigator(@NonNull FragmentActivity activity,
                           @NonNull ContainerIdProvider idProvider,
+                          @NonNull ContextMessageInterceptor contextMessagesInterceptor,
                           @NonNull Map<String, FragmentFactory> fragmentMap,
                           @NonNull Map<String, IntentFactory> intentMap,
                           @NonNull Map<String, NavigationInterceptor> interceptorMap,
@@ -45,10 +49,12 @@ public class BasicNavigator extends SupportAppNavigator {
         this.interceptorMap = interceptorMap;
         this.activity = activity;
         this.animationMap = animationMap;
+        this.contextMessagesInterceptor = contextMessagesInterceptor;
     }
 
     @Override
     protected void applyCommand(Command command) {
+        contextMessagesInterceptor.dismiss();
         String key = null;
         if (command instanceof BackTo) {
             key = ((BackTo) command).getScreenKey();
@@ -64,6 +70,10 @@ public class BasicNavigator extends SupportAppNavigator {
             if (interceptor != null && interceptor.intercept(activity, command)) {
                 return;
             }
+        }
+        if (command instanceof ContextMessage) {
+            contextMessagesInterceptor.intercept(activity, command);
+            return;
         }
 
         super.applyCommand(command);
@@ -97,7 +107,7 @@ public class BasicNavigator extends SupportAppNavigator {
     protected void setupFragmentTransactionAnimation(@NonNull Command command,
                                                      @Nullable Fragment currentFragment,
                                                      @Nullable Fragment nextFragment,
-                                                @NonNull FragmentTransaction fragmentTransaction) {
+                                                     @NonNull FragmentTransaction fragmentTransaction) {
         if (currentFragment == null && nextFragment == null) {
             throw new IllegalStateException("Both transition fragments can't be null");
         }

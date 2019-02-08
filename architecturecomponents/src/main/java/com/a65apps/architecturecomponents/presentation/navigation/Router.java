@@ -1,5 +1,6 @@
 package com.a65apps.architecturecomponents.presentation.navigation;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -30,4 +31,10 @@ public interface Router {
     void exitWithMessage(@NonNull String message);
 
     void showSystemMessage(@NonNull String message);
+
+    void showErrorContextMessage(@NonNull String message, @IdRes int anchor);
+
+    void showPositiveContextMessage(@NonNull String message, @IdRes int anchor);
+
+    void showNeutralContextMessage(@NonNull String message, @IdRes int anchor);
 }

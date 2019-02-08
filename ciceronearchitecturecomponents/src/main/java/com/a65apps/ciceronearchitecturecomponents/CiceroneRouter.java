@@ -8,5 +8,5 @@ import net.jcip.annotations.NotThreadSafe;
 
 @NotThreadSafe
 @UiThread
-public class CiceroneRouter extends ru.terrakok.cicerone.Router implements Router {
+public class CiceroneRouter extends BasicRouter implements Router {
 }
