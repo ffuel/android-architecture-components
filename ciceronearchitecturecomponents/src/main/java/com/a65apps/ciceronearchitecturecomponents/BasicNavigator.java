@@ -54,7 +54,9 @@ public class BasicNavigator extends SupportAppNavigator {
 
     @Override
     protected void applyCommand(Command command) {
-        contextMessagesInterceptor.dismiss();
+        if (!(command instanceof ContextMessage)) {
+            contextMessagesInterceptor.dismiss();
+        }
         String key = null;
         if (command instanceof BackTo) {
             key = ((BackTo) command).getScreenKey();
