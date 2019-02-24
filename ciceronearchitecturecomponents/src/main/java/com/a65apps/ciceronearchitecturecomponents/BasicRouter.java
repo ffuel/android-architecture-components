@@ -1,5 +1,7 @@
 package com.a65apps.ciceronearchitecturecomponents;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 
@@ -22,7 +24,8 @@ public class BasicRouter extends Router {
      * @param anchor  anchorView
      */
     public void showErrorContextMessage(@NonNull String message, @IdRes int anchor) {
-        executeCommands(new ErrorContextMessage(message, anchor));
+        new Handler(Looper.getMainLooper())
+                .post(() -> executeCommands(new ErrorContextMessage(message, anchor)));
     }
 
     /**
@@ -32,7 +35,8 @@ public class BasicRouter extends Router {
      * @param anchor  anchorView
      */
     public void showPositiveContextMessage(@NonNull String message, @IdRes int anchor) {
-        executeCommands(new PositiveContextMessage(message, anchor));
+        new Handler(Looper.getMainLooper())
+                .post(() -> executeCommands(new PositiveContextMessage(message, anchor)));
     }
 
     /**
@@ -42,6 +46,7 @@ public class BasicRouter extends Router {
      * @param anchor  anchorView
      */
     public void showNeutralContextMessage(@NonNull String message, @IdRes int anchor) {
-        executeCommands(new NeutralContextMessage(message, anchor));
+        new Handler(Looper.getMainLooper())
+                .post(() -> executeCommands(new NeutralContextMessage(message, anchor)));
     }
 }
