@@ -13,11 +13,7 @@ import dagger.Provides;
 public class PermissionsModule {
 
     @NonNull
-    private final PermissionsManager permissionsManager;
-
-    public PermissionsModule(@NonNull PermissionsManager permissionsManager) {
-        this.permissionsManager = permissionsManager;
-    }
+    private final PermissionsManager permissionsManager = new PermissionsManager();
 
     @Provides
     @NonNull
