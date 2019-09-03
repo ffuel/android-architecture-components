@@ -48,7 +48,7 @@ allprojects {
     }
 
     project.ext {
-        supportVersion = '28.0.0-alpha3'
+        supportVersion = '28.0.0'
         rxJavaVersion = '2.1.12'
         rxAndroidVersion = '2.0.2'
         jcipVersion = '1.0'
